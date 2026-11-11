@@ -43,30 +43,31 @@ const kind = (post: Post) => (isEssay(post) ? 'essay' : 'scribble');
   .post-nav {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: var(--space-4);
+    gap: var(--space-8);
     margin-top: var(--space-16);
     padding-top: var(--space-8);
     border-top: var(--border-width) solid var(--border);
   }
 
-  /* Same card language as essay cards: 1px border, large radius, elevation only on hover. */
+  /* Plain text links: a small direction label and the title. No frame. */
   a {
     display: grid;
     align-content: start;
     gap: var(--space-1);
-    padding: var(--space-4) var(--space-5);
-    border: var(--border-width) solid var(--border);
-    border-radius: var(--radius-lg);
     color: var(--text);
     text-decoration: none;
-    transition:
-      border-color var(--duration) var(--ease),
-      box-shadow var(--duration) var(--ease);
   }
 
-  a:hover {
-    border-color: color-mix(in srgb, var(--accent) 40%, var(--border));
-    box-shadow: var(--shadow-md);
+  .name {
+    text-decoration: underline;
+    text-decoration-color: transparent;
+    text-decoration-thickness: 2px;
+    text-underline-offset: 0.3em;
+    transition: text-decoration-color var(--duration-fast) var(--ease);
+  }
+
+  a:hover .name {
+    text-decoration-color: var(--accent);
   }
 
   .older {
@@ -74,7 +75,7 @@ const kind = (post: Post) => (isEssay(post) ? 'essay' : 'scribble');
   }
 
   .dir {
-    color: var(--muted);
+    color: var(--accent);
     font-size: var(--fs-label);
     font-weight: var(--fw-bold);
     line-height: var(--lh-label);
@@ -91,6 +92,7 @@ const kind = (post: Post) => (isEssay(post) ? 'essay' : 'scribble');
   @media (max-width: 40rem) {
     .post-nav {
       grid-template-columns: 1fr;
+      gap: var(--space-6);
     }
 
     .older {

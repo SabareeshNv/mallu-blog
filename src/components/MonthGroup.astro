@@ -71,7 +71,7 @@ const monthName = new Intl.DateTimeFormat('en-GB', { month: 'long', timeZone: 'U
     --offset: var(--space-12);
     position: relative;
     display: grid;
-    gap: var(--space-8);
+    gap: var(--space-12);
     margin: 0;
     padding: 0 0 0 var(--offset);
     list-style: none;
@@ -80,8 +80,8 @@ const monthName = new Intl.DateTimeFormat('en-GB', { month: 'long', timeZone: 'U
   .timeline::before {
     content: '';
     position: absolute;
-    top: var(--space-6);
-    bottom: var(--space-6);
+    top: var(--space-4);
+    bottom: var(--space-4);
     left: calc(var(--node) / 2 - 1px);
     width: 2px;
     background: var(--rail);
@@ -91,10 +91,10 @@ const monthName = new Intl.DateTimeFormat('en-GB', { month: 'long', timeZone: 'U
     position: relative;
   }
 
-  /* Centred on the first line of text in a scribble panel (24px padding + 32px line). */
+  /* Sits level with the first line of each entry. */
   .node {
     position: absolute;
-    top: var(--space-6);
+    top: 0;
     left: calc(-1 * var(--offset));
     display: grid;
     place-items: center;
@@ -118,6 +118,16 @@ const monthName = new Intl.DateTimeFormat('en-GB', { month: 'long', timeZone: 'U
   .is-scribble .node {
     color: var(--accent);
     background: var(--accent-soft);
+  }
+
+  /* An essay's headline is taller than a line of text, so its node drops to meet the first line. */
+  .is-essay:not(:has(.has-cover)) .node {
+    top: var(--space-2);
+  }
+
+  /* The scribble reached through a permalink is marked on the timeline too. */
+  .item:has(:target) .node {
+    box-shadow: 0 0 0 var(--space-1) var(--highlight);
   }
 
   @media (max-width: 40rem) {

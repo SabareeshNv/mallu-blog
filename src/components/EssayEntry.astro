@@ -1,7 +1,7 @@
 ---
 import { Image } from 'astro:assets';
 import FormattedDate from './FormattedDate.astro';
-import { excerpt, postAnchor, postUrl, type Post } from '../lib/posts';
+import { excerpt, postAnchor, postUrl, readingMinutes, type Post } from '../lib/posts';
 import { SITE } from '../site.config';
 
 interface Props {
@@ -11,6 +11,7 @@ interface Props {
 const { post } = Astro.props;
 const { title, date, cover, coverAlt } = post.data;
 const url = postUrl(post);
+const minutes = readingMinutes(post);
 ---
 
 <article class:list={['essay', { 'has-cover': cover }]} id={postAnchor(post)}>
@@ -34,26 +35,26 @@ const url = postUrl(post);
       </h3>
     )
   }
-  <div class="text">
-    <p class="summary" lang={SITE.postLang}>{excerpt(post, 90)}</p>
-    <p class="meta">
-      <span class="kind">Essay</span>
-      <span aria-hidden="true">·</span>
-      <FormattedDate date={date} />
-    </p>
-  </div>
+  <p class="summary" lang={SITE.postLang}>{excerpt(post, 90)}</p>
+  <p class="meta">
+    <span class="kind">Essay</span>
+    <span aria-hidden="true">·</span>
+    <FormattedDate date={date} />
+    <span aria-hidden="true">·</span>
+    <span>{minutes} min read</span>
+  </p>
 </article>
 
 <style>
+  /* An essay is a headline: no frame, no fill. Scale and the photograph carry it. */
   .essay {
     position: relative;
-    padding-top: var(--space-5);
   }
 
   .title {
-    font-size: var(--fs-h3);
+    font-size: var(--fs-h2);
     font-weight: var(--fw-bold);
-    line-height: var(--lh-h3);
+    line-height: var(--lh-h2);
   }
 
   .title a {
@@ -83,8 +84,7 @@ const url = postUrl(post);
 
   .essay:has(.title a:focus-visible) {
     outline: 3px solid var(--focus);
-    outline-offset: var(--space-1);
-    border-radius: var(--radius-lg);
+    outline-offset: var(--space-2);
   }
 
   .summary {
@@ -93,12 +93,13 @@ const url = postUrl(post);
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 3;
     line-clamp: 3;
-    margin-top: var(--space-2);
+    margin-top: var(--space-3);
     color: var(--muted);
   }
 
   .meta {
     display: flex;
+    flex-wrap: wrap;
     gap: var(--space-2);
     margin-top: var(--space-3);
     color: var(--muted);
@@ -111,29 +112,14 @@ const url = postUrl(post);
     font-weight: var(--fw-bold);
   }
 
-  /* ---------- With a cover: the photo spans the card, the title sits on it, the text follows ---------- */
-  .essay.has-cover {
-    padding-top: 0;
-    overflow: hidden;
-    border: var(--border-width) solid var(--border);
-    border-radius: var(--radius-lg);
-    background: var(--bg);
-    transition:
-      box-shadow var(--duration) var(--ease),
-      border-color var(--duration) var(--ease);
-  }
-
-  .essay.has-cover:hover {
-    border-color: color-mix(in srgb, var(--essay) 30%, var(--border));
-    box-shadow: var(--shadow-md);
-  }
-
+  /* ---------- With a photograph: a plain, square picture with the title set across its foot ---------- */
   .cover {
     position: relative;
     isolation: isolate;
     display: grid;
     align-items: end;
     aspect-ratio: 2 / 1;
+    margin-bottom: var(--space-4);
     overflow: hidden;
     background: var(--surface-strong);
   }
@@ -152,11 +138,11 @@ const url = postUrl(post);
     position: absolute;
     inset: 0;
     z-index: -1;
-    background: linear-gradient(to top, rgb(var(--veil) / 0.85) 0%, rgb(var(--veil) / 0.45) 35%, rgb(var(--veil) / 0) 70%);
+    background: linear-gradient(to top, rgb(var(--veil) / 0.88) 0%, rgb(var(--veil) / 0.5) 38%, rgb(var(--veil) / 0) 72%);
   }
 
   .has-cover .title {
-    padding: var(--space-12) var(--space-6) var(--space-4);
+    padding: var(--space-16) var(--space-6) var(--space-5);
     text-shadow: var(--text-shadow-image);
   }
 
@@ -169,25 +155,13 @@ const url = postUrl(post);
     text-decoration-color: var(--sun);
   }
 
-  .has-cover .text {
-    padding: var(--space-4) var(--space-6) var(--space-6);
-  }
-
-  .has-cover .summary {
-    margin-top: 0;
-  }
-
   @media (max-width: 40rem) {
     .cover {
       aspect-ratio: 4 / 3;
     }
 
     .has-cover .title {
-      padding: var(--space-8) var(--space-4) var(--space-4);
-    }
-
-    .has-cover .text {
-      padding: var(--space-4);
+      padding: var(--space-12) var(--space-4) var(--space-4);
     }
   }
 </style>

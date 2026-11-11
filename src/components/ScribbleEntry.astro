@@ -8,9 +8,11 @@ import { postAnchor, postUrl, type Post } from '../lib/posts';
 
 interface Props {
   post: Post;
+  /** "large" is used when a scribble has a page of its own. */
+  size?: 'regular' | 'large';
 }
 
-const { post } = Astro.props;
+const { post, size = 'regular' } = Astro.props;
 const { date, cover, coverAlt } = post.data;
 const { Content } = await render(post);
 const anchor = postAnchor(post);
@@ -24,16 +26,18 @@ const longDate = new Intl.DateTimeFormat('en-GB', { dateStyle: 'long', timeZone:
         class="cover"
         src={cover}
         alt={coverAlt ?? ''}
-        widths={[400, 720, 1080]}
-        sizes="(min-width: 48rem) 40rem, 100vw"
+        widths={[320, 480, 720, 1080]}
+        sizes="(min-width: 48rem) 16rem, 100vw"
         data-fade
       />
     )
   }
-  <Prose>
+  <Prose size={size}>
     <Content />
   </Prose>
   <footer class="meta">
+    <span class="kind">Scribble</span>
+    <span aria-hidden="true">·</span>
     <FormattedDate date={date} />
     <span aria-hidden="true">·</span>
     <a
@@ -49,49 +53,59 @@ const longDate = new Intl.DateTimeFormat('en-GB', { dateStyle: 'long', timeZone:
 </article>
 
 <style>
+  /* A scribble is plain text on the page: no frame, no fill. Only its words, a date and a permalink. */
   .scribble {
     position: relative;
-    padding: var(--space-6);
-    border: var(--border-width) solid var(--border);
-    border-radius: var(--radius-lg);
-    background: var(--tint-scribble);
     outline: none;
-    transition: box-shadow var(--duration) var(--ease);
   }
 
   .scribble:focus-visible {
     outline: 3px solid var(--focus);
-    outline-offset: 2px;
+    outline-offset: var(--space-2);
   }
 
-  /* Highlight a scribble reached through its permalink. */
+  /* Reaching a scribble through its permalink marks the text like a highlighter, then fades. */
   .scribble:target,
   .scribble.is-highlighted {
-    box-shadow: 0 0 0 2px var(--accent);
+    background: var(--highlight);
+    box-shadow: 0 0 0 var(--space-2) var(--highlight);
   }
 
   @media (prefers-reduced-motion: no-preference) {
+    .scribble:target,
     .scribble.is-highlighted {
-      animation: arrive 1200ms var(--ease);
+      animation: arrive 2000ms var(--ease) forwards;
     }
 
     @keyframes arrive {
-      from {
-        background-color: var(--highlight);
+      to {
+        background-color: transparent;
+        box-shadow: 0 0 0 var(--space-2) transparent;
       }
     }
   }
 
+  /* A scribble's photograph is a small snapshot beside the words, not a banner. */
   .cover {
-    width: 100%;
-    aspect-ratio: 2 / 1;
-    margin-bottom: var(--space-4);
-    border-radius: var(--radius-md);
+    float: inline-end;
+    width: 40%;
+    aspect-ratio: 3 / 2;
+    margin: var(--space-1) 0 var(--space-2) var(--space-6);
     background: var(--surface-strong);
     object-fit: cover;
   }
 
+  @media (max-width: 40rem) {
+    .cover {
+      float: none;
+      width: 100%;
+      aspect-ratio: 3 / 2;
+      margin: 0 0 var(--space-4);
+    }
+  }
+
   .meta {
+    clear: both;
     display: flex;
     align-items: center;
     gap: var(--space-2);
@@ -101,11 +115,17 @@ const longDate = new Intl.DateTimeFormat('en-GB', { dateStyle: 'long', timeZone:
     line-height: var(--lh-meta);
   }
 
+  .kind {
+    color: var(--accent);
+    font-weight: var(--fw-bold);
+  }
+
   .permalink {
     display: inline-grid;
     place-items: center;
     width: var(--icon-button);
     height: var(--icon-button);
+    margin-block: calc(-1 * var(--space-1));
     border-radius: var(--radius-full);
     color: var(--muted);
     transition:
@@ -116,12 +136,6 @@ const longDate = new Intl.DateTimeFormat('en-GB', { dateStyle: 'long', timeZone:
   .permalink:hover {
     color: var(--accent);
     background: var(--surface-strong);
-  }
-
-  @media (max-width: 40rem) {
-    .scribble {
-      padding: var(--space-4);
-    }
   }
 </style>
 
