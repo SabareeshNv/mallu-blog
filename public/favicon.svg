@@ -1,9 +1,28 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-labelledby="t">
-  <title id="t">Lone Voice</title>
-  <!-- tile -->
-  <rect width="64" height="64" rx="14" fill="#211f2c"/>
-  <!-- the lone voice: a single quotation mark -->
-  <path d="M31 35 A9 9 0 1 1 41 26 C41 36 35 43 25 47 C29 42 31 38 31 35 Z" fill="#ff6b4a"/>
-  <!-- the quiet horizon it stands on -->
-  <path d="M16 53 H48" stroke="#f4f2ee" stroke-width="2.5" stroke-linecap="round" opacity=".55"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
+  <title>Lone Voice</title>
+  <style>
+    .outline { stroke: #245B43; }
+    .dot { fill: #245B43; }
+    /* Browsers with a dark tab strip get a lighter green so the outline stays visible. */
+    @media (prefers-color-scheme: dark) {
+      .outline { stroke: #5FB48C; }
+      .dot { fill: #5FB48C; }
+    }
+  </style>
+  <path
+    class="outline"
+    d="M22 17 C7 29 10 60 27 73 L22 91
+       L43 77 C66 84 88 67 88 46
+       C88 22 68 9 46 12
+       C37 12 29 14 22 17Z"
+    stroke-width="4"
+    stroke-linejoin="round"/>
+  <path
+    d="M27 48 C35 48 35 31 43 31
+       C51 31 48 66 58 66
+       C67 66 66 40 77 40"
+    stroke="#B47C45"
+    stroke-width="4"
+    stroke-linecap="round"/>
+  <circle class="dot" cx="77" cy="40" r="3"/>
 </svg>
