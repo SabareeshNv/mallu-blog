@@ -3,6 +3,8 @@
  */
 export const SITE = {
   title: 'Lone Voice',
+  /** The <title> of the home page: short enough to show in full in search results. */
+  homeTitle: 'Lone Voice — Essays and notes in Malayalam',
   tagline: 'Essays and short notes in Malayalam on memory, travel, reading and everyday life.',
   /** Byline used in the footer and the Content Policy. */
   author: 'Lone Voice',

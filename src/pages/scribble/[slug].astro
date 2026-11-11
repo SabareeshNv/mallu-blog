@@ -29,8 +29,8 @@ const date = new Intl.DateTimeFormat('en-GB', { dateStyle: 'long', timeZone: 'UT
 ---
 
 <BaseLayout
-  title={`Scribble · ${date}`}
-  description={excerpt(post, 150)}
+  title={excerpt(post, 36)}
+  description={excerpt(post, 110)}
   image={post.data.cover}
   imageAlt={post.data.coverAlt}
   type="article"

@@ -1,5 +1,6 @@
 // @ts-check
 import { defineConfig, fontProviders } from 'astro/config';
+import sitemap from '@astrojs/sitemap';
 
 /**
  * The public URL of the site, used for canonical links and social previews.
@@ -11,6 +12,9 @@ const site = process.env.SITE_URL ?? process.env.URL ?? process.env.CF_PAGES_URL
 export default defineConfig({
   site,
   trailingSlash: 'ignore',
+
+  // Writes /sitemap-index.xml and /sitemap-0.xml at build time (the 404 page is left out automatically).
+  integrations: [sitemap()],
 
   // Fonts are downloaded from Google Fonts at build time and self-hosted.
   // Alegreya Sans sets all English text; Arima sets all Malayalam text.

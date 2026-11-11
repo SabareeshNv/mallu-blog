@@ -146,13 +146,16 @@ const minutes = readingMinutes(post);
     text-shadow: var(--text-shadow-image);
   }
 
+  /* On a photograph the title carries no underline; hover and focus turn it gold instead. */
   .has-cover .title a {
     color: var(--on-image);
-    text-decoration-color: color-mix(in srgb, var(--sun) 70%, transparent);
+    text-decoration: none;
+    transition: color var(--duration-fast) var(--ease);
   }
 
-  .essay.has-cover:hover .title a {
-    text-decoration-color: var(--sun);
+  .essay.has-cover:hover .title a,
+  .essay.has-cover:has(.title a:focus-visible) .title a {
+    color: var(--sun);
   }
 
   @media (max-width: 40rem) {

@@ -78,6 +78,18 @@ Set `SITE_URL` in your host's build settings to the public address (for example 
 It is used for canonical links and social-preview images. Netlify's `URL` and Cloudflare Pages' `CF_PAGES_URL`
 are picked up automatically when `SITE_URL` is not set.
 
+## Search engines and sharing (SEO)
+
+- Every page has a unique `<title>`, description, canonical link and social-preview image (an essay's own cover, or
+  the hero photograph); essay and scribble pages are tagged as Malayalam (`og:locale`, `inLanguage`).
+- Structured data (JSON-LD): `WebSite` and `Blog` on the home page; `BlogPosting` and `BreadcrumbList` on every essay
+  and scribble. A scribble's page title is the start of its own text.
+- `/sitemap-index.xml` (generated at build time), `/robots.txt` (points to the sitemap) and `/rss.xml` (every entry,
+  newest first; linked from every page for feed readers).
+- The 404 page is `noindex` and has no canonical link.
+- **Set `SITE_URL`** (see Deployment). All of the above use it for absolute addresses. After publishing, submit
+  `https://your-site/sitemap-index.xml` in Google Search Console and Bing Webmaster Tools.
+
 ## Design system
 
 All tokens live at the top of `src/layouts/BaseLayout.astro`; components use nothing else.

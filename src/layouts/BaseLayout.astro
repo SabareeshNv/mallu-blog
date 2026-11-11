@@ -16,6 +16,8 @@ interface Props {
   type?: 'website' | 'article';
   /** For articles: publication date. */
   publishedTime?: Date;
+  /** Keep the page out of search results (used for the 404 page). */
+  noindex?: boolean;
 }
 
 const {
@@ -25,12 +27,78 @@ const {
   imageAlt = 'A wooden jetty reaching into a calm lake at sunset',
   type = 'website',
   publishedTime,
+  noindex = false,
 } = Astro.props;
 
-const fullTitle = title ? `${title} · ${SITE.title}` : `${SITE.title} — ${SITE.tagline}`;
+const fullTitle = title ? `${title} · ${SITE.title}` : SITE.homeTitle;
 const canonical = new URL(Astro.url.pathname, Astro.site);
 const share = await getImage({ src: image, width: 1200, height: 630, fit: 'cover', format: 'jpg' });
 const shareUrl = new URL(share.src, Astro.site);
+
+// ---- Structured data (schema.org), so search engines understand what each page is ----
+const siteUrl = new URL('/', Astro.site).href;
+const publisher = {
+  '@type': 'Organization',
+  name: SITE.title,
+  url: siteUrl,
+  logo: { '@type': 'ImageObject', url: new URL('/apple-touch-icon.png', Astro.site).href },
+};
+const graph: Record<string, unknown>[] = [];
+
+if (Astro.url.pathname === '/') {
+  graph.push(
+    {
+      '@type': 'WebSite',
+      '@id': `${siteUrl}#website`,
+      url: siteUrl,
+      name: SITE.title,
+      description: SITE.description,
+      inLanguage: ['en', SITE.postLang],
+      publisher,
+    },
+    {
+      '@type': 'Blog',
+      '@id': `${siteUrl}#blog`,
+      url: siteUrl,
+      name: SITE.title,
+      description: SITE.description,
+      inLanguage: SITE.postLang,
+      isPartOf: { '@id': `${siteUrl}#website` },
+      publisher,
+    },
+  );
+}
+
+if (type === 'article' && title) {
+  const section = Astro.url.pathname.split('/')[1];
+  const sectionName = section === 'essay' ? 'Essays' : 'Scribbles';
+  const published = publishedTime?.toISOString();
+  graph.push(
+    {
+      '@type': 'BlogPosting',
+      headline: title,
+      description,
+      url: canonical.href,
+      mainEntityOfPage: canonical.href,
+      ...(published && { datePublished: published, dateModified: published }),
+      inLanguage: SITE.postLang,
+      image: shareUrl.href,
+      author: { '@type': 'Organization', name: SITE.author, url: siteUrl },
+      publisher,
+      isPartOf: { '@id': `${siteUrl}#blog` },
+    },
+    {
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        { '@type': 'ListItem', position: 1, name: 'Home', item: siteUrl },
+        { '@type': 'ListItem', position: 2, name: sectionName, item: new URL(`/${section}s/`, Astro.site).href },
+        { '@type': 'ListItem', position: 3, name: title, item: canonical.href },
+      ],
+    },
+  );
+}
+
+const jsonLd = graph.length ? JSON.stringify({ '@context': 'https://schema.org', '@graph': graph }).replace(/</g, '\\u003c') : null;
 ---
 
 <!doctype html>
@@ -41,7 +109,12 @@ const shareUrl = new URL(share.src, Astro.site);
     <title>{fullTitle}</title>
     <meta name="description" content={description} />
     <meta name="author" content={SITE.author} />
-    <link rel="canonical" href={canonical} />
+    <meta
+      name="robots"
+      content={noindex ? 'noindex, follow' : 'index, follow, max-image-preview:large, max-snippet:-1'}
+    />
+    {!noindex && <link rel="canonical" href={canonical} />}
+    <link rel="alternate" type="application/rss+xml" title={`${SITE.title} — all entries`} href="/rss.xml" />
 
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
@@ -55,6 +128,8 @@ const shareUrl = new URL(share.src, Astro.site);
     <meta property="og:title" content={title ?? SITE.title} />
     <meta property="og:description" content={description} />
     <meta property="og:type" content={type} />
+    <meta property="og:locale" content={type === 'article' ? 'ml_IN' : 'en_US'} />
+    {type !== 'article' && <meta property="og:locale:alternate" content="ml_IN" />}
     <meta property="og:url" content={canonical} />
     <meta property="og:image" content={shareUrl} />
     <meta property="og:image:width" content="1200" />
@@ -85,6 +160,7 @@ const shareUrl = new URL(share.src, Astro.site);
 
     <Font cssVariable="--font-ui" preload={[{ weight: '400', style: 'normal' }]} />
     <Font cssVariable="--font-ml" preload={[{ subset: 'malayalam' }]} />
+    {jsonLd && <script type="application/ld+json" set:html={jsonLd} />}
     <slot name="head" />
   </head>
   <body>

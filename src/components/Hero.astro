@@ -2,13 +2,6 @@
 import { Image } from 'astro:assets';
 import heroImage from '../assets/images/hero-lake-dusk.jpg';
 import { SITE } from '../site.config';
-
-interface Props {
-  essays: number;
-  scribbles: number;
-}
-
-const { essays, scribbles } = Astro.props;
 ---
 
 <section class="hero" aria-labelledby="hero-title">
@@ -26,9 +19,6 @@ const { essays, scribbles } = Astro.props;
     <p class="eyebrow">A notebook in Malayalam</p>
     <h1 id="hero-title">{SITE.title}</h1>
     <p class="tagline">{SITE.tagline}</p>
-    <p class="meta">
-      {essays} {essays === 1 ? 'essay' : 'essays'} · {scribbles} {scribbles === 1 ? 'scribble' : 'scribbles'}
-    </p>
   </div>
 </section>
 
@@ -100,12 +90,5 @@ const { essays, scribbles } = Astro.props;
     color: var(--on-image-muted);
     font-size: var(--fs-lead);
     line-height: var(--lh-lead);
-  }
-
-  .meta {
-    margin-top: var(--space-6);
-    color: var(--on-image-muted);
-    font-size: var(--fs-meta);
-    line-height: var(--lh-meta);
   }
 </style>
