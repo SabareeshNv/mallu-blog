@@ -12,8 +12,8 @@ export const SITE = {
     'Lone Voice is a personal notebook of essays and short notes written in Malayalam — on memory, travel, reading and everyday life.',
   /** Optional e-mail shown on the policy pages. When empty, the first social link is used as the contact. */
   contactEmail: '',
-  /** Profiles linked from the footer. Every entry must be a real, working URL. */
-  social: [{ label: 'GitHub', href: 'https://github.com/SabareeshNv', icon: 'github' }],
+  /** Profiles used as the contact on the policy pages (the first one is shown). Every entry must be a real, working URL. */
+  social: [{ label: 'GitHub', href: 'https://github.com/SabareeshNv' }],
   /** Language of the posts (BCP 47). The interface stays in English. */
   postLang: 'ml',
   /** Maximum number of entries on each page of Home, Essays and Scribbles. */

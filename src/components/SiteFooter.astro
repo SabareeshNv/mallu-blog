@@ -1,5 +1,5 @@
 ---
-import GithubIcon from './icons/GithubIcon.astro';
+import RssIcon from './icons/RssIcon.astro';
 import { SITE } from '../site.config';
 
 const year = new Date().getFullYear();
@@ -8,7 +8,6 @@ const legal = [
   { href: '/privacy/', label: 'Privacy Policy' },
   { href: '/content-policy/', label: 'Content Policy' },
 ];
-const icons = { github: GithubIcon } as const;
 ---
 
 <footer class="site-footer">
@@ -27,22 +26,9 @@ const icons = { github: GithubIcon } as const;
           }
         </ul>
       </nav>
-      {
-        SITE.social.length > 0 && (
-          <ul class="social" aria-label="Elsewhere">
-            {SITE.social.map((profile) => {
-              const Icon = icons[profile.icon];
-              return (
-                <li>
-                  <a href={profile.href} rel="me noopener" target="_blank" aria-label={`${profile.label} (opens in a new tab)`}>
-                    <Icon />
-                  </a>
-                </li>
-              );
-            })}
-          </ul>
-        )
-      }
+      <a class="feed" href="/rss.xml" type="application/rss+xml" aria-label="RSS feed" title="RSS feed">
+        <RssIcon />
+      </a>
     </div>
     <p class="copy">© {year} {SITE.author}</p>
   </div>
@@ -97,7 +83,7 @@ const icons = { github: GithubIcon } as const;
     text-underline-offset: 0.25em;
   }
 
-  .social a {
+  .feed {
     display: inline-grid;
     place-items: center;
     width: var(--icon-button);
@@ -107,7 +93,7 @@ const icons = { github: GithubIcon } as const;
     transition: background-color var(--duration-fast) var(--ease);
   }
 
-  .social a:hover {
+  .feed:hover {
     background: rgb(255 255 255 / 0.1);
   }
 
