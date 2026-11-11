@@ -1,0 +1,53 @@
+---
+/**
+ * A simple page of English text (used for the policy pages).
+ */
+import BaseLayout from './BaseLayout.astro';
+import Prose from '../components/Prose.astro';
+
+interface Props {
+  title: string;
+  description?: string;
+  /** e.g. "11 November 2026" */
+  updated?: string;
+}
+
+const { title, description, updated } = Astro.props;
+---
+
+<BaseLayout title={title} description={description}>
+  <article class="page">
+    <header>
+      <h1>{title}</h1>
+      {updated && <p class="updated">Last updated: {updated}</p>}
+    </header>
+    <Prose lang="en">
+      <slot />
+    </Prose>
+  </article>
+</BaseLayout>
+
+<style>
+  .page {
+    max-width: var(--measure);
+    margin-inline: auto;
+    padding: var(--space-l) var(--space-s) 0;
+  }
+
+  header {
+    margin-bottom: var(--space-l);
+  }
+
+  h1 {
+    margin: 0;
+    font-size: var(--step-3);
+    font-weight: 800;
+    letter-spacing: -0.02em;
+  }
+
+  .updated {
+    margin: var(--space-xs) 0 0;
+    color: var(--muted);
+    font-size: var(--step--1);
+  }
+</style>

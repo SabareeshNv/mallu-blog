@@ -1,0 +1,73 @@
+---
+interface Props {
+  current: number;
+  last: number;
+  prevUrl?: string;
+  nextUrl?: string;
+  /** Labels for the two directions. */
+  prevLabel?: string;
+  nextLabel?: string;
+}
+
+const { current, last, prevUrl, nextUrl, prevLabel = 'Newer', nextLabel = 'Older' } = Astro.props;
+---
+
+{
+  last > 1 && (
+    <nav class="pagination" aria-label="Pagination">
+      {prevUrl ? (
+        <a href={prevUrl} rel="prev">
+          <span aria-hidden="true">←</span> {prevLabel}
+        </a>
+      ) : (
+        <span class="spacer" />
+      )}
+      <span class="status" aria-current="page">
+        Page {current} of {last}
+      </span>
+      {nextUrl ? (
+        <a href={nextUrl} rel="next">
+          {nextLabel} <span aria-hidden="true">→</span>
+        </a>
+      ) : (
+        <span class="spacer" />
+      )}
+    </nav>
+  )
+}
+
+<style>
+  .pagination {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    gap: var(--space-s);
+    margin-top: var(--space-l);
+    padding-top: var(--space-m);
+    border-top: 1px solid var(--border);
+  }
+
+  a {
+    justify-self: start;
+    padding: 0.5rem 1rem;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    color: var(--text);
+    font-weight: 700;
+    text-decoration: none;
+  }
+
+  a[rel='next'] {
+    justify-self: end;
+  }
+
+  a:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  .status {
+    color: var(--muted);
+    font-size: var(--step--1);
+  }
+</style>

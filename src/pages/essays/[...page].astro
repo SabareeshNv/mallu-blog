@@ -1,0 +1,31 @@
+---
+import type { GetStaticPaths, Page } from 'astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Feed from '../../components/Feed.astro';
+import { getSortedPosts, isEssay, type Post } from '../../lib/posts';
+import { SITE } from '../../site.config';
+
+export const getStaticPaths = (async ({ paginate }) => {
+  const essays = (await getSortedPosts()).filter(isEssay);
+  return paginate(essays, { pageSize: SITE.feedPageSize });
+}) satisfies GetStaticPaths;
+
+interface Props {
+  page: Page<Post>;
+}
+
+const { page } = Astro.props;
+---
+
+<BaseLayout
+  title={page.currentPage === 1 ? 'Essays' : `Essays · Page ${page.currentPage}`}
+  description="Longer pieces, each with a title."
+>
+  <Feed
+    page={page}
+    eyebrow="Essays"
+    heading="Longer thoughts"
+    intro={`${page.total} ${page.total === 1 ? 'essay' : 'essays'}, newest first.`}
+    emptyText="No essays yet."
+  />
+</BaseLayout>

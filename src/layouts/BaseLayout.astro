@@ -1,0 +1,269 @@
+---
+import { Font } from 'astro:assets';
+import SiteHeader from '../components/SiteHeader.astro';
+import SiteFooter from '../components/SiteFooter.astro';
+import { SITE } from '../site.config';
+
+interface Props {
+  /** Page title (without the site name). */
+  title?: string;
+  description?: string;
+  /** Social preview image URL. */
+  image?: string;
+}
+
+const { title, description = SITE.description, image } = Astro.props;
+const fullTitle = title ? `${title} · ${SITE.title}` : `${SITE.title} — ${SITE.tagline}`;
+const canonical = new URL(Astro.url.pathname, Astro.site);
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="color-scheme" content="light dark" />
+    <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#141517" media="(prefers-color-scheme: dark)" />
+    <meta property="og:title" content={title ?? SITE.title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    {image && <meta property="og:image" content={new URL(image, Astro.site)} />}
+
+    <!-- Apply the saved (or system) theme before first paint to avoid a flash. -->
+    <script is:inline>
+      (() => {
+        const root = document.documentElement;
+        let theme;
+        try {
+          theme = localStorage.getItem('theme');
+        } catch {}
+        if (theme !== 'light' && theme !== 'dark') {
+          theme = matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        }
+        root.dataset.theme = theme;
+        root.dataset.js = '';
+      })();
+    </script>
+
+    <Font cssVariable="--font-ui" preload={[{ weight: '400', style: 'normal' }]} />
+    <Font cssVariable="--font-ml" preload={[{ subset: 'malayalam' }]} />
+    <slot name="head" />
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <SiteHeader />
+    <slot name="hero" />
+    <main id="main" tabindex="-1">
+      <slot />
+    </main>
+    <SiteFooter />
+  </body>
+</html>
+
+<style is:global>
+  /* ---------- Design tokens ---------- */
+  :root {
+    --bg: #ffffff;
+    --surface: #f7f5f2;
+    --surface-strong: #efebe5;
+    --text: #1f1d1a;
+    --muted: #5d5850;
+    --accent: #9a3f17;
+    --accent-soft: #fbeee6;
+    --border: #e6e1da;
+    --focus: #1a56b8;
+    --shadow: 0 1px 2px rgb(31 29 26 / 0.06), 0 8px 24px -12px rgb(31 29 26 / 0.18);
+    --highlight: #fff3c4;
+    --rail: #e2ddd5;
+    --tint-scribble: #f7f3ee;
+
+    --font-sans: var(--font-ui), system-ui, sans-serif;
+    --font-post: var(--font-ml), var(--font-ui), sans-serif;
+
+    --step--1: clamp(0.875rem, 0.85rem + 0.1vw, 0.95rem);
+    --step-0: clamp(1.0625rem, 1rem + 0.25vw, 1.1875rem);
+    --step-1: clamp(1.25rem, 1.15rem + 0.5vw, 1.5rem);
+    --step-2: clamp(1.5rem, 1.3rem + 1vw, 2.125rem);
+    --step-3: clamp(2rem, 1.6rem + 2vw, 3.25rem);
+
+    --space-xs: 0.5rem;
+    --space-s: 1rem;
+    --space-m: 1.5rem;
+    --space-l: 2.5rem;
+    --space-xl: 4rem;
+
+    --radius: 14px;
+    --measure: 42rem;
+    --wide: 60rem;
+    --feed: 48rem;
+    --header-h: 4rem;
+
+    color-scheme: light;
+  }
+
+  :root[data-theme='dark'] {
+    --bg: #141517;
+    --surface: #1c1e21;
+    --surface-strong: #25282c;
+    --text: #ece8e2;
+    --muted: #a9a39a;
+    --accent: #f2a272;
+    --accent-soft: #33241b;
+    --border: #2f3237;
+    --focus: #8ab4f8;
+    --shadow: 0 1px 2px rgb(0 0 0 / 0.4), 0 10px 30px -14px rgb(0 0 0 / 0.7);
+    --highlight: #3a3220;
+    --rail: #34373c;
+    --tint-scribble: #1d1f22;
+    color-scheme: dark;
+  }
+
+  /* Without JavaScript, follow the operating system. */
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme]) {
+      --bg: #141517;
+      --surface: #1c1e21;
+      --surface-strong: #25282c;
+      --text: #ece8e2;
+      --muted: #a9a39a;
+      --accent: #f2a272;
+      --accent-soft: #33241b;
+      --border: #2f3237;
+      --focus: #8ab4f8;
+      --highlight: #3a3220;
+      --rail: #34373c;
+      --tint-scribble: #1d1f22;
+      color-scheme: dark;
+    }
+  }
+
+  /* ---------- Base ---------- */
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+
+  html {
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+    scroll-padding-top: calc(var(--header-h) + var(--space-s));
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    html {
+      scroll-behavior: smooth;
+    }
+  }
+
+  body {
+    margin: 0;
+    min-height: 100dvh;
+    display: flex;
+    flex-direction: column;
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-sans);
+    font-size: var(--step-0);
+    line-height: 1.6;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    transition:
+      background-color 0.25s ease,
+      color 0.25s ease;
+  }
+
+  main {
+    flex: 1;
+    width: 100%;
+    outline: none;
+  }
+
+  /* Any Malayalam text uses Arima, with a taller line height for its stacked glyphs. */
+  :lang(ml) {
+    font-family: var(--font-post);
+    line-height: 1.85;
+  }
+
+  img,
+  picture,
+  svg {
+    display: block;
+    max-width: 100%;
+    height: auto;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    line-height: 1.25;
+    text-wrap: balance;
+  }
+
+  a {
+    color: var(--accent);
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.2em;
+  }
+
+  a:hover {
+    text-decoration-thickness: 2px;
+  }
+
+  :focus-visible {
+    outline: 3px solid var(--focus);
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
+
+  ::selection {
+    background: var(--accent);
+    color: var(--bg);
+  }
+
+  .sr-only {
+    position: absolute !important;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  .skip-link {
+    position: absolute;
+    top: var(--space-xs);
+    left: var(--space-xs);
+    z-index: 100;
+    padding: 0.6rem 1rem;
+    background: var(--text);
+    color: var(--bg);
+    font-weight: 700;
+    border-radius: 8px;
+    transform: translateY(-200%);
+  }
+
+  .skip-link:focus-visible {
+    transform: none;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+</style>

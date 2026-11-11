@@ -1,0 +1,116 @@
+---
+import SunIcon from './icons/SunIcon.astro';
+import MoonIcon from './icons/MoonIcon.astro';
+/**
+ * Light / dark theme switcher (icons only; the labels are read by screen readers).
+ * A native radio group, so it works with Tab + arrow keys and screen readers out of the box.
+ */
+---
+
+<fieldset class="switcher" data-theme-switcher>
+  <legend class="sr-only">Colour theme</legend>
+  <label class="option" title="Light theme">
+    <input type="radio" name="theme" value="light" />
+    <SunIcon />
+    <span class="sr-only">Light</span>
+  </label>
+  <label class="option" title="Dark theme">
+    <input type="radio" name="theme" value="dark" />
+    <MoonIcon />
+    <span class="sr-only">Dark</span>
+  </label>
+</fieldset>
+
+<style>
+  .switcher {
+    display: inline-flex;
+    gap: 2px;
+    margin: 0;
+    padding: 3px;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    background: var(--surface);
+  }
+
+  /* The switcher needs JavaScript; without it the OS preference is used. */
+  :global(html:not([data-js])) .switcher {
+    display: none;
+  }
+
+  .option {
+    position: relative;
+    display: inline-grid;
+    place-items: center;
+    width: 2.1rem;
+    height: 2.1rem;
+    border-radius: 999px;
+    color: var(--muted);
+    cursor: pointer;
+    transition:
+      background-color 0.2s ease,
+      color 0.2s ease;
+  }
+
+  .option:hover {
+    color: var(--text);
+  }
+
+  .option:has(input:checked) {
+    background: var(--bg);
+    color: var(--text);
+    box-shadow: var(--shadow);
+  }
+
+  .option:has(input:focus-visible) {
+    outline: 3px solid var(--focus);
+    outline-offset: 2px;
+  }
+
+  input {
+    position: absolute;
+    inset: 0;
+    margin: 0;
+    opacity: 0;
+    cursor: pointer;
+  }
+
+</style>
+
+<script>
+  type Theme = 'light' | 'dark';
+  const root = document.documentElement;
+  const systemDark = matchMedia('(prefers-color-scheme: dark)');
+
+  function stored(): Theme | null {
+    try {
+      const value = localStorage.getItem('theme');
+      return value === 'light' || value === 'dark' ? value : null;
+    } catch {
+      return null;
+    }
+  }
+
+  function apply(theme: Theme) {
+    root.dataset.theme = theme;
+    document.querySelectorAll<HTMLInputElement>('[data-theme-switcher] input').forEach((input) => {
+      input.checked = input.value === theme;
+    });
+  }
+
+  apply((root.dataset.theme as Theme) ?? 'light');
+
+  document.querySelectorAll<HTMLFieldSetElement>('[data-theme-switcher]').forEach((switcher) => {
+    switcher.addEventListener('change', (event) => {
+      const theme = (event.target as HTMLInputElement).value as Theme;
+      apply(theme);
+      try {
+        localStorage.setItem('theme', theme);
+      } catch {}
+    });
+  });
+
+  // Follow the OS while the reader has not made an explicit choice.
+  systemDark.addEventListener('change', (event) => {
+    if (!stored()) apply(event.matches ? 'dark' : 'light');
+  });
+</script>

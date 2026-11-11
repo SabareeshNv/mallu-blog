@@ -1,0 +1,29 @@
+---
+import type { GetStaticPaths, Page } from 'astro';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Feed from '../components/Feed.astro';
+import Hero from '../components/Hero.astro';
+import { getSortedPosts, type Post } from '../lib/posts';
+import { SITE } from '../site.config';
+
+export const getStaticPaths = (async ({ paginate }) => {
+  const posts = await getSortedPosts();
+  return paginate(posts, { pageSize: SITE.feedPageSize });
+}) satisfies GetStaticPaths;
+
+interface Props {
+  page: Page<Post>;
+}
+
+const { page } = Astro.props;
+const isFirst = page.currentPage === 1;
+---
+
+<BaseLayout title={isFirst ? undefined : `Page ${page.currentPage}`}>
+  {isFirst && <Hero slot="hero" count={page.total} />}
+  <Feed
+    page={page}
+    heading={isFirst ? undefined : 'Earlier entries'}
+    emptyText="Nothing written yet. The first page is still blank."
+  />
+</BaseLayout>

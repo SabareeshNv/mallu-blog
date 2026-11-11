@@ -1,0 +1,54 @@
+---
+import type { GetStaticPaths } from 'astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PostNav from '../../components/PostNav.astro';
+import ScribbleEntry from '../../components/ScribbleEntry.astro';
+import { excerpt, getSortedPosts, isScribble, postAnchor, type Post } from '../../lib/posts';
+import { SITE } from '../../site.config';
+
+export const getStaticPaths = (async () => {
+  const posts = await getSortedPosts();
+  return posts.flatMap((post, i) => {
+    if (!isScribble(post)) return [];
+    // The feed page that holds this scribble, so readers can see it in context.
+    const feedPage = Math.floor(i / SITE.feedPageSize) + 1;
+    const streamUrl = `${feedPage === 1 ? '/' : `/${feedPage}/`}#${postAnchor(post)}`;
+    return [{ params: { slug: post.id }, props: { post, streamUrl, newer: posts[i - 1], older: posts[i + 1] } }];
+  });
+}) satisfies GetStaticPaths;
+
+interface Props {
+  post: Post;
+  streamUrl: string;
+  newer?: Post;
+  older?: Post;
+}
+
+const { post, streamUrl, newer, older } = Astro.props;
+const date = new Intl.DateTimeFormat('en-GB', { dateStyle: 'long', timeZone: 'UTC' }).format(post.data.date);
+---
+
+<BaseLayout title={`Scribble · ${date}`} description={excerpt(post, 150)}>
+  <div class="single">
+    <h1 class="sr-only">Scribble from {date}</h1>
+    <ScribbleEntry post={post} />
+    <p class="context">
+      <a href={streamUrl}>See it in the stream</a>
+    </p>
+    <PostNav newer={newer} older={older} />
+  </div>
+</BaseLayout>
+
+<style>
+  .single {
+    max-width: var(--measure);
+    margin-inline: auto;
+    padding: var(--space-l) var(--space-s) 0;
+  }
+
+  .context {
+    margin: var(--space-s) 0 0;
+    font-size: var(--step--1);
+    font-weight: 700;
+  }
+</style>

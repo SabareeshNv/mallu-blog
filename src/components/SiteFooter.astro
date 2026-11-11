@@ -1,0 +1,71 @@
+---
+import { SITE } from '../site.config';
+const year = new Date().getFullYear();
+const path = Astro.url.pathname;
+const links = [
+  { href: '/privacy/', label: 'Privacy Policy' },
+  { href: '/content-policy/', label: 'Content Policy' },
+];
+---
+
+<footer class="site-footer">
+  <div class="inner">
+    <nav aria-label="Legal">
+      <ul>
+        {
+          links.map((link) => (
+            <li>
+              <a href={link.href} aria-current={path.startsWith(link.href) ? 'page' : undefined}>
+                {link.label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+    <p class="copy">© {year} {SITE.author}</p>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    margin-top: var(--space-xl);
+    border-top: 1px solid var(--border);
+    background: var(--surface);
+    color: var(--muted);
+    font-size: var(--step--1);
+  }
+
+  .inner {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-xs) var(--space-m);
+    padding: var(--space-m) clamp(var(--space-s), 3vw, var(--space-l));
+  }
+
+  ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-xs) var(--space-m);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  a {
+    color: var(--text);
+    text-decoration: none;
+  }
+
+  a:hover,
+  a[aria-current='page'] {
+    text-decoration: underline;
+    text-underline-offset: 0.25em;
+  }
+
+  .copy {
+    margin: 0;
+  }
+</style>

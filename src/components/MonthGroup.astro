@@ -1,0 +1,127 @@
+---
+import EssayEntry from './EssayEntry.astro';
+import ScribbleEntry from './ScribbleEntry.astro';
+import EssayIcon from './icons/EssayIcon.astro';
+import ScribbleIcon from './icons/ScribbleIcon.astro';
+import { isEssay, type Group } from '../lib/posts';
+
+interface Props {
+  group: Group<string>;
+}
+
+const { group } = Astro.props;
+const headingId = `month-${group.key}`;
+const [year, month] = group.key.split('-');
+const monthName = new Intl.DateTimeFormat('en-GB', { month: 'long', timeZone: 'UTC' }).format(
+  new Date(Date.UTC(Number(year), Number(month) - 1, 1)),
+);
+---
+
+<section class="month" aria-labelledby={headingId}>
+  <h2 id={headingId} class="heading">
+    {monthName} <span class="year">{year}</span>
+  </h2>
+  <ol class="timeline" role="list">
+    {
+      group.posts.map((post) => {
+        const essay = isEssay(post);
+        return (
+          <li class:list={['item', essay ? 'is-essay' : 'is-scribble']}>
+            <span class="node" aria-hidden="true">
+              {essay ? <EssayIcon /> : <ScribbleIcon />}
+            </span>
+            {essay ? <EssayEntry post={post} /> : <ScribbleEntry post={post} />}
+          </li>
+        );
+      })
+    }
+  </ol>
+</section>
+
+<style>
+  .month + .month {
+    margin-top: var(--space-xl);
+  }
+
+  .heading {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    margin: 0 0 var(--space-m);
+    font-size: var(--step-3);
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+  }
+
+  .year {
+    padding: 0.2rem 0.55rem 0.25rem;
+    border-radius: 6px;
+    background: var(--text);
+    color: var(--bg);
+    font-size: var(--step--1);
+    font-weight: 700;
+    letter-spacing: 0.02em;
+  }
+
+  /* A quiet vertical rail links the month's entries together. */
+  .timeline {
+    --node: 2.25rem;
+    --gutter: 3.25rem;
+    position: relative;
+    display: grid;
+    gap: var(--space-m);
+    margin: 0;
+    padding: 0 0 0 var(--gutter);
+    list-style: none;
+  }
+
+  .timeline::before {
+    content: '';
+    position: absolute;
+    top: 0.5rem;
+    bottom: 0.5rem;
+    left: calc(var(--node) / 2 - 1px);
+    width: 2px;
+    border-radius: 2px;
+    background: var(--rail);
+  }
+
+  .item {
+    position: relative;
+  }
+
+  .node {
+    position: absolute;
+    top: 1.1rem;
+    left: calc(-1 * var(--gutter));
+    display: grid;
+    place-items: center;
+    width: var(--node);
+    height: var(--node);
+    border: 2px solid currentColor;
+    border-radius: 50%;
+    background: var(--bg);
+  }
+
+  .is-essay .node {
+    color: var(--accent);
+    background: var(--accent-soft);
+  }
+
+  .is-scribble .node {
+    color: var(--muted);
+  }
+
+  @media (max-width: 34rem) {
+    .timeline {
+      --node: 1.9rem;
+      --gutter: 2.6rem;
+    }
+
+    .node :global(svg) {
+      width: 15px;
+      height: 15px;
+    }
+  }
+</style>

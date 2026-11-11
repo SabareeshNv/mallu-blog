@@ -1,0 +1,111 @@
+---
+/**
+ * Typography for rendered Markdown. The post body is marked as Malayalam,
+ * so screen readers and the browser's hyphenation use the right language.
+ */
+import { SITE } from '../site.config';
+
+interface Props {
+  size?: 'regular' | 'large';
+  /** Language of the text. Defaults to the post language (Malayalam). */
+  lang?: string;
+}
+
+const { size = 'regular', lang = SITE.postLang } = Astro.props;
+---
+
+<div class:list={['prose', size]} lang={lang}>
+  <slot />
+</div>
+
+<style>
+  .prose {
+    font-size: 1.08em;
+    overflow-wrap: break-word;
+  }
+
+  .prose.large {
+    font-size: 1.14em;
+  }
+
+  .prose > :global(:first-child) {
+    margin-top: 0;
+  }
+
+  .prose > :global(:last-child) {
+    margin-bottom: 0;
+  }
+
+  .prose :global(p),
+  .prose :global(ul),
+  .prose :global(ol),
+  .prose :global(blockquote),
+  .prose :global(pre),
+  .prose :global(figure) {
+    margin-block: 0 1.1em;
+  }
+
+  .prose :global(h2),
+  .prose :global(h3),
+  .prose :global(h4) {
+    margin-block: 1.8em 0.6em;
+    line-height: 1.5;
+  }
+
+  .prose :global(h2) {
+    font-size: 1.35em;
+  }
+
+  .prose :global(h3) {
+    font-size: 1.15em;
+  }
+
+  .prose :global(ul),
+  .prose :global(ol) {
+    padding-inline-start: 1.4em;
+  }
+
+  .prose :global(li + li) {
+    margin-top: 0.3em;
+  }
+
+  .prose :global(blockquote) {
+    margin-inline: 0;
+    padding: 0.2em 0 0.2em 1.1em;
+    border-inline-start: 3px solid var(--accent);
+    color: var(--muted);
+    font-style: italic;
+  }
+
+  .prose :global(img) {
+    border-radius: var(--radius);
+    margin-block: 1.5em;
+  }
+
+  .prose :global(hr) {
+    width: 4rem;
+    margin: 2.5em auto;
+    border: 0;
+    border-top: 2px solid var(--border);
+  }
+
+  .prose :global(code) {
+    padding: 0.1em 0.35em;
+    border-radius: 6px;
+    background: var(--surface-strong);
+    font-size: 0.88em;
+  }
+
+  .prose :global(pre) {
+    padding: var(--space-s);
+    overflow-x: auto;
+    border-radius: var(--radius);
+    background: var(--surface);
+    line-height: 1.5;
+  }
+
+  .prose :global(pre code) {
+    padding: 0;
+    background: none;
+  }
+</style>

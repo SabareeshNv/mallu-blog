@@ -1,0 +1,51 @@
+---
+import PageLayout from '../layouts/PageLayout.astro';
+import { SITE } from '../site.config';
+---
+
+<PageLayout
+  title="Content Policy"
+  description={`About the writing on ${SITE.title} and how it may be shared.`}
+  updated="11 November 2026"
+>
+  <h2>About the writing</h2>
+  <p>
+    The essays and scribbles here are personal reflections: ideas, thoughts and feelings written in Malayalam. They
+    express my own views at the time of writing and do not represent any employer, organisation or group. Views can
+    change; older entries are kept as they were written, as a record.
+  </p>
+
+  <h2>Ownership</h2>
+  <p>
+    Unless stated otherwise, all writing on this site is © {SITE.author}. All rights are reserved.
+  </p>
+
+  <h2>Sharing and quoting</h2>
+  <ul>
+    <li>You are welcome to share links to any entry.</li>
+    <li>
+      You may quote short passages for review, comment or discussion, provided you credit {SITE.author} and link to
+      the original entry.
+    </li>
+    <li>
+      Please do not republish entries in full, translate them, or use them commercially without written permission.
+    </li>
+    <li>
+      Collecting the writing in bulk by automated means, including for building datasets, requires prior written
+      permission.
+    </li>
+  </ul>
+
+  <h2>Photographs</h2>
+  <p>
+    The photographs used on this site are from <a href="https://unsplash.com/">Unsplash</a> and are used under the
+    <a href="https://unsplash.com/license">Unsplash License</a>. Their copyright remains with the photographers.
+  </p>
+
+  <h2>Corrections and concerns</h2>
+  <p>
+    If you find a factual error, or believe something here concerns you unfairly or infringes your rights, please{" "}
+    write to <a href={`mailto:${SITE.contactEmail}`}>{SITE.contactEmail}</a>. Every message will be read, and
+    corrections will be made where they are due.
+  </p>
+</PageLayout>

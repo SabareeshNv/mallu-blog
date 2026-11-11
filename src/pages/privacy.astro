@@ -1,0 +1,47 @@
+---
+import PageLayout from '../layouts/PageLayout.astro';
+import { SITE } from '../site.config';
+---
+
+<PageLayout title="Privacy Policy" description={`How ${SITE.title} handles your data.`} updated="11 November 2026">
+  <p>
+    {SITE.title} is a personal notebook. It is a static website: there are no accounts, no comments, no forms and
+    no newsletter, so you are never asked for any personal information.
+  </p>
+
+  <h2>What this site does not do</h2>
+  <ul>
+    <li>It does not use cookies.</li>
+    <li>It does not use analytics, tracking pixels or advertising.</li>
+    <li>
+      It does not load anything from third parties. The fonts and photographs are served from this site itself, so
+      your browser does not contact Google Fonts, Unsplash or any other service while you read.
+    </li>
+  </ul>
+
+  <h2>What is stored on your device</h2>
+  <p>
+    If you choose the light or dark theme, that choice is saved in your browser's local storage under the key
+    <code>theme</code>, so the site looks the same on your next visit. It never leaves your device, and you can
+    remove it at any time by clearing this site's data in your browser settings.
+  </p>
+
+  <h2>Server logs</h2>
+  <p>
+    Like most websites, the hosting provider may keep short-lived technical logs of requests, such as IP address,
+    browser type and the page requested. These are used only to keep the service running and secure, and are not
+    used to identify or profile readers.
+  </p>
+
+  <h2>Links to other websites</h2>
+  <p>
+    Some entries link to other websites. Those sites have their own privacy practices, which this policy does not
+    cover.
+  </p>
+
+  <h2>Changes and contact</h2>
+  <p>
+    If this policy changes, the date at the top of the page will be updated. For any questions, write to{" "}
+    <a href={`mailto:${SITE.contactEmail}`}>{SITE.contactEmail}</a>.
+  </p>
+</PageLayout>

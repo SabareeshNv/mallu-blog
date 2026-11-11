@@ -1,0 +1,133 @@
+---
+import ThemeSwitcher from './ThemeSwitcher.astro';
+import { SITE } from '../site.config';
+
+const path = Astro.url.pathname;
+const section = path.split('/')[1] ?? '';
+const links = [
+  { href: '/', label: 'Home', active: section === '' || /^\d+$/.test(section) },
+  { href: '/essays/', label: 'Essays', active: section === 'essays' || section === 'essay' },
+  { href: '/scribbles/', label: 'Scribbles', active: section === 'scribbles' || section === 'scribble' },
+  { href: '/archive/', label: 'Archive', active: section === 'archive' },
+];
+---
+
+<header class="site-header">
+  <div class="inner">
+    <a class="brand" href="/" aria-label={`${SITE.title} — home`}>
+      <svg class="mark" viewBox="0 0 64 64" width="28" height="28" aria-hidden="true">
+        <rect width="64" height="64" rx="14" fill="currentColor"></rect>
+        <path d="M18 46c6-2 10-9 14-19 3-7 7-10 14-10-2 6-5 9-9 11 3 0 5-1 7-2-3 8-9 13-18 14l-6 6z" fill="var(--bg)"
+        ></path>
+      </svg>
+      <span>{SITE.title}</span>
+    </a>
+    <div class="end">
+    <nav aria-label="Main">
+      <ul>
+        {
+          links.map((link) => (
+            <li>
+              <a href={link.href} aria-current={link.active ? 'page' : undefined}>
+                {link.label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+    <ThemeSwitcher />
+    </div>
+  </div>
+</header>
+
+<style>
+  .site-header {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: color-mix(in srgb, var(--bg) 88%, transparent);
+    backdrop-filter: saturate(1.4) blur(12px);
+    -webkit-backdrop-filter: saturate(1.4) blur(12px);
+    border-bottom: 1px solid var(--border);
+  }
+
+  /* Full width: the brand sits at the left edge, navigation and theme switcher at the right edge. */
+  .inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-s);
+    min-height: var(--header-h);
+    padding-inline: clamp(var(--space-s), 3vw, var(--space-l));
+  }
+
+  .end {
+    display: flex;
+    align-items: center;
+    gap: clamp(0.25rem, 1.5vw, var(--space-m));
+  }
+
+  .brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+    color: var(--text);
+    font-size: var(--step-1);
+    font-weight: 800;
+    letter-spacing: -0.01em;
+    text-decoration: none;
+  }
+
+  .mark {
+    color: var(--accent);
+  }
+
+  ul {
+    display: flex;
+    gap: 0.25rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  nav a {
+    display: block;
+    padding: 0.35rem 0.75rem;
+    border-radius: 999px;
+    color: var(--muted);
+    font-weight: 500;
+    text-decoration: none;
+  }
+
+  nav a:hover {
+    color: var(--text);
+    background: var(--surface);
+  }
+
+  nav a[aria-current='page'] {
+    color: var(--text);
+    background: var(--surface-strong);
+  }
+
+  @media (max-width: 40rem) {
+    ul {
+      gap: 0;
+    }
+
+    nav a {
+      padding: 0.35rem 0.5rem;
+      font-size: var(--step--1);
+    }
+  }
+
+  @media (max-width: 30rem) {
+    .brand span {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      clip: rect(0 0 0 0);
+    }
+  }
+</style>

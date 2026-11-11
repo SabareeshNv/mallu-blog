@@ -1,0 +1,144 @@
+---
+import { Image } from 'astro:assets';
+import FormattedDate from './FormattedDate.astro';
+import { excerpt, postAnchor, postUrl, type Post } from '../lib/posts';
+import { SITE } from '../site.config';
+
+interface Props {
+  post: Post;
+}
+
+const { post } = Astro.props;
+const { title, date, cover, coverAlt } = post.data;
+const url = postUrl(post);
+---
+
+<article class:list={['essay', { 'has-cover': cover }]} id={postAnchor(post)}>
+  <div class="text">
+    <h3 class="title" lang={SITE.postLang}>
+      <a href={url}>{title}</a>
+    </h3>
+    <p class="summary" lang={SITE.postLang}>{excerpt(post, 90)}</p>
+    <p class="meta">
+      <span class="kind">Essay</span>
+      <span aria-hidden="true">·</span>
+      <FormattedDate date={date} />
+    </p>
+  </div>
+  {
+    cover && (
+      <div class="cover">
+        <Image src={cover} alt={coverAlt ?? ''} widths={[240, 400, 560]} sizes="(min-width: 40rem) 13rem, 8rem" />
+      </div>
+    )
+  }
+</article>
+
+<style>
+  .essay {
+    position: relative;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-m);
+    align-items: start;
+    padding: var(--space-s) 0;
+  }
+
+  .essay.has-cover {
+    grid-template-columns: 1fr 13rem;
+  }
+
+  .title {
+    margin: 0;
+    font-size: var(--step-2);
+    font-weight: 700;
+    line-height: 1.5;
+  }
+
+  .title a {
+    color: var(--text);
+    text-decoration: underline;
+    text-decoration-color: color-mix(in srgb, var(--accent) 45%, transparent);
+    text-decoration-thickness: 3px;
+    text-underline-offset: 0.3em;
+    text-decoration-skip-ink: none;
+    transition: text-decoration-color 0.2s ease;
+  }
+
+  /* Stretch the link over the whole entry for a generous click target. */
+  .title a::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+  }
+
+  .essay:hover .title a {
+    text-decoration-color: var(--accent);
+  }
+
+  .title a:focus-visible {
+    outline: none;
+  }
+
+  .essay:has(.title a:focus-visible) {
+    outline: 3px solid var(--focus);
+    outline-offset: 6px;
+    border-radius: 6px;
+  }
+
+  .summary {
+    display: -webkit-box;
+    overflow: hidden;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+    line-clamp: 3;
+    margin: var(--space-xs) 0 0;
+    color: var(--muted);
+  }
+
+  .meta {
+    display: flex;
+    gap: 0.4rem;
+    margin: var(--space-xs) 0 0;
+    color: var(--muted);
+    font-size: var(--step--1);
+  }
+
+  .kind {
+    color: var(--text);
+    font-weight: 700;
+  }
+
+  .cover {
+    aspect-ratio: 3 / 2;
+    overflow: hidden;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    background: var(--surface);
+    box-shadow: var(--shadow);
+  }
+
+  .cover :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.6s ease;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .essay:hover .cover :global(img) {
+      transform: scale(1.04);
+    }
+  }
+
+  @media (max-width: 40rem) {
+    .essay.has-cover {
+      grid-template-columns: 1fr 6.5rem;
+      gap: var(--space-s);
+    }
+
+    .title {
+      font-size: var(--step-1);
+    }
+  }
+</style>

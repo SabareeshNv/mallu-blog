@@ -1,0 +1,153 @@
+---
+import { Image } from 'astro:assets';
+import { render } from 'astro:content';
+import FormattedDate from './FormattedDate.astro';
+import PermalinkIcon from './PermalinkIcon.astro';
+import Prose from './Prose.astro';
+import { postAnchor, postUrl, type Post } from '../lib/posts';
+
+interface Props {
+  post: Post;
+}
+
+const { post } = Astro.props;
+const { date, cover, coverAlt } = post.data;
+const { Content } = await render(post);
+const anchor = postAnchor(post);
+const longDate = new Intl.DateTimeFormat('en-GB', { dateStyle: 'long', timeZone: 'UTC' }).format(date);
+---
+
+<article class="scribble" id={anchor} tabindex="-1" aria-label={`Scribble from ${longDate}`} data-scribble>
+  {
+    cover && (
+      <Image
+        class="cover"
+        src={cover}
+        alt={coverAlt ?? ''}
+        widths={[400, 720, 1080]}
+        sizes="(min-width: 44rem) 40rem, 100vw"
+      />
+    )
+  }
+  <Prose>
+    <Content />
+  </Prose>
+  <footer class="meta">
+    <FormattedDate date={date} />
+    <span aria-hidden="true">·</span>
+    <a
+      class="permalink"
+      href={postUrl(post)}
+      data-scribble-permalink={anchor}
+      aria-label={`Permalink to scribble from ${longDate}`}
+      title="Permalink"
+    >
+      <PermalinkIcon />
+    </a>
+  </footer>
+</article>
+
+<style>
+  .scribble {
+    position: relative;
+    padding: var(--space-m);
+    border-radius: var(--radius);
+    background: var(--tint-scribble);
+    border: 1px solid color-mix(in srgb, var(--border) 70%, transparent);
+    scroll-margin-top: calc(var(--header-h) + var(--space-s));
+    outline: none;
+    transition: box-shadow 0.3s ease;
+  }
+
+  .scribble:focus-visible {
+    outline: 3px solid var(--focus);
+    outline-offset: 3px;
+  }
+
+  /* Highlight a scribble that was reached through its permalink. */
+  .scribble:target,
+  .scribble.is-highlighted {
+    box-shadow: 0 0 0 2px var(--accent);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .scribble.is-highlighted {
+      animation: glow 1.6s ease-out;
+    }
+
+    @keyframes glow {
+      from {
+        background-color: var(--highlight);
+      }
+    }
+  }
+
+  .meta {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    margin-top: var(--space-xs);
+    color: var(--muted);
+    font-size: var(--step--1);
+  }
+
+  .permalink {
+    display: inline-grid;
+    place-items: center;
+    width: 2.25rem;
+    height: 2.25rem;
+    margin: -0.5rem 0;
+    border-radius: 50%;
+    color: var(--muted);
+  }
+
+  .permalink:hover {
+    color: var(--accent);
+    background: var(--surface-strong);
+  }
+
+  .cover {
+    width: 100%;
+    aspect-ratio: 2 / 1;
+    max-height: 15rem;
+    margin-bottom: var(--space-s);
+    border-radius: calc(var(--radius) - 4px);
+    object-fit: cover;
+  }
+</style>
+
+<script>
+  // Clicking a scribble's permalink inside a list scrolls to it (and focuses it)
+  // instead of leaving the page. Opening it in a new tab still goes to its own URL.
+  const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)');
+
+  function reveal(target: HTMLElement, smooth: boolean) {
+    target.scrollIntoView({ behavior: smooth && !reduceMotion.matches ? 'smooth' : 'auto', block: 'start' });
+    target.focus({ preventScroll: true });
+    target.classList.remove('is-highlighted');
+    void target.offsetWidth; // restart the highlight animation
+    target.classList.add('is-highlighted');
+  }
+
+  document.addEventListener('click', (event) => {
+    if (event.defaultPrevented || event.button !== 0) return;
+    if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+    const link = (event.target as Element).closest<HTMLAnchorElement>('a[data-scribble-permalink]');
+    if (!link) return;
+    const target = document.getElementById(link.dataset.scribblePermalink!);
+    if (!target) return;
+    event.preventDefault();
+    history.pushState(null, '', `#${target.id}`);
+    reveal(target, true);
+  });
+
+  // Arriving with a #scribble-… hash (e.g. from "View in stream"): focus and highlight it.
+  function fromHash() {
+    const id = decodeURIComponent(location.hash.slice(1));
+    const target = id ? document.getElementById(id) : null;
+    if (target?.matches('[data-scribble]')) reveal(target, false);
+  }
+
+  fromHash();
+  window.addEventListener('popstate', fromHash);
+</script>
