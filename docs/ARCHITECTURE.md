@@ -87,6 +87,9 @@ All visual decisions are tokens, and a component uses nothing else.
 - **Colour** lives in `theme.css`. Each colour is written once as `light-dark(<light>, <dark>)`. Which theme is active
   is decided by `color-scheme` on `<html>` (set by the theme switcher, or by the operating system when JavaScript is off).
 - **Breakpoints** are listed at the top of `tokens.css`. CSS cannot use variables in media queries, so use only those.
+- **Reading measure**: an essay's text column is `--measure-reading` (75ch) and the label, title and date on its cover
+  sit in a slightly wider column, `--measure-masthead` (90ch). `ch` is measured in the font of the element that uses it,
+  so both are set in the reading font (`Container size="reading"` and the essay masthead).
 - **Shape and motion**: three radii plus full, one border width, two durations, one easing curve.
 
 ## Making changes

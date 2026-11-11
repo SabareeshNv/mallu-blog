@@ -63,7 +63,7 @@ const minutes = readingMinutes(post);
       </div>
     </header>
 
-    <Container size="prose" top={cover ? 'default' : 'tight'}>
+    <Container size="reading" top={cover ? 'default' : 'tight'}>
       <Prose size="large">
         <slot />
       </Prose>
@@ -116,13 +116,17 @@ const minutes = readingMinutes(post);
     );
   }
 
-  /* The left edge stays aligned with the article text below; the title may extend to the right,
-     so a long title wraps late instead of stacking into a narrow column. */
+  /* The label, title and date sit in a column a little wider than the text below, centred on the same axis.
+     It is set in the reading font and size so that its "ch" width compares directly with the text column's;
+     the label and date go back to the interface font. */
   .masthead-inner {
     width: 100%;
     min-width: 0;
-    padding-block: var(--space-12) 0;
-    padding-inline: max(var(--gutter), calc(50% - var(--container-prose) / 2)) var(--gutter);
+    max-width: calc(var(--measure-masthead) + 2 * var(--gutter));
+    margin-inline: auto;
+    padding: var(--space-12) var(--gutter) 0;
+    font-family: var(--font-post);
+    font-size: var(--fs-lead);
   }
 
   .has-cover .masthead-inner {
@@ -131,6 +135,7 @@ const minutes = readingMinutes(post);
   }
 
   .kind {
+    font-family: var(--font-sans);
     display: inline-flex;
     align-items: center;
     gap: var(--space-2);
@@ -148,7 +153,6 @@ const minutes = readingMinutes(post);
 
   h1 {
     margin-top: var(--space-3);
-    max-width: 56rem;
     font-size: var(--fs-display);
     font-weight: var(--fw-bold);
     line-height: var(--lh-display);
@@ -164,6 +168,7 @@ const minutes = readingMinutes(post);
   }
 
   .meta {
+    font-family: var(--font-sans);
     display: flex;
     flex-wrap: wrap;
     gap: var(--space-2);

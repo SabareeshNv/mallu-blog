@@ -26,7 +26,12 @@
   /* ---- Layout ---- */
   --gutter: var(--space-4);
   --container-feed: 48rem; /* lists: Home, Essays, Scribbles, Archive */
-  --container-prose: 42rem; /* reading: essays, scribbles, policies */
+  --container-prose: 42rem; /* reading: scribbles, policies */
+  /* Reading measures for essays. `ch` is the width of a "0" in the font of the element that uses the value, so these
+     are always used on an element set in the reading font (Container size="reading", the essay masthead). The
+     masthead column is a little wider than the text column below it. */
+  --measure-reading: 75ch;
+  --measure-masthead: 90ch;
   --header-h: var(--space-16);
   --control-h: var(--space-10); /* buttons, nav links, theme switcher */
   --icon-button: var(--space-8);
