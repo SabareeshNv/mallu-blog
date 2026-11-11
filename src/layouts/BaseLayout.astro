@@ -27,8 +27,8 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
     <link rel="canonical" href={canonical} />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="color-scheme" content="light dark" />
-    <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
-    <meta name="theme-color" content="#141517" media="(prefers-color-scheme: dark)" />
+    <meta name="theme-color" content="#15212c" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#081115" media="(prefers-color-scheme: dark)" />
     <meta property="og:title" content={title ?? SITE.title} />
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
@@ -68,19 +68,28 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
 <style is:global>
   /* ---------- Design tokens ---------- */
   :root {
+    /* "Monsoon" palette: ink-blue text, backwater teal for the interface, laterite red for essays. */
     --bg: #ffffff;
-    --surface: #f7f5f2;
-    --surface-strong: #efebe5;
-    --text: #1f1d1a;
-    --muted: #5d5850;
-    --accent: #9a3f17;
-    --accent-soft: #fbeee6;
-    --border: #e6e1da;
-    --focus: #1a56b8;
-    --shadow: 0 1px 2px rgb(31 29 26 / 0.06), 0 8px 24px -12px rgb(31 29 26 / 0.18);
-    --highlight: #fff3c4;
-    --rail: #e2ddd5;
-    --tint-scribble: #f7f3ee;
+    --surface: #f2f7f6;
+    --surface-strong: #e2eeec;
+    --text: #15212c;
+    --muted: #4b5a68;
+    --accent: #0a6c67;
+    --accent-soft: #e0f1ee;
+    --essay: #b8400f;
+    --essay-soft: #fcebe2;
+    --sun: #e0a21a;
+    --border: #d9e4e2;
+    --focus: #1d4ed8;
+    --shadow: 0 1px 2px rgb(21 33 44 / 0.06), 0 10px 26px -14px rgb(10 60 66 / 0.28);
+    --highlight: #fff0bf;
+    --rail: linear-gradient(to bottom, #9fd3cc, #f1c3a8);
+    --tint-scribble: #f0f7f5;
+    --scribble-edge: #9fd3cc;
+    --ink: #15212c;
+    --on-ink: #e6efee;
+    --on-ink-muted: #a9bcbf;
+    --veil: 8 30 38;
 
     --font-sans: var(--font-ui), system-ui, sans-serif;
     --font-post: var(--font-ml), var(--font-ui), sans-serif;
@@ -107,37 +116,54 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
   }
 
   :root[data-theme='dark'] {
-    --bg: #141517;
-    --surface: #1c1e21;
-    --surface-strong: #25282c;
-    --text: #ece8e2;
-    --muted: #a9a39a;
-    --accent: #f2a272;
-    --accent-soft: #33241b;
-    --border: #2f3237;
-    --focus: #8ab4f8;
-    --shadow: 0 1px 2px rgb(0 0 0 / 0.4), 0 10px 30px -14px rgb(0 0 0 / 0.7);
-    --highlight: #3a3220;
-    --rail: #34373c;
-    --tint-scribble: #1d1f22;
+    --bg: #0d181d;
+    --surface: #13232a;
+    --surface-strong: #1b3038;
+    --text: #e6efed;
+    --muted: #9cb0b1;
+    --accent: #52d0c4;
+    --accent-soft: #10332f;
+    --essay: #ff9e6e;
+    --essay-soft: #3a2219;
+    --sun: #f2c14e;
+    --border: #22373e;
+    --focus: #93c5fd;
+    --shadow: 0 1px 2px rgb(0 0 0 / 0.4), 0 12px 30px -14px rgb(0 0 0 / 0.75);
+    --highlight: #3a3418;
+    --rail: linear-gradient(to bottom, #1f5a55, #5a3424);
+    --tint-scribble: #112128;
+    --scribble-edge: #1f5a55;
+    --ink: #081115;
+    --on-ink: #e6efed;
+    --on-ink-muted: #8fa6a8;
+    --veil: 4 16 20;
     color-scheme: dark;
   }
 
   /* Without JavaScript, follow the operating system. */
   @media (prefers-color-scheme: dark) {
     :root:not([data-theme]) {
-      --bg: #141517;
-      --surface: #1c1e21;
-      --surface-strong: #25282c;
-      --text: #ece8e2;
-      --muted: #a9a39a;
-      --accent: #f2a272;
-      --accent-soft: #33241b;
-      --border: #2f3237;
-      --focus: #8ab4f8;
-      --highlight: #3a3220;
-      --rail: #34373c;
-      --tint-scribble: #1d1f22;
+      --bg: #0d181d;
+      --surface: #13232a;
+      --surface-strong: #1b3038;
+      --text: #e6efed;
+      --muted: #9cb0b1;
+      --accent: #52d0c4;
+      --accent-soft: #10332f;
+      --essay: #ff9e6e;
+      --essay-soft: #3a2219;
+      --sun: #f2c14e;
+      --border: #22373e;
+      --focus: #93c5fd;
+      --shadow: 0 1px 2px rgb(0 0 0 / 0.4), 0 12px 30px -14px rgb(0 0 0 / 0.75);
+      --highlight: #3a3418;
+      --rail: linear-gradient(to bottom, #1f5a55, #5a3424);
+      --tint-scribble: #112128;
+      --scribble-edge: #1f5a55;
+      --ink: #081115;
+      --on-ink: #e6efed;
+      --on-ink-muted: #8fa6a8;
+      --veil: 4 16 20;
       color-scheme: dark;
     }
   }

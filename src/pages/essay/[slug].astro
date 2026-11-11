@@ -123,10 +123,10 @@ const ogImage = cover ? (await getImage({ src: cover, width: 1200, format: 'jpg'
     z-index: -1;
     background: linear-gradient(
       to top,
-      rgb(10 10 14 / 0.88) 0%,
-      rgb(10 10 14 / 0.55) 40%,
-      rgb(10 10 14 / 0.15) 75%,
-      rgb(10 10 14 / 0.05) 100%
+      rgb(var(--veil) / 0.9) 0%,
+      rgb(var(--veil) / 0.55) 40%,
+      rgb(var(--veil) / 0.15) 75%,
+      rgb(var(--veil) / 0.05) 100%
     );
   }
 
@@ -150,7 +150,7 @@ const ogImage = cover ? (await getImage({ src: cover, width: 1200, format: 'jpg'
     align-items: center;
     gap: 0.4rem;
     margin: 0 0 var(--space-xs);
-    color: var(--accent);
+    color: var(--essay);
     font-size: var(--step--1);
     font-weight: 700;
     letter-spacing: 0.1em;
@@ -158,8 +158,7 @@ const ogImage = cover ? (await getImage({ src: cover, width: 1200, format: 'jpg'
   }
 
   .has-cover .kind {
-    color: #fff;
-    opacity: 0.92;
+    color: #f6c453;
   }
 
   h1 {

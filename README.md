@@ -1,4 +1,4 @@
-# Margins — a Malayalam notebook
+# Lone Voice — a Malayalam notebook
 
 A personal blog/microblog built with **Astro 7**, plain modern CSS and vanilla JavaScript.
 Posts are written in Malayalam; the interface is in English.

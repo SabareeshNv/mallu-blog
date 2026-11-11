@@ -2,7 +2,7 @@
  * Site-wide settings. Edit these to make the blog your own.
  */
 export const SITE = {
-  title: 'Margins',
+  title: 'Lone Voice',
   tagline: 'Ideas, thoughts and feelings — written in Malayalam.',
   author: 'Your Name',
   /** Shown on the Privacy and Content Policy pages. Replace with your own address. */

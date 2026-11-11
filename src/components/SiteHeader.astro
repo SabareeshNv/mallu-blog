@@ -15,10 +15,11 @@ const links = [
 <header class="site-header">
   <div class="inner">
     <a class="brand" href="/" aria-label={`${SITE.title} — home`}>
-      <svg class="mark" viewBox="0 0 64 64" width="28" height="28" aria-hidden="true">
-        <rect width="64" height="64" rx="14" fill="currentColor"></rect>
-        <path d="M18 46c6-2 10-9 14-19 3-7 7-10 14-10-2 6-5 9-9 11 3 0 5-1 7-2-3 8-9 13-18 14l-6 6z" fill="var(--bg)"
-        ></path>
+      <svg class="mark" viewBox="0 0 64 64" width="30" height="30" aria-hidden="true">
+        <rect width="64" height="64" rx="16" fill="#0a6c67"></rect>
+        <circle cx="22" cy="32" r="7" fill="#f6c453"></circle>
+        <path d="M34 22a14 14 0 0 1 0 20M41 15a24 24 0 0 1 0 34" fill="none" stroke="#e6efee" stroke-width="4.5"
+          stroke-linecap="round"></path>
       </svg>
       <span>{SITE.title}</span>
     </a>
@@ -42,14 +43,22 @@ const links = [
 </header>
 
 <style>
+  /* A deep-ink band frames the page, matching the footer. Local tokens recolour everything inside it. */
   .site-header {
+    --text: var(--on-ink);
+    --muted: var(--on-ink-muted);
+    --surface: rgb(255 255 255 / 0.07);
+    --surface-strong: rgb(255 255 255 / 0.15);
+    --border: rgb(255 255 255 / 0.14);
+    --focus: #93c5fd;
+    --shadow: 0 1px 3px rgb(0 0 0 / 0.35);
     position: sticky;
     top: 0;
     z-index: 50;
-    background: color-mix(in srgb, var(--bg) 88%, transparent);
+    background: color-mix(in srgb, var(--ink) 94%, transparent);
     backdrop-filter: saturate(1.4) blur(12px);
     -webkit-backdrop-filter: saturate(1.4) blur(12px);
-    border-bottom: 1px solid var(--border);
+    color: var(--text);
   }
 
   /* Full width: the brand sits at the left edge, navigation and theme switcher at the right edge. */
@@ -80,7 +89,7 @@ const links = [
   }
 
   .mark {
-    color: var(--accent);
+    flex: none;
   }
 
   ul {
@@ -108,6 +117,7 @@ const links = [
   nav a[aria-current='page'] {
     color: var(--text);
     background: var(--surface-strong);
+    box-shadow: inset 0 -2px 0 #f6c453;
   }
 
   @media (max-width: 40rem) {
