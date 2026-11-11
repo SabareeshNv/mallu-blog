@@ -5,14 +5,43 @@ export type Post = CollectionEntry<'posts'>;
 export const isEssay = (post: Post) => Boolean(post.data.title);
 export const isScribble = (post: Post) => !isEssay(post);
 
-/** Turns a (Malayalam or English) title into a URL segment, keeping Unicode letters and marks. */
+const graphemes = new Intl.Segmenter('ml', { granularity: 'grapheme' });
+
+/** Longest URL segment, in UTF-8 bytes. Malayalam letters take 3 bytes each, and file names are limited to 255 bytes. */
+const MAX_SLUG_BYTES = 180;
+const byteLength = (text: string) => new TextEncoder().encode(text).length;
+
+/**
+ * Turns a (Malayalam or English) title into a URL segment, keeping Unicode letters and marks.
+ * Long titles are shortened at a word boundary, so very long titles still produce a valid address.
+ */
 export function slugify(text: string): string {
-  return text
+  const slug = text
     .normalize('NFC')
     .toLowerCase()
-    .replace(/[​-‍﻿]/g, '') // zero-width joiners used in Malayalam chillu forms
+    .replace(/[\u200B-\u200D\uFEFF]/g, '') // zero-width joiners used in Malayalam chillu forms
     .replace(/[^\p{L}\p{M}\p{N}]+/gu, '-')
     .replace(/^-+|-+$/g, '');
+
+  if (byteLength(slug) <= MAX_SLUG_BYTES) return slug;
+
+  // Keep whole words while they fit.
+  const words = slug.split('-');
+  let result = '';
+  for (const word of words) {
+    const next = result ? `${result}-${word}` : word;
+    if (byteLength(next) > MAX_SLUG_BYTES) break;
+    result = next;
+  }
+  if (result) return result;
+
+  // A single enormous word: cut it between grapheme clusters, never inside one.
+  result = '';
+  for (const { segment } of graphemes.segment(slug)) {
+    if (byteLength(result + segment) > MAX_SLUG_BYTES) break;
+    result += segment;
+  }
+  return result;
 }
 
 /** The URL segment used for a post. */
