@@ -30,7 +30,6 @@ import MoonIcon from './icons/MoonIcon.astro';
     padding: calc(var(--space-1) - var(--border-width));
     border: var(--border-width) solid var(--border);
     border-radius: var(--radius-full);
-    background: var(--surface);
   }
 
   /* The switcher needs JavaScript; without it the OS preference is used. */
@@ -57,9 +56,8 @@ import MoonIcon from './icons/MoonIcon.astro';
   }
 
   .option:has(input:checked) {
-    background: var(--surface-strong);
-    color: var(--text);
-    box-shadow: var(--shadow-sm);
+    background: var(--accent-soft);
+    color: var(--accent);
   }
 
   .option:has(input:focus-visible) {

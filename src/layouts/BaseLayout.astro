@@ -202,6 +202,13 @@ const shareUrl = new URL(share.src, Astro.site);
     color-scheme: light;
   }
 
+  /* On phones the header scrolls away, so scroll targets need no offset for it. */
+  @media (max-width: 40rem) {
+    :root {
+      --header-h: 0rem;
+    }
+  }
+
   @media (min-width: 48rem) {
     :root {
       --gutter: var(--space-6);
