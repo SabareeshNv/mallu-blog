@@ -8,14 +8,12 @@ const email = SITE.contactEmail as string;
 const profile = SITE.social[0];
 ---
 
-{
-  email ? (
-    <a href={`mailto:${email}`}>{email}</a>
-  ) : (
-    profile && (
-      <a href={profile.href} rel="me noopener">
-        {SITE.author} on {profile.label}
-      </a>
-    )
+{email ? (
+  <a href={`mailto:${email}`}>{email}</a>
+) : (
+  profile && (
+    <a href={profile.href} rel="me noopener">
+      {SITE.author} on {profile.label}
+    </a>
   )
-}
+)}

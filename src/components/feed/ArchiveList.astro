@@ -29,7 +29,9 @@ const intro = [
 <Container size="feed">
   <PageHeader title="Archive" intro={intro} />
   {groups.length === 0 && <p class="empty">Nothing has been published yet.</p>}
-  {groups.map((group) => <ArchiveYear group={group} />)}
+  {groups.map((group) => (
+    <ArchiveYear group={group} />
+  ))}
   <Pagination current={page.currentPage} last={page.lastPage} prevUrl={page.url.prev} nextUrl={page.url.next} />
 </Container>
 

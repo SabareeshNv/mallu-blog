@@ -12,6 +12,8 @@ Posts are written in Malayalam; the interface is in English.
 | `npm run build`   | Build the static site into `dist/`      |
 | `npm run preview` | Preview the built site                  |
 | `npm run check`   | Type-check the project                  |
+| `npm run validate`| Type-check, build, then verify the output |
+| `npm run format`  | Tidy the code with Prettier             |
 
 ## Writing posts
 
@@ -38,7 +40,7 @@ Put cover images in `src/assets/images/`. Astro optimises them into responsive W
 
 ## Settings
 
-Edit `src/site.config.ts` to set the site title, tagline, byline, social profiles, an optional contact e-mail
+Edit `src/config/site.ts` to set the site title, tagline, byline, social profiles, an optional contact e-mail
 (when empty, the first social profile is used on the policy pages), and the page sizes:
 
 ```ts
@@ -48,28 +50,15 @@ archivePageSize: 30,  // entries per archive page
 
 ## Structure
 
+The code is organised so that content, configuration, logic and design each have one place. See
+**[docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)** for the folder map, how a page is built, and a table of "I want to
+change X: edit Y" recipes.
+
 ```
-src/
-  site.config.ts        site settings and page sizes
-  content.config.ts     the `posts` collection schema
-  lib/posts.ts          sorting, grouping by month/year, URLs, excerpts
-  layouts/BaseLayout.astro   <head>, fonts, theme bootstrap, design tokens and base styles
-  layouts/PageLayout.astro   simple English text pages (the policies)
-  components/           each component keeps its own scoped <style> and <script>
-    SiteHeader, SiteFooter, ThemeSwitcher, Hero
-    Feed, MonthGroup, EssayEntry, ScribbleEntry, PermalinkIcon, Prose
-    ArchiveYear, Pagination, PostNav, FormattedDate
-    icons/                EssayIcon, ScribbleIcon, SunIcon, MoonIcon (custom SVGs)
-  pages/
-    [...page].astro           home feed, grouped by month: /, /2/, …
-    essays/[...page].astro    essays only:    /essays/, /essays/2/, …
-    scribbles/[...page].astro scribbles only: /scribbles/, /scribbles/2/, …
-    archive/[...page].astro   archive, grouped by year:  /archive/, /archive/2/, …
-    essay/[slug].astro        full-width cover with the title, date and reading time inside it
-    scribble/[slug].astro
-    privacy.astro             /privacy/
-    content-policy.astro      /content-policy/
-    404.astro
+src/config/      site settings, URLs, navigation        src/styles/     tokens, theme colours, base styles
+src/content/     the posts (Markdown)                    src/layouts/    page frames
+src/lib/         logic: content, formatting, SEO         src/components/ pieces, grouped by role
+src/pages/       routes                                  scripts/        developer tools (verify-build)
 ```
 
 ## Deployment
@@ -92,7 +81,7 @@ are picked up automatically when `SITE_URL` is not set.
 
 ## Design system
 
-All tokens live at the top of `src/layouts/BaseLayout.astro`; components use nothing else.
+All tokens live in `src/styles/` (`tokens.css` for spacing, type and shape; `theme.css` for every colour, light and dark side by side); components use nothing else.
 
 - **Spacing:** a strict 4-point scale (`--space-1` = 4px … `--space-24` = 96px) for every margin, padding and gap.
 - **Type:** Alegreya Sans for English, Arima for Malayalam. One ramp (`--fs-display`, `--fs-h2`, `--fs-h3`,

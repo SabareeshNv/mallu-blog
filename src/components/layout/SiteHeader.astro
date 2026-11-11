@@ -4,6 +4,7 @@ import LogoMark from '@/components/icons/LogoMark.astro';
 import MenuIcon from '@/components/icons/MenuIcon.astro';
 import CloseIcon from '@/components/icons/CloseIcon.astro';
 import { SITE } from '@/config/site';
+import { ROUTES } from '@/config/routes';
 import { MAIN_NAV, isActiveNavItem } from '@/config/navigation';
 
 const links = MAIN_NAV.map((item) => ({ ...item, active: isActiveNavItem(item, Astro.url.pathname) }));
@@ -11,13 +12,15 @@ const links = MAIN_NAV.map((item) => ({ ...item, active: isActiveNavItem(item, A
 
 <header class="site-header">
   <div class="inner">
-    <a class="brand" href="/" aria-label={`${SITE.title} — home`}>
+    <a class="brand" href={ROUTES.home} aria-label={`${SITE.title} — home`}>
       <LogoMark />
       <span class="name">{SITE.title}</span>
     </a>
     <!-- Two copies of the theme switch, so the keyboard order matches what is on screen at each size:
          phones: logo, theme, menu button, menu links; larger screens: logo, links, theme. Only one is ever shown. -->
-    <div class="theme theme-phone"><ThemeSwitcher /></div>
+    <div class="theme theme-phone">
+      <ThemeSwitcher />
+    </div>
     <button
       type="button"
       class="toggle"
@@ -26,23 +29,27 @@ const links = MAIN_NAV.map((item) => ({ ...item, active: isActiveNavItem(item, A
       aria-label="Open menu"
       data-menu-toggle
     >
-      <span class="icon icon-open"><MenuIcon /></span>
-      <span class="icon icon-close"><CloseIcon /></span>
+      <span class="icon icon-open">
+        <MenuIcon />
+      </span>
+      <span class="icon icon-close">
+        <CloseIcon />
+      </span>
     </button>
     <nav id="site-nav" aria-label="Main">
       <ul>
-        {
-          links.map((link) => (
-            <li>
-              <a href={link.href} aria-current={link.active ? 'page' : undefined}>
-                {link.label}
-              </a>
-            </li>
-          ))
-        }
+        {links.map((link) => (
+          <li>
+            <a href={link.href} aria-current={link.active ? 'page' : undefined}>
+              {link.label}
+            </a>
+          </li>
+        ))}
       </ul>
     </nav>
-    <div class="theme theme-desktop"><ThemeSwitcher /></div>
+    <div class="theme theme-desktop">
+      <ThemeSwitcher />
+    </div>
   </div>
 </header>
 

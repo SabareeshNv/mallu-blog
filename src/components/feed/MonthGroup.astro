@@ -21,19 +21,17 @@ const monthName = formatMonthName(group.posts[0].data.date);
     {monthName} <span class="year">{year}</span>
   </h2>
   <ol class="timeline" role="list">
-    {
-      group.posts.map((post) => {
-        const essay = isEssay(post);
-        return (
-          <li class:list={['item', essay ? 'is-essay' : 'is-scribble']}>
-            <span class="node" aria-hidden="true">
-              {essay ? <EssayIcon size={16} /> : <ScribbleIcon size={16} />}
-            </span>
-            {essay ? <EssayEntry post={post} /> : <ScribbleEntry post={post} />}
-          </li>
-        );
-      })
-    }
+    {group.posts.map((post) => {
+      const essay = isEssay(post);
+      return (
+        <li class:list={['item', essay ? 'is-essay' : 'is-scribble']}>
+          <span class="node" aria-hidden="true">
+            {essay ? <EssayIcon size={16} /> : <ScribbleIcon size={16} />}
+          </span>
+          {essay ? <EssayEntry post={post} /> : <ScribbleEntry post={post} />}
+        </li>
+      );
+    })}
   </ol>
 </section>
 

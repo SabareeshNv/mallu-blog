@@ -27,7 +27,9 @@ const lead = [intro, pageNote].filter(Boolean).join(' ');
   {title ? <PageHeader title={title} intro={lead} /> : <h2 class="sr-only">Latest entries</h2>}
 
   {groups.length === 0 && <p class="empty">{emptyText}</p>}
-  {groups.map((group) => <MonthGroup group={group} />)}
+  {groups.map((group) => (
+    <MonthGroup group={group} />
+  ))}
 
   <Pagination current={page.currentPage} last={page.lastPage} prevUrl={page.url.prev} nextUrl={page.url.next} />
 </Container>

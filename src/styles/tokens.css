@@ -2,6 +2,11 @@
  * Design tokens: everything that is not a colour.
  * Components use these tokens and nothing else; no raw pixel, rem or hex values belong in a component.
  * Colours live in theme.css.
+ *
+ * Breakpoints (CSS cannot use variables inside media queries, so these are the only values to use):
+ *   max-width: 40rem   phones: header collapses into a menu, the footer wraps, columns stack
+ *   min-width: 48rem   tablets and up: larger type and side margins (see below)
+ *   min-width: 80rem   wide screens: widest side margins
  */
 
 :root {

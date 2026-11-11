@@ -15,27 +15,27 @@ const minutes = readingMinutes(post);
 ---
 
 <article class:list={['essay', { 'has-cover': cover }]} id={postAnchor(post)}>
-  {
-    cover ? (
-      <div class="cover">
-        <Image
-          src={cover}
-          alt={coverAlt ?? ''}
-          widths={[480, 720, 1080, 1400]}
-          sizes="(min-width: 48rem) 43rem, 100vw"
-          data-fade
-        />
-        <h3 class="title" lang={SITE.postLang}>
-          <a href={url}>{title}</a>
-        </h3>
-      </div>
-    ) : (
+  {cover ? (
+    <div class="cover">
+      <Image
+        src={cover}
+        alt={coverAlt ?? ''}
+        widths={[480, 720, 1080, 1400]}
+        sizes="(min-width: 48rem) 43rem, 100vw"
+        data-fade
+      />
       <h3 class="title" lang={SITE.postLang}>
         <a href={url}>{title}</a>
       </h3>
-    )
-  }
-  <p class="summary" lang={SITE.postLang}>{excerpt(post, 90)}</p>
+    </div>
+  ) : (
+    <h3 class="title" lang={SITE.postLang}>
+      <a href={url}>{title}</a>
+    </h3>
+  )}
+  <p class="summary" lang={SITE.postLang}>
+    {excerpt(post, 90)}
+  </p>
   <p class="meta">
     <span class="kind">Essay</span>
     <span aria-hidden="true">·</span>
@@ -138,7 +138,12 @@ const minutes = readingMinutes(post);
     position: absolute;
     inset: 0;
     z-index: -1;
-    background: linear-gradient(to top, color-mix(in srgb, var(--veil) 88%, transparent) 0%, color-mix(in srgb, var(--veil) 50%, transparent) 38%, color-mix(in srgb, var(--veil) 0%, transparent) 72%);
+    background: linear-gradient(
+      to top,
+      color-mix(in srgb, var(--veil) 88%, transparent) 0%,
+      color-mix(in srgb, var(--veil) 50%, transparent) 38%,
+      color-mix(in srgb, var(--veil) 0%, transparent) 72%
+    );
   }
 
   .has-cover .title {

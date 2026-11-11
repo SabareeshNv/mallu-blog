@@ -44,13 +44,14 @@ interface Props {
 
     <!-- Apply the saved (or system) theme before first paint to avoid a flash. -->
     <script is:inline set:html={themeInit} />
-
     <Font cssVariable="--font-ui" preload={[{ weight: '400', style: 'normal' }]} />
     <Font cssVariable="--font-ml" preload={[{ subset: 'malayalam' }]} />
     <slot name="head" />
   </head>
   <body>
-    <a class="skip-link" href="#main">Skip to content</a>
+    <a class="skip-link" href="#main">
+      Skip to content
+    </a>
     <SiteHeader />
     <slot name="hero" />
     <main id="main" tabindex="-1">

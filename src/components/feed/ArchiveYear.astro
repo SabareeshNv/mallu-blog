@@ -14,23 +14,23 @@ const headingId = `year-${group.key}`;
 <section class="year" aria-labelledby={headingId}>
   <h2 id={headingId}>
     {group.label}
-    <span class="count">{group.posts.length} {group.posts.length === 1 ? 'entry' : 'entries'}</span>
+    <span class="count">
+      {group.posts.length} {group.posts.length === 1 ? 'entry' : 'entries'}
+    </span>
   </h2>
   <ol class="rows" role="list">
-    {
-      group.posts.map((post) => {
-        const essay = isEssay(post);
-        return (
-          <li class="row">
-            <FormattedDate class="date" date={post.data.date} format="short" />
-            <span class:list={['kind', essay ? 'is-essay' : 'is-scribble']}>{essay ? 'Essay' : 'Scribble'}</span>
-            <a class:list={['link', { 'is-excerpt': !essay }]} href={postUrl(post)} lang={SITE.postLang}>
-              {essay ? post.data.title : excerpt(post, 70)}
-            </a>
-          </li>
-        );
-      })
-    }
+    {group.posts.map((post) => {
+      const essay = isEssay(post);
+      return (
+        <li class="row">
+          <FormattedDate class="date" date={post.data.date} format="short" />
+          <span class:list={['kind', essay ? 'is-essay' : 'is-scribble']}>{essay ? 'Essay' : 'Scribble'}</span>
+          <a class:list={['link', { 'is-excerpt': !essay }]} href={postUrl(post)} lang={SITE.postLang}>
+            {essay ? post.data.title : excerpt(post, 70)}
+          </a>
+        </li>
+      );
+    })}
   </ol>
 </section>
 

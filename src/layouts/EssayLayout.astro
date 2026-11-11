@@ -34,23 +34,21 @@ const minutes = readingMinutes(post);
 >
   <article class="essay">
     <header class:list={['masthead', { 'has-cover': cover }]}>
-      {
-        cover && (
-          <>
-            <Image
-              class="photo"
-              src={cover}
-              alt={coverAlt ?? ''}
-              widths={[640, 960, 1280, 1600, 2000]}
-              sizes="100vw"
-              loading="eager"
-              fetchpriority="high"
-              data-fade
-            />
-            <div class="veil" aria-hidden="true" />
-          </>
-        )
-      }
+      {cover && (
+        <>
+          <Image
+            class="photo"
+            src={cover}
+            alt={coverAlt ?? ''}
+            widths={[640, 960, 1280, 1600, 2000]}
+            sizes="100vw"
+            loading="eager"
+            fetchpriority="high"
+            data-fade
+          />
+          <div class="veil" aria-hidden="true" />
+        </>
+      )}
       <div class="masthead-inner">
         <p class="kind">
           <EssayIcon size={20} />

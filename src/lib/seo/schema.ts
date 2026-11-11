@@ -51,7 +51,15 @@ export interface PostSchemaInput {
 }
 
 /** An essay or scribble: the post itself, and its breadcrumb trail (Home > Essays > title). */
-export function postSchemas({ site, canonical, headline, description, imageUrl, publishedTime, section }: PostSchemaInput): Schema[] {
+export function postSchemas({
+  site,
+  canonical,
+  headline,
+  description,
+  imageUrl,
+  publishedTime,
+  section,
+}: PostSchemaInput): Schema[] {
   const published = publishedTime?.toISOString();
   const sectionName = section === 'essay' ? 'Essays' : 'Scribbles';
   const sectionUrl = new URL(section === 'essay' ? ROUTES.essays : ROUTES.scribbles, site).href;

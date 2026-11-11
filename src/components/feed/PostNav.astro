@@ -12,32 +12,30 @@ const label = (post: Post) => (isEssay(post) ? post.data.title! : excerpt(post, 
 const kind = (post: Post) => (isEssay(post) ? 'essay' : 'scribble');
 ---
 
-{
-  (newer || older) && (
-    <nav class="post-nav" aria-label="More entries">
-      {newer ? (
-        <a class="newer" href={postUrl(newer)} rel="prev">
-          <span class="dir">← Newer {kind(newer)}</span>
-          <span class="name" lang={SITE.postLang}>
-            {label(newer)}
-          </span>
-        </a>
-      ) : (
-        <span />
-      )}
-      {older ? (
-        <a class="older" href={postUrl(older)} rel="next">
-          <span class="dir">Older {kind(older)} →</span>
-          <span class="name" lang={SITE.postLang}>
-            {label(older)}
-          </span>
-        </a>
-      ) : (
-        <span />
-      )}
-    </nav>
-  )
-}
+{(newer || older) && (
+  <nav class="post-nav" aria-label="More entries">
+    {newer ? (
+      <a class="newer" href={postUrl(newer)} rel="prev">
+        <span class="dir">← Newer {kind(newer)}</span>
+        <span class="name" lang={SITE.postLang}>
+          {label(newer)}
+        </span>
+      </a>
+    ) : (
+      <span />
+    )}
+    {older ? (
+      <a class="older" href={postUrl(older)} rel="next">
+        <span class="dir">Older {kind(older)} →</span>
+        <span class="name" lang={SITE.postLang}>
+          {label(older)}
+        </span>
+      </a>
+    ) : (
+      <span />
+    )}
+  </nav>
+)}
 
 <style>
   .post-nav {

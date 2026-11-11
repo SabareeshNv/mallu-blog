@@ -12,29 +12,27 @@ interface Props {
 const { current, last, prevUrl, nextUrl, prevLabel = 'Newer', nextLabel = 'Older' } = Astro.props;
 ---
 
-{
-  last > 1 && (
-    <nav class="pagination" aria-label="Pagination">
-      {prevUrl ? (
-        <a href={prevUrl} rel="prev">
-          <span aria-hidden="true">←</span> {prevLabel}
-        </a>
-      ) : (
-        <span class="spacer" />
-      )}
-      <span class="status" aria-current="page">
-        Page {current} of {last}
-      </span>
-      {nextUrl ? (
-        <a href={nextUrl} rel="next">
-          {nextLabel} <span aria-hidden="true">→</span>
-        </a>
-      ) : (
-        <span class="spacer" />
-      )}
-    </nav>
-  )
-}
+{last > 1 && (
+  <nav class="pagination" aria-label="Pagination">
+    {prevUrl ? (
+      <a href={prevUrl} rel="prev">
+        <span aria-hidden="true">←</span> {prevLabel}
+      </a>
+    ) : (
+      <span class="spacer" />
+    )}
+    <span class="status" aria-current="page">
+      Page {current} of {last}
+    </span>
+    {nextUrl ? (
+      <a href={nextUrl} rel="next">
+        {nextLabel} <span aria-hidden="true">→</span>
+      </a>
+    ) : (
+      <span class="spacer" />
+    )}
+  </nav>
+)}
 
 <style>
   .pagination {

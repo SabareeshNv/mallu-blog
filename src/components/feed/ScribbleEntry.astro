@@ -21,18 +21,16 @@ const longDate = formatDate(date);
 ---
 
 <article class="scribble" id={anchor} tabindex="-1" aria-label={`Scribble from ${longDate}`} data-scribble>
-  {
-    cover && (
-      <Image
-        class="cover"
-        src={cover}
-        alt={coverAlt ?? ''}
-        widths={[320, 480, 720, 1080]}
-        sizes="(min-width: 48rem) 16rem, 100vw"
-        data-fade
-      />
-    )
-  }
+  {cover && (
+    <Image
+      class="cover"
+      src={cover}
+      alt={coverAlt ?? ''}
+      widths={[320, 480, 720, 1080]}
+      sizes="(min-width: 48rem) 16rem, 100vw"
+      data-fade
+    />
+  )}
   <Prose size={size}>
     <Content />
   </Prose>
