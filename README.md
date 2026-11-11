@@ -106,8 +106,8 @@ The build machine needs access to `fonts.google.com`, `fonts.googleapis.com` and
 ## Accessibility
 
 - A skip link, landmarks, and a logical heading order
-- A visible focus ring on everything you can interact with. The theme switcher is a native radio group,
-  so arrow keys work.
+- A visible focus ring on everything you can interact with. The theme switcher is two real buttons: Tab reaches
+  both, and Enter or Space switches the theme.
 - Text contrast meets WCAG AA in both themes
 - `prefers-reduced-motion` turns off smooth scrolling, the hero zoom, hover lifts and highlight animations
 - The theme follows the operating system until the reader picks one; the choice is saved in `localStorage`
