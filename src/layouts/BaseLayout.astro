@@ -202,9 +202,9 @@ const shareUrl = new URL(share.src, Astro.site);
     color-scheme: light;
   }
 
-  /* On phones the header scrolls away, so scroll targets need no offset for it. */
+  /* Without JavaScript the phone header scrolls away (two rows), so scroll targets need no offset for it. */
   @media (max-width: 40rem) {
-    :root {
+    :root:not([data-js]) {
       --header-h: 0rem;
     }
   }

@@ -108,6 +108,8 @@ The build machine needs access to `fonts.google.com`, `fonts.googleapis.com` and
 - A skip link, landmarks, and a logical heading order
 - A visible focus ring on everything you can interact with. The theme switcher is two real buttons: Tab reaches
   both, and Enter or Space switches the theme.
+- On phones the navigation collapses into a menu button (with `aria-expanded`); Escape, a tap outside, or tabbing
+  away closes it. Without JavaScript the links stay visible in a row instead.
 - Text contrast meets WCAG AA in both themes
 - `prefers-reduced-motion` turns off smooth scrolling, the hero zoom, hover lifts and highlight animations
 - The theme follows the operating system until the reader picks one; the choice is saved in `localStorage`

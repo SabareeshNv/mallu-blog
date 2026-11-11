@@ -1,6 +1,8 @@
 ---
 import ThemeSwitcher from './ThemeSwitcher.astro';
 import LogoMark from './icons/LogoMark.astro';
+import MenuIcon from './icons/MenuIcon.astro';
+import CloseIcon from './icons/CloseIcon.astro';
 import { SITE } from '../site.config';
 
 const section = Astro.url.pathname.split('/')[1] ?? '';
@@ -18,7 +20,21 @@ const links = [
       <LogoMark />
       <span class="name">{SITE.title}</span>
     </a>
-    <nav aria-label="Main">
+    <!-- Two copies of the theme switch, so the keyboard order matches what is on screen at each size:
+         phones: logo, theme, menu button, menu links; larger screens: logo, links, theme. Only one is ever shown. -->
+    <div class="theme theme-phone"><ThemeSwitcher /></div>
+    <button
+      type="button"
+      class="toggle"
+      aria-controls="site-nav"
+      aria-expanded="false"
+      aria-label="Open menu"
+      data-menu-toggle
+    >
+      <span class="icon icon-open"><MenuIcon /></span>
+      <span class="icon icon-close"><CloseIcon /></span>
+    </button>
+    <nav id="site-nav" aria-label="Main">
       <ul>
         {
           links.map((link) => (
@@ -31,7 +47,7 @@ const links = [
         }
       </ul>
     </nav>
-    <ThemeSwitcher />
+    <div class="theme theme-desktop"><ThemeSwitcher /></div>
   </div>
 </header>
 
@@ -76,8 +92,14 @@ const links = [
     align-self: stretch;
   }
 
-  :global(.site-header) .inner > :global(.switcher) {
+  .theme {
     grid-area: switcher;
+    display: flex;
+    align-items: center;
+  }
+
+  .theme-phone {
+    display: none;
   }
 
   ul {
@@ -135,13 +157,27 @@ const links = [
     outline-offset: calc(-1 * var(--space-2));
   }
 
-  /* ---------- Phones: logo and theme switch on one row, the four links on a row of their own ---------- */
+  /* The menu button only exists on phones, and only when JavaScript can open it. */
+  .toggle {
+    display: none;
+  }
+
+  /* ---------- Phones ---------- */
   @media (max-width: 40rem) {
-    .site-header {
-      position: relative; /* two rows would take too much of a small screen if they stayed fixed */
+    .theme-desktop {
+      display: none;
     }
 
-    .inner {
+    .theme-phone {
+      display: flex;
+    }
+
+    /* Without JavaScript the menu cannot open, so the links stay visible on a row of their own. */
+    :global(html:not([data-js])) .site-header {
+      position: relative;
+    }
+
+    :global(html:not([data-js])) .inner {
       grid-template-columns: 1fr auto;
       grid-template-areas:
         'brand switcher'
@@ -149,13 +185,11 @@ const links = [
       row-gap: 0;
     }
 
-    .brand {
+    :global(html:not([data-js])) .brand {
       height: var(--space-16);
     }
 
-    /* The four links share the full row, with the free space spread between them (flexbox), and a 48px-tall
-       touch target each. The first and last text still line up with the page margin. */
-    nav {
+    :global(html:not([data-js])) nav {
       justify-self: stretch;
       height: var(--space-12);
       margin-inline: calc(-1 * var(--space-4));
@@ -163,17 +197,157 @@ const links = [
       padding-inline: var(--space-1);
     }
 
-    ul {
+    :global(html:not([data-js])) ul {
       justify-content: space-between;
       gap: var(--space-2);
     }
 
-    nav a {
+    :global(html:not([data-js])) nav a {
       padding-inline: var(--space-3);
     }
 
-    nav a::after {
+    :global(html:not([data-js])) nav a::after {
       inset-inline: var(--space-3);
+    }
+
+    /* With JavaScript: one row (logo, theme switch, menu button) and a list that drops down beneath it. */
+    :global(html[data-js]) .inner {
+      grid-template-columns: 1fr auto auto;
+      grid-template-areas: 'brand switcher toggle';
+      column-gap: var(--space-3);
+    }
+
+    :global(html[data-js]) .toggle {
+      grid-area: toggle;
+      display: inline-grid;
+      place-items: center;
+      width: var(--control-h);
+      height: var(--control-h);
+      margin: 0;
+      padding: 0;
+      border: var(--border-width) solid var(--border);
+      border-radius: var(--radius-full);
+      background: transparent;
+      color: var(--text);
+      font: inherit;
+      cursor: pointer;
+      transition: background-color var(--duration-fast) var(--ease);
+    }
+
+    :global(html[data-js]) .toggle:hover,
+    :global(html[data-js]) .toggle[aria-expanded='true'] {
+      background: var(--accent-soft);
+      color: var(--accent);
+    }
+
+    .icon {
+      display: grid;
+      place-items: center;
+    }
+
+    .icon-close,
+    .toggle[aria-expanded='true'] .icon-open {
+      display: none;
+    }
+
+    .toggle[aria-expanded='true'] .icon-close {
+      display: grid;
+    }
+
+    :global(html[data-js]) nav {
+      position: absolute;
+      inset: 100% 0 auto;
+      justify-self: stretch;
+      align-self: auto;
+      height: auto;
+      padding-block: var(--space-2);
+      background: var(--bg);
+      border-bottom: var(--border-width) solid var(--border);
+      box-shadow: var(--shadow-md);
+      visibility: hidden;
+      opacity: 0;
+      transform: translateY(calc(-1 * var(--space-2)));
+      transition:
+        opacity var(--duration-fast) var(--ease),
+        transform var(--duration-fast) var(--ease),
+        visibility 0s linear var(--duration-fast);
+    }
+
+    :global(html[data-js]) .site-header.is-open nav {
+      visibility: visible;
+      opacity: 1;
+      transform: none;
+      transition-delay: 0s;
+    }
+
+    :global(html[data-js]) ul {
+      flex-direction: column;
+      height: auto;
+    }
+
+    :global(html[data-js]) li + li {
+      border-top: var(--border-width) solid var(--border);
+    }
+
+    /* Each row is a full-width, 48px-tall touch target; the current page is marked by a bar on the left edge. */
+    :global(html[data-js]) nav a {
+      height: var(--space-12);
+      padding-inline: var(--gutter);
+      font-size: var(--fs-body);
+      line-height: var(--lh-body);
+    }
+
+    :global(html[data-js]) nav a::after {
+      inset: var(--space-2) auto var(--space-2) 0;
+      width: 3px;
+      height: auto;
+      transform: none;
+      opacity: 0;
+      transition: opacity var(--duration-fast) var(--ease);
+    }
+
+    :global(html[data-js]) nav a:hover::after,
+    :global(html[data-js]) nav a:focus-visible::after,
+    :global(html[data-js]) nav a[aria-current='page']::after {
+      transform: none;
+      opacity: 1;
     }
   }
 </style>
+
+<script>
+  const header = document.querySelector<HTMLElement>('.site-header');
+  const toggle = header?.querySelector<HTMLButtonElement>('[data-menu-toggle]');
+
+  if (header && toggle) {
+    const isOpen = () => toggle.getAttribute('aria-expanded') === 'true';
+
+    function setOpen(open: boolean, returnFocus = false) {
+      header!.classList.toggle('is-open', open);
+      toggle!.setAttribute('aria-expanded', String(open));
+      toggle!.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+      if (!open && returnFocus) toggle!.focus();
+    }
+
+    toggle.addEventListener('click', () => setOpen(!isOpen()));
+
+    // Escape closes the menu and returns focus to its button.
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape' && isOpen()) setOpen(false, header.contains(document.activeElement));
+    });
+
+    // A tap outside the header closes it, and so does tabbing out of it.
+    document.addEventListener('click', (event) => {
+      if (isOpen() && !header.contains(event.target as Node)) setOpen(false);
+    });
+    header.addEventListener('focusout', (event) => {
+      const next = event.relatedTarget as Node | null;
+      if (isOpen() && next && !header.contains(next)) setOpen(false);
+    });
+
+    // Growing past the phone breakpoint shows the regular navigation, so reset the menu.
+    matchMedia('(min-width: 40.0625rem)').addEventListener('change', (event) => {
+      if (event.matches) setOpen(false);
+    });
+  }
+</script>
