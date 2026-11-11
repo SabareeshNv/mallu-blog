@@ -73,10 +73,13 @@ const links = [
     padding-inline: var(--gutter);
   }
 
+  /* justify-self keeps the link as wide as the logo and name; the free space beside it is not clickable. */
   .brand {
     grid-area: brand;
+    justify-self: start;
     display: inline-flex;
     align-items: center;
+    min-height: var(--space-12);
     gap: var(--space-3);
     color: var(--text);
     font-size: var(--fs-lead);
@@ -110,8 +113,8 @@ const links = [
     list-style: none;
   }
 
-  /* Plain text links. The current page is marked with a bar that sits on the header's bottom line,
-     and the same bar slides in from the left when you hover or focus a link. */
+  /* Plain text links. The current page is marked with a bar that sits on the header's bottom line.
+     Hovering or focusing any other link turns it teal and brings up a small dot beneath the label. */
   nav a {
     position: relative;
     display: flex;
@@ -123,6 +126,20 @@ const links = [
     line-height: var(--lh-small);
     text-decoration: none;
     transition: color var(--duration-fast) var(--ease);
+  }
+
+  nav a::before {
+    content: '';
+    position: absolute;
+    inset-inline-start: 50%;
+    bottom: var(--space-3);
+    width: var(--space-1);
+    height: var(--space-1);
+    margin-inline-start: calc(-0.5 * var(--space-1));
+    border-radius: var(--radius-full);
+    background: var(--accent);
+    transform: scale(0);
+    transition: transform var(--duration-fast) var(--ease);
   }
 
   nav a::after {
@@ -139,18 +156,25 @@ const links = [
 
   nav a:hover,
   nav a:focus-visible {
-    color: var(--text);
+    color: var(--accent);
   }
 
-  nav a:hover::after,
-  nav a:focus-visible::after,
-  nav a[aria-current='page']::after {
-    transform: scaleX(1);
+  nav a:hover::before,
+  nav a:focus-visible::before {
+    transform: scale(1);
   }
 
   nav a[aria-current='page'] {
     color: var(--text);
     font-weight: var(--fw-bold);
+  }
+
+  nav a[aria-current='page']::before {
+    transform: scale(0);
+  }
+
+  nav a[aria-current='page']::after {
+    transform: scaleX(1);
   }
 
   nav a:focus-visible {
@@ -297,20 +321,38 @@ const links = [
       line-height: var(--lh-body);
     }
 
+    :global(html[data-js]) nav a {
+      transition:
+        background-color var(--duration-fast) var(--ease),
+        color var(--duration-fast) var(--ease);
+    }
+
+    :global(html[data-js]) nav a::before {
+      display: none;
+    }
+
     :global(html[data-js]) nav a::after {
       inset: var(--space-2) auto var(--space-2) 0;
       width: 3px;
       height: auto;
       transform: none;
       opacity: 0;
-      transition: opacity var(--duration-fast) var(--ease);
     }
 
-    :global(html[data-js]) nav a:hover::after,
-    :global(html[data-js]) nav a:focus-visible::after,
     :global(html[data-js]) nav a[aria-current='page']::after {
-      transform: none;
       opacity: 1;
+    }
+
+    /* Hover, keyboard focus and the moment of a touch: a soft tint and a teal label. */
+    :global(html[data-js]) nav a:hover,
+    :global(html[data-js]) nav a:focus-visible,
+    :global(html[data-js]) nav a:active {
+      background: var(--accent-soft);
+      color: var(--accent);
+    }
+
+    :global(html[data-js]) nav a:focus-visible {
+      outline-offset: calc(-1 * var(--space-1));
     }
   }
 </style>
