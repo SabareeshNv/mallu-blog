@@ -2,13 +2,13 @@
 import type { GetStaticPaths } from 'astro';
 import { Image } from 'astro:assets';
 import { render } from 'astro:content';
-import BaseLayout from '../../layouts/BaseLayout.astro';
-import FormattedDate from '../../components/FormattedDate.astro';
-import PostNav from '../../components/PostNav.astro';
-import Prose from '../../components/Prose.astro';
-import EssayIcon from '../../components/icons/EssayIcon.astro';
-import { excerpt, getSortedPosts, isEssay, postSlug, readingMinutes, type Post } from '../../lib/posts';
-import { SITE } from '../../site.config';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import FormattedDate from '@/components/ui/FormattedDate.astro';
+import PostNav from '@/components/feed/PostNav.astro';
+import Prose from '@/components/ui/Prose.astro';
+import EssayIcon from '@/components/icons/EssayIcon.astro';
+import { excerpt, getSortedPosts, isEssay, postSlug, readingMinutes, type Post } from '@/lib/posts';
+import { SITE } from '@/config/site';
 
 export const getStaticPaths = (async () => {
   const posts = await getSortedPosts();

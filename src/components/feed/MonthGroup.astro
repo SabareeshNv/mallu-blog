@@ -1,9 +1,9 @@
 ---
-import EssayEntry from './EssayEntry.astro';
-import ScribbleEntry from './ScribbleEntry.astro';
-import EssayIcon from './icons/EssayIcon.astro';
-import ScribbleIcon from './icons/ScribbleIcon.astro';
-import { isEssay, type Group } from '../lib/posts';
+import EssayEntry from '@/components/feed/EssayEntry.astro';
+import ScribbleEntry from '@/components/feed/ScribbleEntry.astro';
+import EssayIcon from '@/components/icons/EssayIcon.astro';
+import ScribbleIcon from '@/components/icons/ScribbleIcon.astro';
+import { isEssay, type Group } from '@/lib/posts';
 
 interface Props {
   group: Group<string>;

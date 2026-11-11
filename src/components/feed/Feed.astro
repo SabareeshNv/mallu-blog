@@ -3,10 +3,10 @@
  * A paginated stream of entries grouped by month, used by Home, Essays and Scribbles.
  */
 import type { Page } from 'astro';
-import MonthGroup from './MonthGroup.astro';
-import PageHeader from './PageHeader.astro';
-import Pagination from './Pagination.astro';
-import { groupByMonth, type Post } from '../lib/posts';
+import MonthGroup from '@/components/feed/MonthGroup.astro';
+import PageHeader from '@/components/ui/PageHeader.astro';
+import Pagination from '@/components/feed/Pagination.astro';
+import { groupByMonth, type Post } from '@/lib/posts';
 
 interface Props {
   page: Page<Post>;

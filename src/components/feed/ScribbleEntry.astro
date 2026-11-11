@@ -1,10 +1,10 @@
 ---
 import { Image } from 'astro:assets';
 import { render } from 'astro:content';
-import FormattedDate from './FormattedDate.astro';
-import PermalinkIcon from './PermalinkIcon.astro';
-import Prose from './Prose.astro';
-import { postAnchor, postUrl, type Post } from '../lib/posts';
+import FormattedDate from '@/components/ui/FormattedDate.astro';
+import PermalinkIcon from '@/components/icons/PermalinkIcon.astro';
+import Prose from '@/components/ui/Prose.astro';
+import { postAnchor, postUrl, type Post } from '@/lib/posts';
 
 interface Props {
   post: Post;

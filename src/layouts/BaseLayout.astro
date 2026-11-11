@@ -1,9 +1,9 @@
 ---
 import { Font, getImage } from 'astro:assets';
-import SiteHeader from '../components/SiteHeader.astro';
-import SiteFooter from '../components/SiteFooter.astro';
-import defaultShareImage from '../assets/images/hero-lake-dusk.jpg';
-import { SITE } from '../site.config';
+import SiteHeader from '@/components/layout/SiteHeader.astro';
+import SiteFooter from '@/components/layout/SiteFooter.astro';
+import defaultShareImage from '@/assets/images/hero-lake-dusk.jpg';
+import { SITE } from '@/config/site';
 
 interface Props {
   /** Page title (without the site name). */

@@ -1,7 +1,7 @@
 import rss from '@astrojs/rss';
 import type { APIContext } from 'astro';
-import { excerpt, getSortedPosts, isEssay, postUrl } from '../lib/posts';
-import { SITE } from '../site.config';
+import { excerpt, getSortedPosts, isEssay, postUrl } from '@/lib/posts';
+import { SITE } from '@/config/site';
 
 /** A feed of every essay and scribble, newest first, for feed readers and search engines. */
 export async function GET(context: APIContext) {

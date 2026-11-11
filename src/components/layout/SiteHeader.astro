@@ -1,9 +1,9 @@
 ---
-import ThemeSwitcher from './ThemeSwitcher.astro';
-import LogoMark from './icons/LogoMark.astro';
-import MenuIcon from './icons/MenuIcon.astro';
-import CloseIcon from './icons/CloseIcon.astro';
-import { SITE } from '../site.config';
+import ThemeSwitcher from '@/components/layout/ThemeSwitcher.astro';
+import LogoMark from '@/components/icons/LogoMark.astro';
+import MenuIcon from '@/components/icons/MenuIcon.astro';
+import CloseIcon from '@/components/icons/CloseIcon.astro';
+import { SITE } from '@/config/site';
 
 const section = Astro.url.pathname.split('/')[1] ?? '';
 const links = [

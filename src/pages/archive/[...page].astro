@@ -1,11 +1,11 @@
 ---
 import type { GetStaticPaths, Page } from 'astro';
-import BaseLayout from '../../layouts/BaseLayout.astro';
-import ArchiveYear from '../../components/ArchiveYear.astro';
-import PageHeader from '../../components/PageHeader.astro';
-import Pagination from '../../components/Pagination.astro';
-import { getSortedPosts, groupByYear, isEssay, type Post } from '../../lib/posts';
-import { SITE } from '../../site.config';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import ArchiveYear from '@/components/feed/ArchiveYear.astro';
+import PageHeader from '@/components/ui/PageHeader.astro';
+import Pagination from '@/components/feed/Pagination.astro';
+import { getSortedPosts, groupByYear, isEssay, type Post } from '@/lib/posts';
+import { SITE } from '@/config/site';
 
 export const getStaticPaths = (async ({ paginate }) => {
   const posts = await getSortedPosts();
