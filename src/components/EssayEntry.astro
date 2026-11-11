@@ -14,10 +14,26 @@ const url = postUrl(post);
 ---
 
 <article class:list={['essay', { 'has-cover': cover }]} id={postAnchor(post)}>
+  {
+    cover ? (
+      <div class="cover">
+        <Image
+          src={cover}
+          alt={coverAlt ?? ''}
+          widths={[480, 720, 1080, 1400]}
+          sizes="(min-width: 48rem) 43rem, 100vw"
+        />
+        <h3 class="title" lang={SITE.postLang}>
+          <a href={url}>{title}</a>
+        </h3>
+      </div>
+    ) : (
+      <h3 class="title" lang={SITE.postLang}>
+        <a href={url}>{title}</a>
+      </h3>
+    )
+  }
   <div class="text">
-    <h3 class="title" lang={SITE.postLang}>
-      <a href={url}>{title}</a>
-    </h3>
     <p class="summary" lang={SITE.postLang}>{excerpt(post, 90)}</p>
     <p class="meta">
       <span class="kind">Essay</span>
@@ -25,27 +41,12 @@ const url = postUrl(post);
       <FormattedDate date={date} />
     </p>
   </div>
-  {
-    cover && (
-      <div class="cover">
-        <Image src={cover} alt={coverAlt ?? ''} widths={[240, 400, 560]} sizes="(min-width: 40rem) 13rem, 8rem" />
-      </div>
-    )
-  }
 </article>
 
 <style>
   .essay {
     position: relative;
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: var(--space-m);
-    align-items: start;
     padding: var(--space-s) 0;
-  }
-
-  .essay.has-cover {
-    grid-template-columns: 1fr 13rem;
   }
 
   .title {
@@ -109,16 +110,45 @@ const url = postUrl(post);
     font-weight: 700;
   }
 
-  .cover {
-    aspect-ratio: 3 / 2;
+  /* ---------- With a cover: the photo spans the card, the title sits on it, the text follows below ---------- */
+  .essay.has-cover {
+    padding: 0;
     overflow: hidden;
     border: 1px solid var(--border);
-    border-radius: 10px;
-    background: var(--surface);
+    border-radius: var(--radius);
+    background: var(--bg);
     box-shadow: var(--shadow);
+    transition:
+      transform 0.25s ease,
+      box-shadow 0.25s ease;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .essay.has-cover:hover {
+      transform: translateY(-2px);
+    }
+  }
+
+  .essay.has-cover:has(.title a:focus-visible) {
+    outline-offset: 4px;
+    border-radius: var(--radius);
+  }
+
+  .cover {
+    position: relative;
+    isolation: isolate;
+    display: grid;
+    align-items: end;
+    aspect-ratio: 16 / 8;
+    min-height: 13rem;
+    overflow: hidden;
+    background: var(--surface);
   }
 
   .cover :global(img) {
+    position: absolute;
+    inset: 0;
+    z-index: -2;
     width: 100%;
     height: 100%;
     object-fit: cover;
@@ -131,14 +161,57 @@ const url = postUrl(post);
     }
   }
 
-  @media (max-width: 40rem) {
-    .essay.has-cover {
-      grid-template-columns: 1fr 6.5rem;
-      gap: var(--space-s);
-    }
+  .cover::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: linear-gradient(
+      to top,
+      rgb(var(--veil) / 0.85) 0%,
+      rgb(var(--veil) / 0.45) 35%,
+      rgb(var(--veil) / 0) 70%
+    );
+  }
 
+  .has-cover .title {
+    padding: var(--space-l) var(--space-m) var(--space-s);
+    text-shadow: 0 1px 12px rgb(0 0 0 / 0.45);
+  }
+
+  .has-cover .title a {
+    color: #fff;
+    text-decoration-color: rgb(246 196 83 / 0.75);
+  }
+
+  .essay.has-cover:hover .title a {
+    text-decoration-color: #f6c453;
+  }
+
+  .has-cover .text {
+    padding: var(--space-s) var(--space-m) var(--space-m);
+  }
+
+  .has-cover .summary {
+    margin-top: 0;
+  }
+
+  @media (max-width: 40rem) {
     .title {
       font-size: var(--step-1);
+    }
+
+    .cover {
+      aspect-ratio: 4 / 3;
+      min-height: 0;
+    }
+
+    .has-cover .title {
+      padding: var(--space-m) var(--space-s) var(--space-s);
+    }
+
+    .has-cover .text {
+      padding: var(--space-s);
     }
   }
 </style>
