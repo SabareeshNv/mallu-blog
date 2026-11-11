@@ -1,0 +1,181 @@
+---
+/**
+ * An essay's own page: a full-width masthead (the cover photograph with the label, title and date set on it,
+ * or the same on the plain background), then the text and links to the neighbouring posts.
+ * The essay's rendered Markdown goes in the default slot.
+ */
+import { Image } from 'astro:assets';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Container from '@/components/ui/Container.astro';
+import FormattedDate from '@/components/ui/FormattedDate.astro';
+import PostNav from '@/components/feed/PostNav.astro';
+import Prose from '@/components/ui/Prose.astro';
+import EssayIcon from '@/components/icons/EssayIcon.astro';
+import { excerpt, readingMinutes, type Post } from '@/lib/content';
+import { SITE } from '@/config/site';
+
+interface Props {
+  post: Post;
+  newer?: Post;
+  older?: Post;
+}
+
+const { post, newer, older } = Astro.props;
+const { title, date, cover, coverAlt } = post.data;
+const minutes = readingMinutes(post);
+---
+
+<BaseLayout
+  title={title}
+  description={excerpt(post, 110)}
+  image={cover}
+  imageAlt={coverAlt}
+  article={{ section: 'essay', publishedTime: date }}
+>
+  <article class="essay">
+    <header class:list={['masthead', { 'has-cover': cover }]}>
+      {
+        cover && (
+          <>
+            <Image
+              class="photo"
+              src={cover}
+              alt={coverAlt ?? ''}
+              widths={[640, 960, 1280, 1600, 2000]}
+              sizes="100vw"
+              loading="eager"
+              fetchpriority="high"
+              data-fade
+            />
+            <div class="veil" aria-hidden="true" />
+          </>
+        )
+      }
+      <div class="masthead-inner">
+        <p class="kind">
+          <EssayIcon size={20} />
+          Essay
+        </p>
+        <h1 lang={SITE.postLang}>{title}</h1>
+        <p class="meta">
+          <FormattedDate date={date} />
+          <span aria-hidden="true">·</span>
+          <span>{minutes} min read</span>
+        </p>
+      </div>
+    </header>
+
+    <Container size="prose" top={cover ? 'default' : 'tight'}>
+      <Prose size="large">
+        <slot />
+      </Prose>
+      <PostNav newer={newer} older={older} />
+    </Container>
+  </article>
+</BaseLayout>
+
+<style>
+  /* ---------- Masthead ---------- */
+  .masthead {
+    position: relative;
+    isolation: isolate;
+    display: grid;
+    align-items: end;
+  }
+
+  .masthead.has-cover {
+    min-height: 28rem;
+    overflow: hidden;
+    background: var(--ink);
+    color: var(--on-image);
+  }
+
+  @media (min-width: 48rem) {
+    .masthead.has-cover {
+      min-height: 40rem;
+    }
+  }
+
+  .photo {
+    position: absolute;
+    inset: 0;
+    z-index: -2;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .veil {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    /* Never lighter than 35%, so the label and title stay readable even on a bright photograph. */
+    background: linear-gradient(
+      to top,
+      color-mix(in srgb, var(--veil) 92%, transparent) 0%,
+      color-mix(in srgb, var(--veil) 70%, transparent) 45%,
+      color-mix(in srgb, var(--veil) 35%, transparent) 100%
+    );
+  }
+
+  /* The left edge stays aligned with the article text below; the title may extend to the right,
+     so a long title wraps late instead of stacking into a narrow column. */
+  .masthead-inner {
+    width: 100%;
+    min-width: 0;
+    padding-block: var(--space-12) 0;
+    padding-inline: max(var(--gutter), calc(50% - var(--container-prose) / 2)) var(--gutter);
+  }
+
+  .has-cover .masthead-inner {
+    padding-block: var(--space-16) var(--space-12);
+    text-shadow: var(--text-shadow-image);
+  }
+
+  .kind {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    color: var(--essay);
+    font-size: var(--fs-small);
+    font-weight: var(--fw-bold);
+    line-height: var(--lh-small);
+    letter-spacing: var(--tracking-label);
+    text-transform: uppercase;
+  }
+
+  .has-cover .kind {
+    color: var(--sun);
+  }
+
+  h1 {
+    margin-top: var(--space-3);
+    max-width: 56rem;
+    font-size: var(--fs-display);
+    font-weight: var(--fw-bold);
+    line-height: var(--lh-display);
+    overflow-wrap: anywhere; /* safety net: a very long word never runs off the screen */
+  }
+
+  /* Malayalam words are long; on phones the title steps down to the section-heading size. */
+  @media (max-width: 48rem) {
+    h1 {
+      font-size: var(--fs-h2);
+      line-height: var(--lh-h2);
+    }
+  }
+
+  .meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    margin-top: var(--space-3);
+    color: var(--muted);
+    font-size: var(--fs-small);
+    line-height: var(--lh-small);
+  }
+
+  .has-cover .meta {
+    color: var(--on-image-muted);
+  }
+</style>

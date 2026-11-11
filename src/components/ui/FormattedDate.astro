@@ -1,4 +1,6 @@
 ---
+import { formatDate, isoDate } from '@/lib/format';
+
 interface Props {
   date: Date;
   /** "long" → 12 March 2026, "short" → 12 Mar */
@@ -7,12 +9,8 @@ interface Props {
 }
 
 const { date, format = 'long', class: className } = Astro.props;
-const options: Intl.DateTimeFormatOptions =
-  format === 'long'
-    ? { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' }
-    : { day: 'numeric', month: 'short', timeZone: 'UTC' };
 ---
 
-<time class={className} datetime={date.toISOString().slice(0, 10)}>
-  {new Intl.DateTimeFormat('en-GB', options).format(date)}
+<time class={className} datetime={isoDate(date)}>
+  {formatDate(date, format)}
 </time>

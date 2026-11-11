@@ -1,0 +1,40 @@
+---
+/**
+ * The archive: every post grouped by year, newest first, with a summary line and pagination.
+ */
+import type { Page } from 'astro';
+import ArchiveYear from '@/components/feed/ArchiveYear.astro';
+import Container from '@/components/ui/Container.astro';
+import PageHeader from '@/components/ui/PageHeader.astro';
+import Pagination from '@/components/feed/Pagination.astro';
+import { groupByYear, type Post } from '@/lib/content';
+import { countOf } from '@/lib/format';
+
+interface Props {
+  page: Page<Post>;
+  essays: number;
+  scribbles: number;
+}
+
+const { page, essays, scribbles } = Astro.props;
+const groups = groupByYear(page.data);
+const intro = [
+  `All ${countOf(page.total, 'entry', 'entries')} — ${countOf(essays, 'essay')} and ${countOf(scribbles, 'scribble')} — grouped by year, newest first.`,
+  page.lastPage > 1 ? `Page ${page.currentPage} of ${page.lastPage}.` : '',
+]
+  .filter(Boolean)
+  .join(' ');
+---
+
+<Container size="feed">
+  <PageHeader title="Archive" intro={intro} />
+  {groups.length === 0 && <p class="empty">Nothing has been published yet.</p>}
+  {groups.map((group) => <ArchiveYear group={group} />)}
+  <Pagination current={page.currentPage} last={page.lastPage} prevUrl={page.url.prev} nextUrl={page.url.next} />
+</Container>
+
+<style>
+  .empty {
+    color: var(--muted);
+  }
+</style>

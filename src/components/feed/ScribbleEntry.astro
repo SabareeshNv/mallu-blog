@@ -4,7 +4,8 @@ import { render } from 'astro:content';
 import FormattedDate from '@/components/ui/FormattedDate.astro';
 import PermalinkIcon from '@/components/icons/PermalinkIcon.astro';
 import Prose from '@/components/ui/Prose.astro';
-import { postAnchor, postUrl, type Post } from '@/lib/posts';
+import { postAnchor, postUrl, type Post } from '@/lib/content';
+import { formatDate } from '@/lib/format';
 
 interface Props {
   post: Post;
@@ -16,7 +17,7 @@ const { post, size = 'regular' } = Astro.props;
 const { date, cover, coverAlt } = post.data;
 const { Content } = await render(post);
 const anchor = postAnchor(post);
-const longDate = new Intl.DateTimeFormat('en-GB', { dateStyle: 'long', timeZone: 'UTC' }).format(date);
+const longDate = formatDate(date);
 ---
 
 <article class="scribble" id={anchor} tabindex="-1" aria-label={`Scribble from ${longDate}`} data-scribble>

@@ -1,10 +1,10 @@
 ---
 import FormattedDate from '@/components/ui/FormattedDate.astro';
-import { excerpt, isEssay, postUrl, type Group } from '@/lib/posts';
+import { excerpt, isEssay, postUrl, type Group } from '@/lib/content';
 import { SITE } from '@/config/site';
 
 interface Props {
-  group: Group<string>;
+  group: Group;
 }
 
 const { group } = Astro.props;

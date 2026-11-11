@@ -4,14 +4,9 @@ import LogoMark from '@/components/icons/LogoMark.astro';
 import MenuIcon from '@/components/icons/MenuIcon.astro';
 import CloseIcon from '@/components/icons/CloseIcon.astro';
 import { SITE } from '@/config/site';
+import { MAIN_NAV, isActiveNavItem } from '@/config/navigation';
 
-const section = Astro.url.pathname.split('/')[1] ?? '';
-const links = [
-  { href: '/', label: 'Home', active: section === '' || (/^\d+$/.test(section) && section !== '404') },
-  { href: '/essays/', label: 'Essays', active: section === 'essays' || section === 'essay' },
-  { href: '/scribbles/', label: 'Scribbles', active: section === 'scribbles' || section === 'scribble' },
-  { href: '/archive/', label: 'Archive', active: section === 'archive' },
-];
+const links = MAIN_NAV.map((item) => ({ ...item, active: isActiveNavItem(item, Astro.url.pathname) }));
 ---
 
 <header class="site-header">

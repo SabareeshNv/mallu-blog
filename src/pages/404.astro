@@ -1,26 +1,21 @@
 ---
 import BaseLayout from '@/layouts/BaseLayout.astro';
+import Container from '@/components/ui/Container.astro';
+import { ROUTES } from '@/config/routes';
 import PageHeader from '@/components/ui/PageHeader.astro';
 ---
 
 <BaseLayout title="Page not found" description="The page you were looking for could not be found." noindex>
-  <div class="missing">
+  <Container size="prose">
     <PageHeader title="Page not found" intro="The link may be out of date, or the page may have been moved or removed." />
     <ul class="actions">
-      <li><a class="button primary" href="/">Go to the latest entries</a></li>
-      <li><a class="button" href="/archive/">Browse the archive</a></li>
+      <li><a class="button primary" href={ROUTES.home}>Go to the latest entries</a></li>
+      <li><a class="button" href={ROUTES.archive}>Browse the archive</a></li>
     </ul>
-  </div>
+  </Container>
 </BaseLayout>
 
 <style>
-  .missing {
-    width: 100%;
-    max-width: calc(var(--container-prose) + 2 * var(--gutter));
-    margin-inline: auto;
-    padding: var(--space-12) var(--gutter) 0;
-  }
-
   .actions {
     display: flex;
     flex-wrap: wrap;

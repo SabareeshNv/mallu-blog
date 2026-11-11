@@ -1,107 +1,31 @@
 ---
-import { Font, getImage } from 'astro:assets';
+import { Font } from 'astro:assets';
+import Seo from '@/components/seo/Seo.astro';
 import SiteHeader from '@/components/layout/SiteHeader.astro';
 import SiteFooter from '@/components/layout/SiteFooter.astro';
-import defaultShareImage from '@/assets/images/hero-lake-dusk.jpg';
-import { SITE } from '@/config/site';
+import themeInit from '@/scripts/theme-init.js?raw';
+import imageFade from '@/scripts/image-fade.js?raw';
+import type { ArticleMeta } from '@/lib/seo/types';
 import '@/styles/tokens.css';
 import '@/styles/theme.css';
 import '@/styles/base.css';
 
+/**
+ * The frame of every page: <head> (SEO, icons, theme, fonts), skip link, header, an optional hero, <main>, footer.
+ * Pages normally use it through PageLayout, EssayLayout or ScribbleLayout.
+ */
 interface Props {
   /** Page title (without the site name). */
   title?: string;
   description?: string;
-  /** Social preview image (an imported image). Defaults to the site's hero photograph. */
+  /** Social preview image. Defaults to the site's hero photograph. */
   image?: ImageMetadata;
-  /** Alt text for the social preview image. */
   imageAlt?: string;
-  type?: 'website' | 'article';
-  /** For articles: publication date. */
-  publishedTime?: Date;
-  /** Keep the page out of search results (used for the 404 page). */
+  /** Set for essays and scribbles. */
+  article?: ArticleMeta;
+  /** Keep the page out of search results. */
   noindex?: boolean;
 }
-
-const {
-  title,
-  description = SITE.description,
-  image = defaultShareImage,
-  imageAlt = 'A wooden jetty reaching into a calm lake at sunset',
-  type = 'website',
-  publishedTime,
-  noindex = false,
-} = Astro.props;
-
-const fullTitle = title ? `${title} · ${SITE.title}` : SITE.homeTitle;
-const canonical = new URL(Astro.url.pathname, Astro.site);
-const share = await getImage({ src: image, width: 1200, height: 630, fit: 'cover', format: 'jpg' });
-const shareUrl = new URL(share.src, Astro.site);
-
-// ---- Structured data (schema.org), so search engines understand what each page is ----
-const siteUrl = new URL('/', Astro.site).href;
-const publisher = {
-  '@type': 'Organization',
-  name: SITE.title,
-  url: siteUrl,
-  logo: { '@type': 'ImageObject', url: new URL('/apple-touch-icon.png', Astro.site).href },
-};
-const graph: Record<string, unknown>[] = [];
-
-if (Astro.url.pathname === '/') {
-  graph.push(
-    {
-      '@type': 'WebSite',
-      '@id': `${siteUrl}#website`,
-      url: siteUrl,
-      name: SITE.title,
-      description: SITE.description,
-      inLanguage: ['en', SITE.postLang],
-      publisher,
-    },
-    {
-      '@type': 'Blog',
-      '@id': `${siteUrl}#blog`,
-      url: siteUrl,
-      name: SITE.title,
-      description: SITE.description,
-      inLanguage: SITE.postLang,
-      isPartOf: { '@id': `${siteUrl}#website` },
-      publisher,
-    },
-  );
-}
-
-if (type === 'article' && title) {
-  const section = Astro.url.pathname.split('/')[1];
-  const sectionName = section === 'essay' ? 'Essays' : 'Scribbles';
-  const published = publishedTime?.toISOString();
-  graph.push(
-    {
-      '@type': 'BlogPosting',
-      headline: title,
-      description,
-      url: canonical.href,
-      mainEntityOfPage: canonical.href,
-      ...(published && { datePublished: published, dateModified: published }),
-      inLanguage: SITE.postLang,
-      image: shareUrl.href,
-      author: { '@type': 'Organization', name: SITE.author, url: siteUrl },
-      publisher,
-      isPartOf: { '@id': `${siteUrl}#blog` },
-    },
-    {
-      '@type': 'BreadcrumbList',
-      itemListElement: [
-        { '@type': 'ListItem', position: 1, name: 'Home', item: siteUrl },
-        { '@type': 'ListItem', position: 2, name: sectionName, item: new URL(`/${section}s/`, Astro.site).href },
-        { '@type': 'ListItem', position: 3, name: title, item: canonical.href },
-      ],
-    },
-  );
-}
-
-const jsonLd = graph.length ? JSON.stringify({ '@context': 'https://schema.org', '@graph': graph }).replace(/</g, '\\u003c') : null;
 ---
 
 <!doctype html>
@@ -109,15 +33,7 @@ const jsonLd = graph.length ? JSON.stringify({ '@context': 'https://schema.org',
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>{fullTitle}</title>
-    <meta name="description" content={description} />
-    <meta name="author" content={SITE.author} />
-    <meta
-      name="robots"
-      content={noindex ? 'noindex, follow' : 'index, follow, max-image-preview:large, max-snippet:-1'}
-    />
-    {!noindex && <link rel="canonical" href={canonical} />}
-    <link rel="alternate" type="application/rss+xml" title={`${SITE.title} — all entries`} href="/rss.xml" />
+    <Seo {...Astro.props} />
 
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
@@ -126,44 +42,11 @@ const jsonLd = graph.length ? JSON.stringify({ '@context': 'https://schema.org',
     <meta name="theme-color" content="#15212c" media="(prefers-color-scheme: light)" />
     <meta name="theme-color" content="#081115" media="(prefers-color-scheme: dark)" />
 
-    <!-- Social previews -->
-    <meta property="og:site_name" content={SITE.title} />
-    <meta property="og:title" content={title ?? SITE.title} />
-    <meta property="og:description" content={description} />
-    <meta property="og:type" content={type} />
-    <meta property="og:locale" content={type === 'article' ? 'ml_IN' : 'en_US'} />
-    {type !== 'article' && <meta property="og:locale:alternate" content="ml_IN" />}
-    <meta property="og:url" content={canonical} />
-    <meta property="og:image" content={shareUrl} />
-    <meta property="og:image:width" content="1200" />
-    <meta property="og:image:height" content="630" />
-    <meta property="og:image:alt" content={imageAlt} />
-    {publishedTime && <meta property="article:published_time" content={publishedTime.toISOString()} />}
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content={title ?? SITE.title} />
-    <meta name="twitter:description" content={description} />
-    <meta name="twitter:image" content={shareUrl} />
-    <meta name="twitter:image:alt" content={imageAlt} />
-
     <!-- Apply the saved (or system) theme before first paint to avoid a flash. -->
-    <script is:inline>
-      (() => {
-        const root = document.documentElement;
-        let theme;
-        try {
-          theme = localStorage.getItem('theme');
-        } catch {}
-        if (theme !== 'light' && theme !== 'dark') {
-          theme = matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-        }
-        root.dataset.theme = theme;
-        root.dataset.js = '';
-      })();
-    </script>
+    <script is:inline set:html={themeInit} />
 
     <Font cssVariable="--font-ui" preload={[{ weight: '400', style: 'normal' }]} />
     <Font cssVariable="--font-ml" preload={[{ subset: 'malayalam' }]} />
-    {jsonLd && <script type="application/ld+json" set:html={jsonLd} />}
     <slot name="head" />
   </head>
   <body>
@@ -176,15 +59,6 @@ const jsonLd = graph.length ? JSON.stringify({ '@context': 'https://schema.org',
     <SiteFooter />
 
     <!-- Images marked data-fade sit on a placeholder colour and fade in once loaded. -->
-    <script is:inline>
-      (() => {
-        const done = (img) => img.setAttribute('data-loaded', '');
-        document.querySelectorAll('img[data-fade]').forEach((img) => {
-          if (img.complete) return done(img);
-          img.addEventListener('load', () => done(img), { once: true });
-          img.addEventListener('error', () => done(img), { once: true });
-        });
-      })();
-    </script>
+    <script is:inline set:html={imageFade} />
   </body>
 </html>

@@ -3,7 +3,7 @@ import type { GetStaticPaths, Page } from 'astro';
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import Feed from '@/components/feed/Feed.astro';
 import Hero from '@/components/home/Hero.astro';
-import { getSortedPosts, type Post } from '@/lib/posts';
+import { getSortedPosts, type Post } from '@/lib/content';
 import { SITE } from '@/config/site';
 
 export const getStaticPaths = (async ({ paginate }) => {

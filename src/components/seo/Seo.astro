@@ -1,0 +1,87 @@
+---
+/**
+ * Everything a search engine or a social network reads from a page: title, description, canonical link,
+ * robots, Open Graph and Twitter cards, and schema.org structured data.
+ */
+import { getImage } from 'astro:assets';
+import defaultShareImage from '@/assets/images/hero-lake-dusk.jpg';
+import { SITE } from '@/config/site';
+import { ROUTES } from '@/config/routes';
+import { postSchemas, serializeJsonLd, siteSchemas, type Schema } from '@/lib/seo/schema';
+import type { ArticleMeta } from '@/lib/seo/types';
+
+interface Props {
+  /** Page title (without the site name). The home page has none and uses the site's own title. */
+  title?: string;
+  description?: string;
+  /** Social preview image (an imported image). Defaults to the site's hero photograph. */
+  image?: ImageMetadata;
+  /** Alt text for the social preview image. */
+  imageAlt?: string;
+  /** Set for essays and scribbles. */
+  article?: ArticleMeta;
+  /** Keep the page out of search results (used for the 404 page). */
+  noindex?: boolean;
+}
+
+const {
+  title,
+  description = SITE.description,
+  image = defaultShareImage,
+  imageAlt = 'A wooden jetty reaching into a calm lake at sunset',
+  article,
+  noindex = false,
+} = Astro.props;
+
+const site = new URL('/', Astro.site);
+const canonical = new URL(Astro.url.pathname, Astro.site);
+const fullTitle = title ? `${title} · ${SITE.title}` : SITE.homeTitle;
+const share = await getImage({ src: image, width: 1200, height: 630, fit: 'cover', format: 'jpg' });
+const shareUrl = new URL(share.src, Astro.site);
+
+const graph: Schema[] = [];
+if (Astro.url.pathname === ROUTES.home) graph.push(...siteSchemas(site));
+if (article && title) {
+  graph.push(
+    ...postSchemas({
+      site,
+      canonical,
+      headline: title,
+      description,
+      imageUrl: shareUrl,
+      publishedTime: article.publishedTime,
+      section: article.section,
+    }),
+  );
+}
+const jsonLd = graph.length ? serializeJsonLd(graph) : null;
+const type = article ? 'article' : 'website';
+---
+
+<title>{fullTitle}</title>
+<meta name="description" content={description} />
+<meta name="author" content={SITE.author} />
+<meta name="robots" content={noindex ? 'noindex, follow' : 'index, follow, max-image-preview:large, max-snippet:-1'} />
+{!noindex && <link rel="canonical" href={canonical} />}
+<link rel="alternate" type="application/rss+xml" title={`${SITE.title} — all entries`} href={ROUTES.rss} />
+
+<!-- Social previews -->
+<meta property="og:site_name" content={SITE.title} />
+<meta property="og:title" content={title ?? SITE.title} />
+<meta property="og:description" content={description} />
+<meta property="og:type" content={type} />
+<meta property="og:locale" content={article ? 'ml_IN' : 'en_US'} />
+{!article && <meta property="og:locale:alternate" content="ml_IN" />}
+<meta property="og:url" content={canonical} />
+<meta property="og:image" content={shareUrl} />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:image:alt" content={imageAlt} />
+{article && <meta property="article:published_time" content={article.publishedTime.toISOString()} />}
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content={title ?? SITE.title} />
+<meta name="twitter:description" content={description} />
+<meta name="twitter:image" content={shareUrl} />
+<meta name="twitter:image:alt" content={imageAlt} />
+
+{jsonLd && <script type="application/ld+json" set:html={jsonLd} />}

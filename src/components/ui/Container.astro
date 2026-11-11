@@ -1,0 +1,45 @@
+---
+/**
+ * The page-width wrapper: centres its content in a column and applies the page's side margins.
+ *
+ *   size="feed"   the width of lists (Home, Essays, Scribbles, Archive)
+ *   size="prose"  the width of reading text (essays, scribbles, policies)
+ *   top           space above the content: the default is 48px; "tight" is 32px; "none" is 0
+ */
+interface Props {
+  size: 'feed' | 'prose';
+  top?: 'default' | 'tight' | 'none';
+  /** The element to render. */
+  as?: 'div' | 'article' | 'section';
+}
+
+const { size, top = 'default', as: Tag = 'div' } = Astro.props;
+---
+
+<Tag class:list={['container', size, top]}>
+  <slot />
+</Tag>
+
+<style>
+  .container {
+    width: 100%;
+    margin-inline: auto;
+    padding: var(--space-12) var(--gutter) 0;
+  }
+
+  .feed {
+    max-width: calc(var(--container-feed) + 2 * var(--gutter));
+  }
+
+  .prose {
+    max-width: calc(var(--container-prose) + 2 * var(--gutter));
+  }
+
+  .tight {
+    padding-top: var(--space-8);
+  }
+
+  .none {
+    padding-top: 0;
+  }
+</style>

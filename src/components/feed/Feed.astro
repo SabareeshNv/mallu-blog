@@ -3,10 +3,11 @@
  * A paginated stream of entries grouped by month, used by Home, Essays and Scribbles.
  */
 import type { Page } from 'astro';
+import Container from '@/components/ui/Container.astro';
 import MonthGroup from '@/components/feed/MonthGroup.astro';
 import PageHeader from '@/components/ui/PageHeader.astro';
 import Pagination from '@/components/feed/Pagination.astro';
-import { groupByMonth, type Post } from '@/lib/posts';
+import { groupByMonth, type Post } from '@/lib/content';
 
 interface Props {
   page: Page<Post>;
@@ -22,23 +23,16 @@ const pageNote = page.lastPage > 1 ? `Page ${page.currentPage} of ${page.lastPag
 const lead = [intro, pageNote].filter(Boolean).join(' ');
 ---
 
-<div class="feed">
+<Container size="feed">
   {title ? <PageHeader title={title} intro={lead} /> : <h2 class="sr-only">Latest entries</h2>}
 
   {groups.length === 0 && <p class="empty">{emptyText}</p>}
   {groups.map((group) => <MonthGroup group={group} />)}
 
   <Pagination current={page.currentPage} last={page.lastPage} prevUrl={page.url.prev} nextUrl={page.url.next} />
-</div>
+</Container>
 
 <style>
-  .feed {
-    width: 100%;
-    max-width: calc(var(--container-feed) + 2 * var(--gutter));
-    margin-inline: auto;
-    padding: var(--space-12) var(--gutter) 0;
-  }
-
   .empty {
     color: var(--muted);
   }

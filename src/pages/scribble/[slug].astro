@@ -1,63 +1,18 @@
 ---
 import type { GetStaticPaths } from 'astro';
-import BaseLayout from '@/layouts/BaseLayout.astro';
-import PostNav from '@/components/feed/PostNav.astro';
-import ScribbleEntry from '@/components/feed/ScribbleEntry.astro';
-import { excerpt, getSortedPosts, isScribble, postAnchor, type Post } from '@/lib/posts';
-import { SITE } from '@/config/site';
+import ScribbleLayout from '@/layouts/ScribbleLayout.astro';
+import { getScribbleEntries, streamUrl, type PostEntry } from '@/lib/content';
 
 export const getStaticPaths = (async () => {
-  const posts = await getSortedPosts();
-  return posts.flatMap((post, i) => {
-    if (!isScribble(post)) return [];
-    // The feed page that holds this scribble, so readers can see it in context.
-    const feedPage = Math.floor(i / SITE.feedPageSize) + 1;
-    const streamUrl = `${feedPage === 1 ? '/' : `/${feedPage}/`}#${postAnchor(post)}`;
-    return [{ params: { slug: post.id }, props: { post, streamUrl, newer: posts[i - 1], older: posts[i + 1] } }];
-  });
+  const entries = await getScribbleEntries();
+  return entries.map((entry) => ({ params: { slug: entry.post.id }, props: { entry } }));
 }) satisfies GetStaticPaths;
 
 interface Props {
-  post: Post;
-  streamUrl: string;
-  newer?: Post;
-  older?: Post;
+  entry: PostEntry;
 }
 
-const { post, streamUrl, newer, older } = Astro.props;
-const date = new Intl.DateTimeFormat('en-GB', { dateStyle: 'long', timeZone: 'UTC' }).format(post.data.date);
+const { entry } = Astro.props;
 ---
 
-<BaseLayout
-  title={excerpt(post, 36)}
-  description={excerpt(post, 110)}
-  image={post.data.cover}
-  imageAlt={post.data.coverAlt}
-  type="article"
-  publishedTime={post.data.date}
->
-  <div class="single">
-    <h1 class="sr-only">Scribble from {date}</h1>
-    <ScribbleEntry post={post} size="large" />
-    <p class="context">
-      <a href={streamUrl}>See it in the stream</a>
-    </p>
-    <PostNav newer={newer} older={older} />
-  </div>
-</BaseLayout>
-
-<style>
-  .single {
-    width: 100%;
-    max-width: calc(var(--container-prose) + 2 * var(--gutter));
-    margin-inline: auto;
-    padding: var(--space-12) var(--gutter) 0;
-  }
-
-  .context {
-    margin-top: var(--space-4);
-    font-size: var(--fs-small);
-    font-weight: var(--fw-bold);
-    line-height: var(--lh-small);
-  }
-</style>
+<ScribbleLayout post={entry.post} streamUrl={streamUrl(entry)} newer={entry.newer} older={entry.older} />

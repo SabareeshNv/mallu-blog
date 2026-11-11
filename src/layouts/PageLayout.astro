@@ -3,6 +3,7 @@
  * A page of English text (the policy pages): page header, then prose at reading width.
  */
 import BaseLayout from '@/layouts/BaseLayout.astro';
+import Container from '@/components/ui/Container.astro';
 import PageHeader from '@/components/ui/PageHeader.astro';
 import Prose from '@/components/ui/Prose.astro';
 
@@ -17,19 +18,10 @@ const { title, description, updated } = Astro.props;
 ---
 
 <BaseLayout title={title} description={description}>
-  <article class="page">
+  <Container as="article" size="prose">
     <PageHeader title={title} intro={updated ? `Last updated ${updated}.` : undefined} />
     <Prose lang="en">
       <slot />
     </Prose>
-  </article>
+  </Container>
 </BaseLayout>
-
-<style>
-  .page {
-    width: 100%;
-    max-width: calc(var(--container-prose) + 2 * var(--gutter));
-    margin-inline: auto;
-    padding: var(--space-12) var(--gutter) 0;
-  }
-</style>

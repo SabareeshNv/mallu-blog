@@ -2,12 +2,11 @@
 import type { GetStaticPaths, Page } from 'astro';
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import Feed from '@/components/feed/Feed.astro';
-import { getSortedPosts, isScribble, type Post } from '@/lib/posts';
+import { getScribbles, type Post } from '@/lib/content';
 import { SITE } from '@/config/site';
 
 export const getStaticPaths = (async ({ paginate }) => {
-  const scribbles = (await getSortedPosts()).filter(isScribble);
-  return paginate(scribbles, { pageSize: SITE.feedPageSize });
+  return paginate(await getScribbles(), { pageSize: SITE.feedPageSize });
 }) satisfies GetStaticPaths;
 
 interface Props {

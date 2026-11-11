@@ -1,10 +1,8 @@
 ---
 import type { GetStaticPaths, Page } from 'astro';
 import BaseLayout from '@/layouts/BaseLayout.astro';
-import ArchiveYear from '@/components/feed/ArchiveYear.astro';
-import PageHeader from '@/components/ui/PageHeader.astro';
-import Pagination from '@/components/feed/Pagination.astro';
-import { getSortedPosts, groupByYear, isEssay, type Post } from '@/lib/posts';
+import ArchiveList from '@/components/feed/ArchiveList.astro';
+import { getSortedPosts, isEssay, type Post } from '@/lib/content';
 import { SITE } from '@/config/site';
 
 export const getStaticPaths = (async ({ paginate }) => {
@@ -23,37 +21,11 @@ interface Props {
 }
 
 const { page, essays, scribbles } = Astro.props;
-const groups = groupByYear(page.data);
-const plural = (n: number, word: string) => `${n} ${word}${n === 1 ? '' : 's'}`;
-const intro = [
-  `All ${plural(page.total, 'entry').replace('entrys', 'entries')} — ${plural(essays, 'essay')} and ${plural(scribbles, 'scribble')} — grouped by year, newest first.`,
-  page.lastPage > 1 ? `Page ${page.currentPage} of ${page.lastPage}.` : '',
-]
-  .filter(Boolean)
-  .join(' ');
 ---
 
 <BaseLayout
   title={page.currentPage === 1 ? 'Archive' : `Archive · Page ${page.currentPage}`}
   description={`Every essay and scribble on ${SITE.title}, grouped by year.`}
 >
-  <div class="archive">
-    <PageHeader title="Archive" intro={intro} />
-    {groups.length === 0 && <p class="empty">Nothing has been published yet.</p>}
-    {groups.map((group) => <ArchiveYear group={group} />)}
-    <Pagination current={page.currentPage} last={page.lastPage} prevUrl={page.url.prev} nextUrl={page.url.next} />
-  </div>
+  <ArchiveList page={page} essays={essays} scribbles={scribbles} />
 </BaseLayout>
-
-<style>
-  .archive {
-    width: 100%;
-    max-width: calc(var(--container-feed) + 2 * var(--gutter));
-    margin-inline: auto;
-    padding: var(--space-12) var(--gutter) 0;
-  }
-
-  .empty {
-    color: var(--muted);
-  }
-</style>

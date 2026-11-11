@@ -3,18 +3,17 @@ import EssayEntry from '@/components/feed/EssayEntry.astro';
 import ScribbleEntry from '@/components/feed/ScribbleEntry.astro';
 import EssayIcon from '@/components/icons/EssayIcon.astro';
 import ScribbleIcon from '@/components/icons/ScribbleIcon.astro';
-import { isEssay, type Group } from '@/lib/posts';
+import { isEssay, type Group } from '@/lib/content';
+import { formatMonthName } from '@/lib/format';
 
 interface Props {
-  group: Group<string>;
+  group: Group;
 }
 
 const { group } = Astro.props;
 const headingId = `month-${group.key}`;
-const [year, month] = group.key.split('-');
-const monthName = new Intl.DateTimeFormat('en-GB', { month: 'long', timeZone: 'UTC' }).format(
-  new Date(Date.UTC(Number(year), Number(month) - 1, 1)),
-);
+const [year] = group.key.split('-');
+const monthName = formatMonthName(group.posts[0].data.date);
 ---
 
 <section class="month" aria-labelledby={headingId}>

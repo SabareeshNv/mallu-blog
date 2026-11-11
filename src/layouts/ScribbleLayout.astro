@@ -1,0 +1,48 @@
+---
+/**
+ * A scribble's own page: the scribble itself, a link back to it in the feed, and the neighbouring posts.
+ */
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Container from '@/components/ui/Container.astro';
+import PostNav from '@/components/feed/PostNav.astro';
+import ScribbleEntry from '@/components/feed/ScribbleEntry.astro';
+import { excerpt, type Post } from '@/lib/content';
+import { formatDate } from '@/lib/format';
+
+interface Props {
+  post: Post;
+  /** The scribble in its place in the feed. */
+  streamUrl: string;
+  newer?: Post;
+  older?: Post;
+}
+
+const { post, streamUrl, newer, older } = Astro.props;
+const date = formatDate(post.data.date);
+---
+
+<BaseLayout
+  title={excerpt(post, 36)}
+  description={excerpt(post, 110)}
+  image={post.data.cover}
+  imageAlt={post.data.coverAlt}
+  article={{ section: 'scribble', publishedTime: post.data.date }}
+>
+  <Container size="prose">
+    <h1 class="sr-only">Scribble from {date}</h1>
+    <ScribbleEntry post={post} size="large" />
+    <p class="context">
+      <a href={streamUrl}>See it in the stream</a>
+    </p>
+    <PostNav newer={newer} older={older} />
+  </Container>
+</BaseLayout>
+
+<style>
+  .context {
+    margin-top: var(--space-4);
+    font-size: var(--fs-small);
+    font-weight: var(--fw-bold);
+    line-height: var(--lh-small);
+  }
+</style>
