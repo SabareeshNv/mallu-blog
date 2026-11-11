@@ -14,40 +14,40 @@
 :root {
   color-scheme: light dark;
 
-  /* ---- The "monsoon" palette ---- */
-  --bg: light-dark(#ffffff, #0d181d);
-  --surface: light-dark(#f2f7f6, #13232a);
-  --surface-strong: light-dark(#e2eeec, #1b3038);
-  --text: light-dark(#15212c, #e6efed);
-  --muted: light-dark(#4b5a68, #9cb0b1);
-  --border: light-dark(#d9e4e2, #22373e);
-  --accent: light-dark(#0a6c67, #52d0c4); /* interface and scribbles */
-  --accent-soft: light-dark(#e0f1ee, #10332f);
-  --essay: light-dark(#b8400f, #ff9e6e); /* essays */
-  --essay-soft: light-dark(#fcebe2, #3a2219);
+  /* ---- The "kasavu" palette: cream and gold with a deep maroon (the cloth of Kerala) ---- */
+  --bg: light-dark(#ffffff, #16100e);
+  --surface: light-dark(#faf6ee, #201815);
+  --surface-strong: light-dark(#f1e8d6, #2c211d);
+  --text: light-dark(#251c18, #f3e9e1);
+  --muted: light-dark(#6a5a50, #b9a79b);
+  --border: light-dark(#eadfcb, #3a2c26);
+  --accent: light-dark(#8a2232, #f08b95); /* interface and scribbles: maroon */
+  --accent-soft: light-dark(#f8e8ea, #3a161c);
+  --essay: light-dark(#8f5f00, #e8b84a); /* essays: antique gold */
+  --essay-soft: light-dark(#f9efd2, #33270c);
   --sun: #f6c453; /* highlights on dark surfaces only */
-  --rail: light-dark(#cfe3df, #22403f);
-  --highlight: light-dark(#fff0bf, #3a3418);
+  --rail: light-dark(#e6d9bd, #44352c);
+  --highlight: light-dark(#fff0bf, #3a3416);
   --focus: light-dark(#1d4ed8, #93c5fd);
 
   /* Deep surfaces: the footer and the fade over photographs */
-  --ink: light-dark(#15212c, #081115);
-  --on-ink: #e6efee;
-  --on-ink-muted: light-dark(#a9bcbf, #8fa6a8);
+  --ink: light-dark(#2a1015, #0e0908);
+  --on-ink: #f6ece4;
+  --on-ink-muted: light-dark(#cfb7ad, #a89086);
   --on-image: #ffffff;
   --on-image-muted: rgb(255 255 255 / 0.86);
-  --veil: light-dark(rgb(8 30 38), rgb(4 16 20)); /* use as color-mix(in srgb, var(--veil) 90%, transparent) */
+  --veil: light-dark(rgb(36 12 14), rgb(18 8 6)); /* use as color-mix(in srgb, var(--veil) 90%, transparent) */
   --text-shadow-image: 0 1px 12px rgb(0 0 0 / 0.4);
 
-  /* The logo: forest green outline, bronze wave */
-  --logo-outline: light-dark(#245b43, #5fb48c);
-  --logo-wave: #b47c45;
+  /* The logo: a maroon outline and a gold wave (the same colours as the interface and essay accents) */
+  --logo-outline: light-dark(#8a2232, #f08b95);
+  --logo-wave: light-dark(#b8862b, #e8b84a);
 
   /* Elevation */
-  --shadow-sm: 0 1px 2px light-dark(rgb(21 33 44 / 0.08), rgb(0 0 0 / 0.4));
+  --shadow-sm: 0 1px 2px light-dark(rgb(42 16 21 / 0.08), rgb(0 0 0 / 0.4));
   --shadow-md:
-    0 2px 4px light-dark(rgb(21 33 44 / 0.05), rgb(0 0 0 / 0.3)),
-    0 12px 24px -8px light-dark(rgb(10 60 66 / 0.2), rgb(0 0 0 / 0.6));
+    0 2px 4px light-dark(rgb(42 16 21 / 0.05), rgb(0 0 0 / 0.3)),
+    0 12px 24px -8px light-dark(rgb(42 16 21 / 0.2), rgb(0 0 0 / 0.6));
 }
 
 :root[data-theme='light'] {

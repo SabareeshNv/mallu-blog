@@ -1,12 +1,14 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
   <title>Lone Voice</title>
   <style>
-    .outline { stroke: #245B43; }
-    .dot { fill: #245B43; }
-    /* Browsers with a dark tab strip get a lighter green so the outline stays visible. */
+    .outline { stroke: #8A2232; }
+    .wave { stroke: #B8862B; }
+    .dot { fill: #8A2232; }
+    /* Browsers with a dark tab strip get lighter colours so the icon stays visible. */
     @media (prefers-color-scheme: dark) {
-      .outline { stroke: #5FB48C; }
-      .dot { fill: #5FB48C; }
+      .outline { stroke: #F08B95; }
+      .wave { stroke: #E8B84A; }
+      .dot { fill: #F08B95; }
     }
   </style>
   <path
@@ -18,10 +20,10 @@
     stroke-width="4"
     stroke-linejoin="round"/>
   <path
+    class="wave"
     d="M27 48 C35 48 35 31 43 31
        C51 31 48 66 58 66
        C67 66 66 40 77 40"
-    stroke="#B47C45"
     stroke-width="4"
     stroke-linecap="round"/>
   <circle class="dot" cx="77" cy="40" r="3"/>
