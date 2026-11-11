@@ -126,9 +126,9 @@ const minutes = readingMinutes(post);
     /* Never lighter than 35%, so the label and title stay readable even on a bright photograph. */
     background: linear-gradient(
       to top,
-      rgb(var(--veil) / 0.92) 0%,
-      rgb(var(--veil) / 0.7) 45%,
-      rgb(var(--veil) / 0.35) 100%
+      color-mix(in srgb, var(--veil) 92%, transparent) 0%,
+      color-mix(in srgb, var(--veil) 70%, transparent) 45%,
+      color-mix(in srgb, var(--veil) 35%, transparent) 100%
     );
   }
 

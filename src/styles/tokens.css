@@ -1,0 +1,109 @@
+/*
+ * Design tokens: everything that is not a colour.
+ * Components use these tokens and nothing else; no raw pixel, rem or hex values belong in a component.
+ * Colours live in theme.css.
+ */
+
+:root {
+  /* ---- Spacing: a strict 4-point scale. No other values are used. ---- */
+  --space-1: 0.25rem; /*  4 */
+  --space-2: 0.5rem; /*  8 */
+  --space-3: 0.75rem; /* 12 */
+  --space-4: 1rem; /* 16 */
+  --space-5: 1.25rem; /* 20 */
+  --space-6: 1.5rem; /* 24 */
+  --space-8: 2rem; /* 32 */
+  --space-10: 2.5rem; /* 40 */
+  --space-12: 3rem; /* 48 */
+  --space-16: 4rem; /* 64 */
+  --space-24: 6rem; /* 96 */
+
+  /* ---- Layout ---- */
+  --gutter: var(--space-4);
+  --container-feed: 48rem; /* lists: Home, Essays, Scribbles, Archive */
+  --container-prose: 42rem; /* reading: essays, scribbles, policies */
+  --header-h: var(--space-16);
+  --control-h: var(--space-10); /* buttons, nav links, theme switcher */
+  --icon-button: var(--space-8);
+
+  /* ---- Type: one family per script, one ramp, paired line heights on the 4-point grid ---- */
+  --font-sans: var(--font-ui), system-ui, sans-serif;
+  --font-post: var(--font-ml), var(--font-ui), sans-serif;
+
+  --fw-regular: 400;
+  --fw-bold: 700;
+  --fw-heavy: 800;
+
+  --fs-display: 2.5rem; /* page titles, hero */
+  --lh-display: 3rem;
+  --fs-h2: 1.75rem; /* section headings */
+  --lh-h2: 2.25rem;
+  --fs-h3: 1.25rem; /* card titles, in-article headings */
+  --lh-h3: 1.75rem;
+  --fs-lead: 1.25rem; /* hero tagline, long-form body */
+  --lh-lead: 1.75rem;
+  --fs-body: 1.125rem;
+  --lh-body: 1.75rem;
+  --fs-small: 1rem; /* navigation, buttons */
+  --lh-small: 1.5rem;
+  --fs-meta: 0.875rem; /* dates, footer */
+  --lh-meta: 1.25rem;
+  --fs-label: 0.75rem; /* uppercase labels and badges */
+  --lh-label: 1rem;
+  --tracking-label: 0.08em;
+
+  /* ---- Shape ---- */
+  --radius-sm: 4px; /* badges, code */
+  --radius-md: 8px; /* images inside cards */
+  --radius-lg: 12px; /* cards and panels */
+  --radius-full: 999px; /* buttons, pills, icon buttons */
+  --border-width: 1px;
+
+  /* ---- Motion ---- */
+  --ease: cubic-bezier(0.2, 0, 0, 1);
+  --duration-fast: 150ms;
+  --duration: 250ms;
+}
+
+/* Without JavaScript the phone header scrolls away (two rows), so scroll targets need no offset for it. */
+@media (max-width: 40rem) {
+  :root:not([data-js]) {
+    --header-h: 0rem;
+  }
+}
+
+@media (min-width: 48rem) {
+  :root {
+    --gutter: var(--space-6);
+    --fs-display: 3.25rem;
+    --lh-display: 3.75rem;
+    --fs-h2: 2rem;
+    --lh-h2: 2.5rem;
+    --fs-h3: 1.5rem;
+    --lh-h3: 2rem;
+  }
+}
+
+@media (min-width: 80rem) {
+  :root {
+    --gutter: var(--space-10);
+  }
+}
+
+/* Malayalam's stacked glyphs need taller lines. The same tokens, redefined for any lang="ml" subtree. */
+:lang(ml) {
+  --lh-display: 3.5rem;
+  --lh-h2: 2.75rem;
+  --lh-h3: 2rem;
+  --lh-lead: 2.25rem;
+  --lh-body: 2rem;
+  --lh-small: 1.75rem;
+}
+
+@media (min-width: 48rem) {
+  :lang(ml) {
+    --lh-display: 4.5rem;
+    --lh-h2: 3rem;
+    --lh-h3: 2.25rem;
+  }
+}

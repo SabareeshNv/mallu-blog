@@ -1,0 +1,59 @@
+/*
+ * Colour tokens for both themes, written once.
+ *
+ *   light-dark(<light value>, <dark value>)
+ *
+ * picks the first value in the light theme and the second in the dark theme. Which theme is active is decided by
+ * `color-scheme` on <html>:
+ *   - data-theme="light" / "dark" is set by the theme switcher (and by the inline script in <head>, before first paint);
+ *   - with no data-theme (JavaScript off), the operating system's preference is followed.
+ *
+ * To change a colour, edit it here, in one place. A value shared by both themes is written once, without light-dark().
+ */
+
+:root {
+  color-scheme: light dark;
+
+  /* ---- The "monsoon" palette ---- */
+  --bg: light-dark(#ffffff, #0d181d);
+  --surface: light-dark(#f2f7f6, #13232a);
+  --surface-strong: light-dark(#e2eeec, #1b3038);
+  --text: light-dark(#15212c, #e6efed);
+  --muted: light-dark(#4b5a68, #9cb0b1);
+  --border: light-dark(#d9e4e2, #22373e);
+  --accent: light-dark(#0a6c67, #52d0c4); /* interface and scribbles */
+  --accent-soft: light-dark(#e0f1ee, #10332f);
+  --essay: light-dark(#b8400f, #ff9e6e); /* essays */
+  --essay-soft: light-dark(#fcebe2, #3a2219);
+  --sun: #f6c453; /* highlights on dark surfaces only */
+  --rail: light-dark(#cfe3df, #22403f);
+  --highlight: light-dark(#fff0bf, #3a3418);
+  --focus: light-dark(#1d4ed8, #93c5fd);
+
+  /* Deep surfaces: the footer and the fade over photographs */
+  --ink: light-dark(#15212c, #081115);
+  --on-ink: #e6efee;
+  --on-ink-muted: light-dark(#a9bcbf, #8fa6a8);
+  --on-image: #ffffff;
+  --on-image-muted: rgb(255 255 255 / 0.86);
+  --veil: light-dark(rgb(8 30 38), rgb(4 16 20)); /* use as color-mix(in srgb, var(--veil) 90%, transparent) */
+  --text-shadow-image: 0 1px 12px rgb(0 0 0 / 0.4);
+
+  /* The logo: forest green outline, bronze wave */
+  --logo-outline: light-dark(#245b43, #5fb48c);
+  --logo-wave: #b47c45;
+
+  /* Elevation */
+  --shadow-sm: 0 1px 2px light-dark(rgb(21 33 44 / 0.08), rgb(0 0 0 / 0.4));
+  --shadow-md:
+    0 2px 4px light-dark(rgb(21 33 44 / 0.05), rgb(0 0 0 / 0.3)),
+    0 12px 24px -8px light-dark(rgb(10 60 66 / 0.2), rgb(0 0 0 / 0.6));
+}
+
+:root[data-theme='light'] {
+  color-scheme: light;
+}
+
+:root[data-theme='dark'] {
+  color-scheme: dark;
+}
