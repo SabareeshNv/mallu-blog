@@ -1,5 +1,6 @@
 ---
 import PageLayout from '../layouts/PageLayout.astro';
+import ContactLink from '../components/ContactLink.astro';
 import { SITE } from '../site.config';
 ---
 
@@ -41,7 +42,7 @@ import { SITE } from '../site.config';
 
   <h2>Changes and contact</h2>
   <p>
-    If this policy changes, the date at the top of the page will be updated. For any questions, write to{" "}
-    <a href={`mailto:${SITE.contactEmail}`}>{SITE.contactEmail}</a>.
+    If this policy changes, the date at the top of the page will be updated. For any questions, get in touch through{" "}
+    <ContactLink />.
   </p>
 </PageLayout>

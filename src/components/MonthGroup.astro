@@ -28,7 +28,7 @@ const monthName = new Intl.DateTimeFormat('en-GB', { month: 'long', timeZone: 'U
         return (
           <li class:list={['item', essay ? 'is-essay' : 'is-scribble']}>
             <span class="node" aria-hidden="true">
-              {essay ? <EssayIcon /> : <ScribbleIcon />}
+              {essay ? <EssayIcon size={16} /> : <ScribbleIcon size={16} />}
             </span>
             {essay ? <EssayEntry post={post} /> : <ScribbleEntry post={post} />}
           </li>
@@ -40,50 +40,50 @@ const monthName = new Intl.DateTimeFormat('en-GB', { month: 'long', timeZone: 'U
 
 <style>
   .month + .month {
-    margin-top: var(--space-xl);
+    margin-top: var(--space-16);
   }
 
   .heading {
     display: flex;
     align-items: center;
-    gap: 0.6rem;
-    margin: 0 0 var(--space-m);
-    font-size: var(--step-3);
-    font-weight: 800;
+    gap: var(--space-3);
+    margin-bottom: var(--space-6);
+    font-size: var(--fs-h2);
+    font-weight: var(--fw-heavy);
+    line-height: var(--lh-h2);
     letter-spacing: -0.02em;
-    line-height: 1.1;
   }
 
   .year {
-    padding: 0.2rem 0.55rem 0.25rem;
-    border-radius: 6px;
+    padding: var(--space-1) var(--space-2);
+    border-radius: var(--radius-sm);
     background: var(--accent);
     color: var(--bg);
-    font-size: var(--step--1);
-    font-weight: 700;
-    letter-spacing: 0.02em;
+    font-size: var(--fs-label);
+    font-weight: var(--fw-bold);
+    line-height: var(--lh-label);
+    letter-spacing: var(--tracking-label);
   }
 
-  /* A quiet vertical rail links the month's entries together. */
+  /* A quiet vertical rail links the month's entries. Node: 32px; offset: 48px (40px on phones). */
   .timeline {
-    --node: 2.25rem;
-    --gutter: 3.25rem;
+    --node: var(--space-8);
+    --offset: var(--space-12);
     position: relative;
     display: grid;
-    gap: var(--space-m);
+    gap: var(--space-8);
     margin: 0;
-    padding: 0 0 0 var(--gutter);
+    padding: 0 0 0 var(--offset);
     list-style: none;
   }
 
   .timeline::before {
     content: '';
     position: absolute;
-    top: 0.5rem;
-    bottom: 0.5rem;
+    top: var(--space-6);
+    bottom: var(--space-6);
     left: calc(var(--node) / 2 - 1px);
     width: 2px;
-    border-radius: 2px;
     background: var(--rail);
   }
 
@@ -91,17 +91,23 @@ const monthName = new Intl.DateTimeFormat('en-GB', { month: 'long', timeZone: 'U
     position: relative;
   }
 
+  /* Centred on the first line of text in a scribble panel (24px padding + 32px line). */
   .node {
     position: absolute;
-    top: 1.1rem;
-    left: calc(-1 * var(--gutter));
+    top: var(--space-6);
+    left: calc(-1 * var(--offset));
     display: grid;
     place-items: center;
     width: var(--node);
     height: var(--node);
     border: 2px solid currentColor;
-    border-radius: 50%;
+    border-radius: var(--radius-full);
     background: var(--bg);
+  }
+
+  .node :global(svg) {
+    width: var(--space-4);
+    height: var(--space-4);
   }
 
   .is-essay .node {
@@ -114,15 +120,9 @@ const monthName = new Intl.DateTimeFormat('en-GB', { month: 'long', timeZone: 'U
     background: var(--accent-soft);
   }
 
-  @media (max-width: 34rem) {
+  @media (max-width: 40rem) {
     .timeline {
-      --node: 1.9rem;
-      --gutter: 2.6rem;
-    }
-
-    .node :global(svg) {
-      width: 15px;
-      height: 15px;
+      --offset: var(--space-10);
     }
   }
 </style>

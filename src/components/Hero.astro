@@ -4,11 +4,11 @@ import heroImage from '../assets/images/hero-lake-dusk.jpg';
 import { SITE } from '../site.config';
 
 interface Props {
-  /** Total number of entries, shown as a quiet stat. */
-  count: number;
+  essays: number;
+  scribbles: number;
 }
 
-const { count } = Astro.props;
+const { essays, scribbles } = Astro.props;
 ---
 
 <section class="hero" aria-labelledby="hero-title">
@@ -16,30 +16,38 @@ const { count } = Astro.props;
     class="photo"
     src={heroImage}
     alt=""
-    widths={[640, 960, 1280, 1600]}
+    widths={[640, 960, 1280, 1600, 2000]}
     sizes="100vw"
     loading="eager"
     fetchpriority="high"
+    data-fade
   />
-  <div class="veil" aria-hidden="true"></div>
   <div class="content">
     <p class="eyebrow">A notebook in Malayalam</p>
     <h1 id="hero-title">{SITE.title}</h1>
     <p class="tagline">{SITE.tagline}</p>
-    <p class="meta">{count} {count === 1 ? 'entry' : 'entries'} so far</p>
+    <p class="meta">
+      {essays} {essays === 1 ? 'essay' : 'essays'} · {scribbles} {scribbles === 1 ? 'scribble' : 'scribbles'}
+    </p>
   </div>
 </section>
 
 <style>
-  /* A full-width photograph opens the notebook. */
   .hero {
     position: relative;
     isolation: isolate;
     display: grid;
     align-items: end;
-    min-height: clamp(20rem, 55vh, 32rem);
+    min-height: 26rem;
     overflow: hidden;
-    color: #fff;
+    background: var(--ink);
+    color: var(--on-image);
+  }
+
+  @media (min-width: 48rem) {
+    .hero {
+      min-height: 32rem;
+    }
   }
 
   .photo {
@@ -52,60 +60,52 @@ const { count } = Astro.props;
     object-position: center 60%;
   }
 
-  @media (prefers-reduced-motion: no-preference) {
-    .photo {
-      animation: settle 2.4s cubic-bezier(0.2, 0.7, 0.2, 1) both;
-    }
-
-    @keyframes settle {
-      from {
-        transform: scale(1.06);
-      }
-    }
-  }
-
-  .veil {
+  .hero::before {
+    content: '';
     position: absolute;
     inset: 0;
     z-index: -1;
-    background:
-      linear-gradient(to top, rgb(var(--veil) / 0.9) 0%, rgb(var(--veil) / 0.5) 50%, rgb(var(--veil) / 0.08) 100%);
+    background: linear-gradient(to top, rgb(var(--veil) / 0.9) 0%, rgb(var(--veil) / 0.5) 50%, rgb(var(--veil) / 0.1) 100%);
   }
 
-  /* The text lines up with the feed column below. */
+  /* Same container as the feed below, so the text lines up with the timeline. */
   .content {
     width: 100%;
-    max-width: var(--feed);
+    max-width: calc(var(--container-feed) + 2 * var(--gutter));
     margin-inline: auto;
-    padding: var(--space-xl) var(--space-s) var(--space-l);
-    text-shadow: 0 1px 12px rgb(0 0 0 / 0.45);
+    padding: var(--space-16) var(--gutter) var(--space-12);
+    text-shadow: var(--text-shadow-image);
   }
 
   .eyebrow {
-    margin: 0 0 var(--space-xs);
-    font-size: var(--step--1);
-    font-weight: 700;
-    letter-spacing: 0.14em;
+    color: var(--sun);
+    font-size: var(--fs-label);
+    font-weight: var(--fw-bold);
+    line-height: var(--lh-label);
+    letter-spacing: var(--tracking-label);
     text-transform: uppercase;
-    color: #f6c453;
   }
 
   h1 {
-    margin: 0;
-    font-size: var(--step-3);
-    font-weight: 800;
+    margin-top: var(--space-3);
+    font-size: var(--fs-display);
+    font-weight: var(--fw-heavy);
+    line-height: var(--lh-display);
     letter-spacing: -0.02em;
   }
 
   .tagline {
-    max-width: 34ch;
-    margin: var(--space-xs) 0 0;
-    font-size: var(--step-1);
+    max-width: 32rem;
+    margin-top: var(--space-3);
+    color: var(--on-image-muted);
+    font-size: var(--fs-lead);
+    line-height: var(--lh-lead);
   }
 
   .meta {
-    margin: var(--space-s) 0 0;
-    font-size: var(--step--1);
-    opacity: 0.9;
+    margin-top: var(--space-6);
+    color: var(--on-image-muted);
+    font-size: var(--fs-meta);
+    line-height: var(--lh-meta);
   }
 </style>

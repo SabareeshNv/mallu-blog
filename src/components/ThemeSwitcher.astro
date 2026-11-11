@@ -22,13 +22,14 @@ import MoonIcon from './icons/MoonIcon.astro';
 </fieldset>
 
 <style>
+  /* Track height equals --control-h: 4px padding + 32px options + 4px padding. */
   .switcher {
     display: inline-flex;
-    gap: 2px;
+    gap: var(--space-1);
     margin: 0;
-    padding: 3px;
-    border: 1px solid var(--border);
-    border-radius: 999px;
+    padding: calc(var(--space-1) - var(--border-width));
+    border: var(--border-width) solid var(--border);
+    border-radius: var(--radius-full);
     background: var(--surface);
   }
 
@@ -41,14 +42,14 @@ import MoonIcon from './icons/MoonIcon.astro';
     position: relative;
     display: inline-grid;
     place-items: center;
-    width: 2.1rem;
-    height: 2.1rem;
-    border-radius: 999px;
+    width: var(--icon-button);
+    height: var(--icon-button);
+    border-radius: var(--radius-full);
     color: var(--muted);
     cursor: pointer;
     transition:
-      background-color 0.2s ease,
-      color 0.2s ease;
+      background-color var(--duration-fast) var(--ease),
+      color var(--duration-fast) var(--ease);
   }
 
   .option:hover {
@@ -58,7 +59,7 @@ import MoonIcon from './icons/MoonIcon.astro';
   .option:has(input:checked) {
     background: var(--surface-strong);
     color: var(--text);
-    box-shadow: var(--shadow);
+    box-shadow: var(--shadow-sm);
   }
 
   .option:has(input:focus-visible) {
@@ -73,7 +74,6 @@ import MoonIcon from './icons/MoonIcon.astro';
     opacity: 0;
     cursor: pointer;
   }
-
 </style>
 
 <script>

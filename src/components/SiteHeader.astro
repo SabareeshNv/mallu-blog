@@ -1,11 +1,11 @@
 ---
 import ThemeSwitcher from './ThemeSwitcher.astro';
+import LogoMark from './icons/LogoMark.astro';
 import { SITE } from '../site.config';
 
-const path = Astro.url.pathname;
-const section = path.split('/')[1] ?? '';
+const section = Astro.url.pathname.split('/')[1] ?? '';
 const links = [
-  { href: '/', label: 'Home', active: section === '' || /^\d+$/.test(section) },
+  { href: '/', label: 'Home', active: section === '' || (/^\d+$/.test(section) && section !== '404') },
   { href: '/essays/', label: 'Essays', active: section === 'essays' || section === 'essay' },
   { href: '/scribbles/', label: 'Scribbles', active: section === 'scribbles' || section === 'scribble' },
   { href: '/archive/', label: 'Archive', active: section === 'archive' },
@@ -15,29 +15,24 @@ const links = [
 <header class="site-header">
   <div class="inner">
     <a class="brand" href="/" aria-label={`${SITE.title} — home`}>
-      <svg class="mark" viewBox="0 0 64 64" width="30" height="30" aria-hidden="true">
-        <rect width="64" height="64" rx="16" fill="#0a6c67"></rect>
-        <circle cx="22" cy="32" r="7" fill="#f6c453"></circle>
-        <path d="M34 22a14 14 0 0 1 0 20M41 15a24 24 0 0 1 0 34" fill="none" stroke="#e6efee" stroke-width="4.5"
-          stroke-linecap="round"></path>
-      </svg>
-      <span>{SITE.title}</span>
+      <LogoMark />
+      <span class="name">{SITE.title}</span>
     </a>
     <div class="end">
-    <nav aria-label="Main">
-      <ul>
-        {
-          links.map((link) => (
-            <li>
-              <a href={link.href} aria-current={link.active ? 'page' : undefined}>
-                {link.label}
-              </a>
-            </li>
-          ))
-        }
-      </ul>
-    </nav>
-    <ThemeSwitcher />
+      <nav aria-label="Main">
+        <ul>
+          {
+            links.map((link) => (
+              <li>
+                <a href={link.href} aria-current={link.active ? 'page' : undefined}>
+                  {link.label}
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </nav>
+      <ThemeSwitcher />
     </div>
   </div>
 </header>
@@ -47,66 +42,66 @@ const links = [
   .site-header {
     --text: var(--on-ink);
     --muted: var(--on-ink-muted);
-    --surface: rgb(255 255 255 / 0.07);
-    --surface-strong: rgb(255 255 255 / 0.15);
+    --surface: rgb(255 255 255 / 0.06);
+    --surface-strong: rgb(255 255 255 / 0.14);
     --border: rgb(255 255 255 / 0.14);
     --focus: #93c5fd;
-    --shadow: 0 1px 3px rgb(0 0 0 / 0.35);
     position: sticky;
     top: 0;
     z-index: 50;
-    background: color-mix(in srgb, var(--ink) 94%, transparent);
-    backdrop-filter: saturate(1.4) blur(12px);
-    -webkit-backdrop-filter: saturate(1.4) blur(12px);
+    height: var(--header-h);
+    background: var(--ink);
     color: var(--text);
   }
 
-  /* Full width: the brand sits at the left edge, navigation and theme switcher at the right edge. */
   .inner {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: var(--space-s);
-    min-height: var(--header-h);
-    padding-inline: clamp(var(--space-s), 3vw, var(--space-l));
-  }
-
-  .end {
-    display: flex;
-    align-items: center;
-    gap: clamp(0.25rem, 1.5vw, var(--space-m));
+    gap: var(--space-4);
+    height: 100%;
+    padding-inline: var(--gutter);
   }
 
   .brand {
     display: inline-flex;
     align-items: center;
-    gap: 0.55rem;
+    gap: var(--space-3);
     color: var(--text);
-    font-size: var(--step-1);
-    font-weight: 800;
+    font-size: var(--fs-lead);
+    font-weight: var(--fw-heavy);
+    line-height: var(--lh-lead);
     letter-spacing: -0.01em;
     text-decoration: none;
   }
 
-  .mark {
-    flex: none;
+  .end {
+    display: flex;
+    align-items: center;
+    gap: var(--space-4);
   }
 
   ul {
     display: flex;
-    gap: 0.25rem;
+    gap: var(--space-1);
     margin: 0;
     padding: 0;
     list-style: none;
   }
 
   nav a {
-    display: block;
-    padding: 0.35rem 0.75rem;
-    border-radius: 999px;
+    display: inline-flex;
+    align-items: center;
+    height: var(--control-h);
+    padding: 0 var(--space-4);
+    border-radius: var(--radius-full);
     color: var(--muted);
-    font-weight: 500;
+    font-size: var(--fs-small);
+    line-height: var(--lh-small);
     text-decoration: none;
+    transition:
+      background-color var(--duration-fast) var(--ease),
+      color var(--duration-fast) var(--ease);
   }
 
   nav a:hover {
@@ -117,27 +112,35 @@ const links = [
   nav a[aria-current='page'] {
     color: var(--text);
     background: var(--surface-strong);
-    box-shadow: inset 0 -2px 0 #f6c453;
+    box-shadow: inset 0 -2px 0 var(--sun);
   }
 
-  @media (max-width: 40rem) {
+  @media (max-width: 48rem) {
+    .end {
+      gap: var(--space-2);
+    }
+
     ul {
       gap: 0;
     }
 
     nav a {
-      padding: 0.35rem 0.5rem;
-      font-size: var(--step--1);
+      padding: 0 var(--space-3);
     }
   }
 
   @media (max-width: 30rem) {
-    .brand span {
+    .name {
       position: absolute;
       width: 1px;
       height: 1px;
       overflow: hidden;
       clip: rect(0 0 0 0);
+    }
+
+    nav a {
+      padding: 0 var(--space-2);
+      font-size: var(--fs-meta);
     }
   }
 </style>

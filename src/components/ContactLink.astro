@@ -1,0 +1,21 @@
+---
+/**
+ * The site's contact: the e-mail address when one is configured, otherwise the first social profile.
+ */
+import { SITE } from '../site.config';
+
+const email = SITE.contactEmail as string;
+const profile = SITE.social[0];
+---
+
+{
+  email ? (
+    <a href={`mailto:${email}`}>{email}</a>
+  ) : (
+    profile && (
+      <a href={profile.href} rel="me noopener">
+        {SITE.author} on {profile.label}
+      </a>
+    )
+  )
+}

@@ -1,5 +1,6 @@
 ---
 import PageLayout from '../layouts/PageLayout.astro';
+import ContactLink from '../components/ContactLink.astro';
 import { SITE } from '../site.config';
 ---
 
@@ -44,8 +45,8 @@ import { SITE } from '../site.config';
 
   <h2>Corrections and concerns</h2>
   <p>
-    If you find a factual error, or believe something here concerns you unfairly or infringes your rights, please{" "}
-    write to <a href={`mailto:${SITE.contactEmail}`}>{SITE.contactEmail}</a>. Every message will be read, and
+    If you find a factual error, or believe something here concerns you unfairly or infringes your rights, please get in touch through{" "}
+    <ContactLink />. Every message will be read, and
     corrections will be made where they are due.
   </p>
 </PageLayout>

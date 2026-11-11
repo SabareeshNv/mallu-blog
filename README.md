@@ -38,7 +38,8 @@ Put cover images in `src/assets/images/`. Astro optimises them into responsive W
 
 ## Settings
 
-Edit `src/site.config.ts` to set the site title, tagline, author and contact email (shown on the policy pages), and the page sizes:
+Edit `src/site.config.ts` to set the site title, tagline, byline, social profiles, an optional contact e-mail
+(when empty, the first social profile is used on the policy pages), and the page sizes:
 
 ```ts
 feedPageSize: 30,     // entries per page on Home, Essays and Scribbles
@@ -70,6 +71,27 @@ src/
     content-policy.astro      /content-policy/
     404.astro
 ```
+
+## Deployment
+
+Set `SITE_URL` in your host's build settings to the public address (for example `https://lonevoice.pages.dev`).
+It is used for canonical links and social-preview images. Netlify's `URL` and Cloudflare Pages' `CF_PAGES_URL`
+are picked up automatically when `SITE_URL` is not set.
+
+## Design system
+
+All tokens live at the top of `src/layouts/BaseLayout.astro`; components use nothing else.
+
+- **Spacing:** a strict 4-point scale (`--space-1` = 4px … `--space-24` = 96px) for every margin, padding and gap.
+- **Type:** Alegreya Sans for English, Arima for Malayalam. One ramp (`--fs-display`, `--fs-h2`, `--fs-h3`,
+  `--fs-lead`, `--fs-body`, `--fs-small`, `--fs-meta`, `--fs-label`) with paired line heights on the same grid.
+  Any `lang="ml"` element automatically gets taller line heights. Weights: 400, 700, 800.
+- **Layout:** two containers (`--container-feed` 48rem for lists, `--container-prose` 42rem for reading) and one
+  responsive gutter (16 / 24 / 40px).
+- **Shape:** radius 4px (badges), 8px (images inside cards), 12px (cards and panels), full (buttons and pills).
+  Cards have a 1px border; elevation (`--shadow-md`) appears only on hover.
+- **Controls:** buttons, navigation links and the theme switcher are all 40px tall; icon buttons are 32px.
+- **Motion:** 150–250ms with one easing curve, only in response to the reader. Photographs fade in once loaded.
 
 ## Fonts
 

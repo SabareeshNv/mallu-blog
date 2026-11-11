@@ -3,27 +3,31 @@ import type { GetStaticPaths, Page } from 'astro';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Feed from '../components/Feed.astro';
 import Hero from '../components/Hero.astro';
-import { getSortedPosts, type Post } from '../lib/posts';
+import { getSortedPosts, isEssay, type Post } from '../lib/posts';
 import { SITE } from '../site.config';
 
 export const getStaticPaths = (async ({ paginate }) => {
   const posts = await getSortedPosts();
-  return paginate(posts, { pageSize: SITE.feedPageSize });
+  const essays = posts.filter(isEssay).length;
+  return paginate(posts, { pageSize: SITE.feedPageSize, props: { essays, scribbles: posts.length - essays } });
 }) satisfies GetStaticPaths;
 
 interface Props {
   page: Page<Post>;
+  essays: number;
+  scribbles: number;
 }
 
-const { page } = Astro.props;
+const { page, essays, scribbles } = Astro.props;
 const isFirst = page.currentPage === 1;
 ---
 
-<BaseLayout title={isFirst ? undefined : `Page ${page.currentPage}`}>
-  {isFirst && <Hero slot="hero" count={page.total} />}
+<BaseLayout title={isFirst ? undefined : `Earlier entries · Page ${page.currentPage}`}>
+  {isFirst && <Hero slot="hero" essays={essays} scribbles={scribbles} />}
   <Feed
     page={page}
-    heading={isFirst ? undefined : 'Earlier entries'}
-    emptyText="Nothing written yet. The first page is still blank."
+    title={isFirst ? undefined : 'Earlier entries'}
+    intro={isFirst ? undefined : 'Older essays and scribbles, newest first.'}
+    emptyText="Nothing has been published yet."
   />
 </BaseLayout>

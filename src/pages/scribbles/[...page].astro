@@ -19,13 +19,12 @@ const { page } = Astro.props;
 
 <BaseLayout
   title={page.currentPage === 1 ? 'Scribbles' : `Scribbles · Page ${page.currentPage}`}
-  description="Short notes without a title."
+  description={`Scribbles on ${SITE.title}: short untitled notes in Malayalam.`}
 >
   <Feed
     page={page}
-    eyebrow="Scribbles"
-    heading="Small notes"
-    intro={`${page.total} ${page.total === 1 ? 'scribble' : 'scribbles'}, newest first.`}
-    emptyText="No scribbles yet."
+    title="Scribbles"
+    intro={`Short notes without a title — ${page.total} so far, newest first.`}
+    emptyText="No scribbles have been published yet."
   />
 </BaseLayout>

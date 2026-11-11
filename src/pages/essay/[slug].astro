@@ -1,6 +1,6 @@
 ---
 import type { GetStaticPaths } from 'astro';
-import { Image, getImage } from 'astro:assets';
+import { Image } from 'astro:assets';
 import { render } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import FormattedDate from '../../components/FormattedDate.astro';
@@ -36,10 +36,16 @@ const { post, newer, older } = Astro.props;
 const { title, date, cover, coverAlt } = post.data;
 const { Content } = await render(post);
 const minutes = readingMinutes(post);
-const ogImage = cover ? (await getImage({ src: cover, width: 1200, format: 'jpg' })).src : undefined;
 ---
 
-<BaseLayout title={title} description={excerpt(post, 150)} image={ogImage}>
+<BaseLayout
+  title={title}
+  description={excerpt(post, 150)}
+  image={cover}
+  imageAlt={coverAlt}
+  type="article"
+  publishedTime={date}
+>
   <article class="essay">
     <header class:list={['masthead', { 'has-cover': cover }]}>
       {
@@ -53,6 +59,7 @@ const ogImage = cover ? (await getImage({ src: cover, width: 1200, format: 'jpg'
               sizes="100vw"
               loading="eager"
               fetchpriority="high"
+              data-fade
             />
             <div class="veil" aria-hidden="true" />
           </>
@@ -91,9 +98,16 @@ const ogImage = cover ? (await getImage({ src: cover, width: 1200, format: 'jpg'
   }
 
   .masthead.has-cover {
-    min-height: clamp(22rem, 68vh, 40rem);
+    min-height: 28rem;
     overflow: hidden;
-    color: #fff;
+    background: var(--ink);
+    color: var(--on-image);
+  }
+
+  @media (min-width: 48rem) {
+    .masthead.has-cover {
+      min-height: 40rem;
+    }
   }
 
   .photo {
@@ -103,18 +117,6 @@ const ogImage = cover ? (await getImage({ src: cover, width: 1200, format: 'jpg'
     width: 100%;
     height: 100%;
     object-fit: cover;
-  }
-
-  @media (prefers-reduced-motion: no-preference) {
-    .photo {
-      animation: settle 2.4s cubic-bezier(0.2, 0.7, 0.2, 1) both;
-    }
-
-    @keyframes settle {
-      from {
-        transform: scale(1.06);
-      }
-    }
   }
 
   .veil {
@@ -130,65 +132,65 @@ const ogImage = cover ? (await getImage({ src: cover, width: 1200, format: 'jpg'
     );
   }
 
+  /* Same container as the article body, so the title and text share one left edge. */
   .masthead-inner {
     width: 100%;
-    max-width: var(--measure);
+    max-width: calc(var(--container-prose) + 2 * var(--gutter));
     margin-inline: auto;
-    padding: var(--space-xl) var(--space-s) var(--space-l);
+    padding: var(--space-12) var(--gutter) 0;
   }
 
   .has-cover .masthead-inner {
-    text-shadow: 0 1px 14px rgb(0 0 0 / 0.5);
-  }
-
-  .masthead:not(.has-cover) .masthead-inner {
-    padding-bottom: var(--space-m);
+    padding: var(--space-16) var(--gutter) var(--space-12);
+    text-shadow: var(--text-shadow-image);
   }
 
   .kind {
     display: inline-flex;
     align-items: center;
-    gap: 0.4rem;
-    margin: 0 0 var(--space-xs);
+    gap: var(--space-2);
     color: var(--essay);
-    font-size: var(--step--1);
-    font-weight: 700;
-    letter-spacing: 0.1em;
+    font-size: var(--fs-label);
+    font-weight: var(--fw-bold);
+    line-height: var(--lh-label);
+    letter-spacing: var(--tracking-label);
     text-transform: uppercase;
   }
 
   .has-cover .kind {
-    color: #f6c453;
+    color: var(--sun);
   }
 
   h1 {
-    margin: 0;
-    font-size: var(--step-3);
-    font-weight: 700;
-    line-height: 1.4;
+    margin-top: var(--space-3);
+    font-size: var(--fs-display);
+    font-weight: var(--fw-bold);
+    line-height: var(--lh-display);
   }
 
   .meta {
     display: flex;
     flex-wrap: wrap;
-    gap: 0.4rem;
-    margin: var(--space-xs) 0 0;
+    gap: var(--space-2);
+    margin-top: var(--space-3);
     color: var(--muted);
-    font-size: var(--step--1);
+    font-size: var(--fs-meta);
+    line-height: var(--lh-meta);
   }
 
   .has-cover .meta {
-    color: rgb(255 255 255 / 0.9);
+    color: var(--on-image-muted);
   }
 
   /* ---------- Body ---------- */
   .body {
-    max-width: var(--measure);
+    width: 100%;
+    max-width: calc(var(--container-prose) + 2 * var(--gutter));
     margin-inline: auto;
-    padding: var(--space-l) var(--space-s) 0;
+    padding: var(--space-12) var(--gutter) 0;
   }
 
   .masthead:not(.has-cover) + .body {
-    padding-top: var(--space-s);
+    padding-top: var(--space-8);
   }
 </style>

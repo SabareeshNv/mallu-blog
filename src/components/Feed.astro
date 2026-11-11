@@ -4,41 +4,28 @@
  */
 import type { Page } from 'astro';
 import MonthGroup from './MonthGroup.astro';
+import PageHeader from './PageHeader.astro';
 import Pagination from './Pagination.astro';
 import { groupByMonth, type Post } from '../lib/posts';
 
 interface Props {
   page: Page<Post>;
-  /** Visible page heading. When omitted, a hidden heading is used (the hero provides the visible one). */
-  heading?: string;
-  eyebrow?: string;
+  /** Visible page title. When omitted, a hidden heading is used (the hero provides the visible one). */
+  title?: string;
   intro?: string;
   emptyText?: string;
 }
 
-const { page, heading, eyebrow, intro, emptyText = 'Nothing here yet.' } = Astro.props;
+const { page, title, intro, emptyText = 'Nothing here yet.' } = Astro.props;
 const groups = groupByMonth(page.data);
+const pageNote = page.lastPage > 1 ? `Page ${page.currentPage} of ${page.lastPage}.` : '';
+const lead = [intro, pageNote].filter(Boolean).join(' ');
 ---
 
 <div class="feed">
-  {
-    heading ? (
-      <header class="page-head">
-        {eyebrow && <p class="eyebrow">{eyebrow}</p>}
-        <h1>{heading}</h1>
-        {intro && <p class="intro">{intro}</p>}
-        {page.lastPage > 1 && (
-          <p class="intro">
-            Page {page.currentPage} of {page.lastPage}
-          </p>
-        )}
-      </header>
-    ) : (
-      <h2 class="sr-only">Latest entries</h2>
-    )
-  }
+  {title ? <PageHeader title={title} intro={lead} /> : <h2 class="sr-only">Latest entries</h2>}
 
-  {groups.length === 0 && <p class="intro">{emptyText}</p>}
+  {groups.length === 0 && <p class="empty">{emptyText}</p>}
   {groups.map((group) => <MonthGroup group={group} />)}
 
   <Pagination current={page.currentPage} last={page.lastPage} prevUrl={page.url.prev} nextUrl={page.url.next} />
@@ -46,33 +33,13 @@ const groups = groupByMonth(page.data);
 
 <style>
   .feed {
-    max-width: var(--feed);
+    width: 100%;
+    max-width: calc(var(--container-feed) + 2 * var(--gutter));
     margin-inline: auto;
-    padding: var(--space-l) var(--space-s) 0;
+    padding: var(--space-12) var(--gutter) 0;
   }
 
-  .page-head {
-    margin-bottom: var(--space-l);
-  }
-
-  .eyebrow {
-    margin: 0;
-    color: var(--accent);
-    font-size: var(--step--1);
-    font-weight: 700;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-  }
-
-  h1 {
-    margin: 0.2rem 0 0;
-    font-size: var(--step-3);
-    font-weight: 800;
-    letter-spacing: -0.02em;
-  }
-
-  .intro {
-    margin: var(--space-xs) 0 0;
+  .empty {
     color: var(--muted);
   }
 </style>

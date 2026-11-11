@@ -1,41 +1,67 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHeader from '../components/PageHeader.astro';
 ---
 
-<BaseLayout title="Page not found">
+<BaseLayout title="Page not found" description="The page you were looking for could not be found.">
   <div class="missing">
-    <p class="code">404</p>
-    <h1>This page seems to have been torn out.</h1>
-    <p>The link may be old, or the page never existed.</p>
-    <p class="links"><a href="/">Back to the latest entries</a> · <a href="/archive/">Browse the archive</a></p>
+    <PageHeader title="Page not found" intro="The link may be out of date, or the page may have been moved or removed." />
+    <ul class="actions">
+      <li><a class="button primary" href="/">Go to the latest entries</a></li>
+      <li><a class="button" href="/archive/">Browse the archive</a></li>
+    </ul>
   </div>
 </BaseLayout>
 
 <style>
   .missing {
-    max-width: var(--measure);
+    width: 100%;
+    max-width: calc(var(--container-prose) + 2 * var(--gutter));
     margin-inline: auto;
-    padding: var(--space-xl) var(--space-s) 0;
-    text-align: center;
+    padding: var(--space-12) var(--gutter) 0;
   }
 
-  .code {
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
     margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  /* Same button language as pagination: 40px pill, 1px border, bold small text. */
+  .button {
+    display: inline-flex;
+    align-items: center;
+    height: var(--control-h);
+    padding: 0 var(--space-5);
+    border: var(--border-width) solid var(--border);
+    border-radius: var(--radius-full);
+    color: var(--text);
+    font-size: var(--fs-small);
+    font-weight: var(--fw-bold);
+    line-height: var(--lh-small);
+    text-decoration: none;
+    transition:
+      background-color var(--duration-fast) var(--ease),
+      border-color var(--duration-fast) var(--ease),
+      color var(--duration-fast) var(--ease);
+  }
+
+  .button:hover {
+    border-color: var(--accent);
     color: var(--accent);
-    font-size: var(--step-3);
-    font-weight: 800;
   }
 
-  h1 {
-    margin: 0;
-    font-size: var(--step-2);
+  .button.primary {
+    border-color: var(--accent);
+    background: var(--accent);
+    color: var(--bg);
   }
 
-  p {
-    color: var(--muted);
-  }
-
-  .links {
-    font-weight: 700;
+  .button.primary:hover {
+    background: color-mix(in srgb, var(--accent) 88%, var(--text));
+    color: var(--bg);
   }
 </style>

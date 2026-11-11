@@ -3,15 +3,19 @@
  */
 export const SITE = {
   title: 'Lone Voice',
-  tagline: 'Ideas, thoughts and feelings — written in Malayalam.',
-  author: 'Your Name',
-  /** Shown on the Privacy and Content Policy pages. Replace with your own address. */
-  contactEmail: 'you@example.com',
-  description: 'A personal notebook of essays and scribbles in Malayalam.',
-  /** Language of the posts (BCP 47). The UI stays in English. */
+  tagline: 'Essays and short notes in Malayalam on memory, travel, reading and everyday life.',
+  /** Byline used in the footer and the Content Policy. */
+  author: 'Lone Voice',
+  description:
+    'Lone Voice is a personal notebook of essays and short notes written in Malayalam — on memory, travel, reading and everyday life.',
+  /** Optional e-mail shown on the policy pages. When empty, the first social link is used as the contact. */
+  contactEmail: '',
+  /** Profiles linked from the footer. Every entry must be a real, working URL. */
+  social: [{ label: 'GitHub', href: 'https://github.com/SabareeshNv', icon: 'github' }],
+  /** Language of the posts (BCP 47). The interface stays in English. */
   postLang: 'ml',
-  /** Maximum number of entries on each page of the home feed. */
+  /** Maximum number of entries on each page of Home, Essays and Scribbles. */
   feedPageSize: 30,
-  /** Maximum number of entries on each page of the archive. */
+  /** Maximum number of entries on each page of the Archive. */
   archivePageSize: 30,
 } as const;

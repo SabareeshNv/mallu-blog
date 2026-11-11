@@ -25,7 +25,8 @@ const longDate = new Intl.DateTimeFormat('en-GB', { dateStyle: 'long', timeZone:
         src={cover}
         alt={coverAlt ?? ''}
         widths={[400, 720, 1080]}
-        sizes="(min-width: 44rem) 40rem, 100vw"
+        sizes="(min-width: 48rem) 40rem, 100vw"
+        data-fade
       />
     )
   }
@@ -50,22 +51,20 @@ const longDate = new Intl.DateTimeFormat('en-GB', { dateStyle: 'long', timeZone:
 <style>
   .scribble {
     position: relative;
-    padding: var(--space-m);
-    border-radius: var(--radius);
+    padding: var(--space-6);
+    border: var(--border-width) solid var(--border);
+    border-radius: var(--radius-lg);
     background: var(--tint-scribble);
-    border: 1px solid color-mix(in srgb, var(--border) 70%, transparent);
-    border-inline-start: 3px solid var(--scribble-edge);
-    scroll-margin-top: calc(var(--header-h) + var(--space-s));
     outline: none;
-    transition: box-shadow 0.3s ease;
+    transition: box-shadow var(--duration) var(--ease);
   }
 
   .scribble:focus-visible {
     outline: 3px solid var(--focus);
-    outline-offset: 3px;
+    outline-offset: 2px;
   }
 
-  /* Highlight a scribble that was reached through its permalink. */
+  /* Highlight a scribble reached through its permalink. */
   .scribble:target,
   .scribble.is-highlighted {
     box-shadow: 0 0 0 2px var(--accent);
@@ -73,33 +72,45 @@ const longDate = new Intl.DateTimeFormat('en-GB', { dateStyle: 'long', timeZone:
 
   @media (prefers-reduced-motion: no-preference) {
     .scribble.is-highlighted {
-      animation: glow 1.6s ease-out;
+      animation: arrive 1200ms var(--ease);
     }
 
-    @keyframes glow {
+    @keyframes arrive {
       from {
         background-color: var(--highlight);
       }
     }
   }
 
+  .cover {
+    width: 100%;
+    aspect-ratio: 2 / 1;
+    margin-bottom: var(--space-4);
+    border-radius: var(--radius-md);
+    background: var(--surface-strong);
+    object-fit: cover;
+  }
+
   .meta {
     display: flex;
     align-items: center;
-    gap: 0.4rem;
-    margin-top: var(--space-xs);
+    gap: var(--space-2);
+    margin-top: var(--space-3);
     color: var(--muted);
-    font-size: var(--step--1);
+    font-size: var(--fs-meta);
+    line-height: var(--lh-meta);
   }
 
   .permalink {
     display: inline-grid;
     place-items: center;
-    width: 2.25rem;
-    height: 2.25rem;
-    margin: -0.5rem 0;
-    border-radius: 50%;
+    width: var(--icon-button);
+    height: var(--icon-button);
+    border-radius: var(--radius-full);
     color: var(--muted);
+    transition:
+      background-color var(--duration-fast) var(--ease),
+      color var(--duration-fast) var(--ease);
   }
 
   .permalink:hover {
@@ -107,13 +118,10 @@ const longDate = new Intl.DateTimeFormat('en-GB', { dateStyle: 'long', timeZone:
     background: var(--surface-strong);
   }
 
-  .cover {
-    width: 100%;
-    aspect-ratio: 2 / 1;
-    max-height: 15rem;
-    margin-bottom: var(--space-s);
-    border-radius: calc(var(--radius) - 4px);
-    object-fit: cover;
+  @media (max-width: 40rem) {
+    .scribble {
+      padding: var(--space-4);
+    }
   }
 </style>
 

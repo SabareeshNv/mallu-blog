@@ -19,13 +19,12 @@ const { page } = Astro.props;
 
 <BaseLayout
   title={page.currentPage === 1 ? 'Essays' : `Essays · Page ${page.currentPage}`}
-  description="Longer pieces, each with a title."
+  description={`Essays on ${SITE.title}: longer pieces in Malayalam, each with a title.`}
 >
   <Feed
     page={page}
-    eyebrow="Essays"
-    heading="Longer thoughts"
-    intro={`${page.total} ${page.total === 1 ? 'essay' : 'essays'}, newest first.`}
-    emptyText="No essays yet."
+    title="Essays"
+    intro={`Longer pieces, each with a title — ${page.total} so far, newest first.`}
+    emptyText="No essays have been published yet."
   />
 </BaseLayout>

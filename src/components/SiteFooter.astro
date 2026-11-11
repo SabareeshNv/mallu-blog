@@ -1,19 +1,23 @@
 ---
+import GithubIcon from './icons/GithubIcon.astro';
 import { SITE } from '../site.config';
+
 const year = new Date().getFullYear();
 const path = Astro.url.pathname;
-const links = [
+const legal = [
   { href: '/privacy/', label: 'Privacy Policy' },
   { href: '/content-policy/', label: 'Content Policy' },
 ];
+const icons = { github: GithubIcon } as const;
 ---
 
 <footer class="site-footer">
   <div class="inner">
+    <p class="copy">© {year} {SITE.author}. Written in Malayalam.</p>
     <nav aria-label="Legal">
-      <ul>
+      <ul class="links">
         {
-          links.map((link) => (
+          legal.map((link) => (
             <li>
               <a href={link.href} aria-current={path.startsWith(link.href) ? 'page' : undefined}>
                 {link.label}
@@ -23,49 +27,85 @@ const links = [
         }
       </ul>
     </nav>
-    <p class="copy">© {year} {SITE.author}</p>
+    {
+      SITE.social.length > 0 && (
+        <ul class="social" aria-label="Elsewhere">
+          {SITE.social.map((profile) => {
+            const Icon = icons[profile.icon];
+            return (
+              <li>
+                <a href={profile.href} rel="me noopener" target="_blank" aria-label={`${profile.label} (opens in a new tab)`}>
+                  <Icon />
+                </a>
+              </li>
+            );
+          })}
+        </ul>
+      )
+    }
   </div>
 </footer>
 
 <style>
   .site-footer {
-    margin-top: var(--space-xl);
     --focus: #93c5fd;
+    margin-top: var(--space-24);
     background: var(--ink);
     color: var(--on-ink-muted);
-    font-size: var(--step--1);
+    font-size: var(--fs-meta);
+    line-height: var(--lh-meta);
   }
 
   .inner {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    justify-content: space-between;
-    gap: var(--space-xs) var(--space-m);
-    padding: var(--space-m) clamp(var(--space-s), 3vw, var(--space-l));
+    gap: var(--space-4) var(--space-8);
+    padding: var(--space-8) var(--gutter);
+  }
+
+  .copy {
+    margin-inline-end: auto;
   }
 
   ul {
     display: flex;
     flex-wrap: wrap;
-    gap: var(--space-xs) var(--space-m);
+    align-items: center;
+    gap: var(--space-2) var(--space-6);
     margin: 0;
     padding: 0;
     list-style: none;
   }
 
-  a {
+  .links a {
     color: var(--on-ink);
     text-decoration: none;
   }
 
-  a:hover,
-  a[aria-current='page'] {
+  .links a:hover,
+  .links a[aria-current='page'] {
     text-decoration: underline;
     text-underline-offset: 0.25em;
   }
 
-  .copy {
-    margin: 0;
+  .social a {
+    display: inline-grid;
+    place-items: center;
+    width: var(--icon-button);
+    height: var(--icon-button);
+    border-radius: var(--radius-full);
+    color: var(--on-ink);
+    transition: background-color var(--duration-fast) var(--ease);
+  }
+
+  .social a:hover {
+    background: rgb(255 255 255 / 0.1);
+  }
+
+  @media (max-width: 40rem) {
+    .copy {
+      flex-basis: 100%;
+    }
   }
 </style>

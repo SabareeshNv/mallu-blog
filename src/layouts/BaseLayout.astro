@@ -1,20 +1,36 @@
 ---
-import { Font } from 'astro:assets';
+import { Font, getImage } from 'astro:assets';
 import SiteHeader from '../components/SiteHeader.astro';
 import SiteFooter from '../components/SiteFooter.astro';
+import defaultShareImage from '../assets/images/hero-lake-dusk.jpg';
 import { SITE } from '../site.config';
 
 interface Props {
   /** Page title (without the site name). */
   title?: string;
   description?: string;
-  /** Social preview image URL. */
-  image?: string;
+  /** Social preview image (an imported image). Defaults to the site's hero photograph. */
+  image?: ImageMetadata;
+  /** Alt text for the social preview image. */
+  imageAlt?: string;
+  type?: 'website' | 'article';
+  /** For articles: publication date. */
+  publishedTime?: Date;
 }
 
-const { title, description = SITE.description, image } = Astro.props;
+const {
+  title,
+  description = SITE.description,
+  image = defaultShareImage,
+  imageAlt = 'A wooden jetty reaching into a calm lake at sunset',
+  type = 'website',
+  publishedTime,
+} = Astro.props;
+
 const fullTitle = title ? `${title} · ${SITE.title}` : `${SITE.title} — ${SITE.tagline}`;
 const canonical = new URL(Astro.url.pathname, Astro.site);
+const share = await getImage({ src: image, width: 1200, height: 630, fit: 'cover', format: 'jpg' });
+const shareUrl = new URL(share.src, Astro.site);
 ---
 
 <!doctype html>
@@ -24,15 +40,32 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{fullTitle}</title>
     <meta name="description" content={description} />
+    <meta name="author" content={SITE.author} />
     <link rel="canonical" href={canonical} />
+
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <meta name="color-scheme" content="light dark" />
     <meta name="theme-color" content="#15212c" media="(prefers-color-scheme: light)" />
     <meta name="theme-color" content="#081115" media="(prefers-color-scheme: dark)" />
+
+    <!-- Social previews -->
+    <meta property="og:site_name" content={SITE.title} />
     <meta property="og:title" content={title ?? SITE.title} />
     <meta property="og:description" content={description} />
-    <meta property="og:type" content="website" />
-    {image && <meta property="og:image" content={new URL(image, Astro.site)} />}
+    <meta property="og:type" content={type} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={shareUrl} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content={imageAlt} />
+    {publishedTime && <meta property="article:published_time" content={publishedTime.toISOString()} />}
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title ?? SITE.title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={shareUrl} />
+    <meta name="twitter:image:alt" content={imageAlt} />
 
     <!-- Apply the saved (or system) theme before first paint to avoid a flash. -->
     <script is:inline>
@@ -62,81 +95,172 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
       <slot />
     </main>
     <SiteFooter />
+
+    <!-- Images marked data-fade sit on a placeholder colour and fade in once loaded. -->
+    <script is:inline>
+      (() => {
+        const done = (img) => img.setAttribute('data-loaded', '');
+        document.querySelectorAll('img[data-fade]').forEach((img) => {
+          if (img.complete) return done(img);
+          img.addEventListener('load', () => done(img), { once: true });
+          img.addEventListener('error', () => done(img), { once: true });
+        });
+      })();
+    </script>
   </body>
 </html>
 
 <style is:global>
-  /* ---------- Design tokens ---------- */
+  /* =====================================================================
+     Design tokens
+     ===================================================================== */
   :root {
-    /* "Monsoon" palette: ink-blue text, backwater teal for the interface, laterite red for essays. */
+    /* ---- Spacing: a strict 4-point scale. No other values are used. ---- */
+    --space-1: 0.25rem; /*  4 */
+    --space-2: 0.5rem; /*  8 */
+    --space-3: 0.75rem; /* 12 */
+    --space-4: 1rem; /* 16 */
+    --space-5: 1.25rem; /* 20 */
+    --space-6: 1.5rem; /* 24 */
+    --space-8: 2rem; /* 32 */
+    --space-10: 2.5rem; /* 40 */
+    --space-12: 3rem; /* 48 */
+    --space-16: 4rem; /* 64 */
+    --space-24: 6rem; /* 96 */
+
+    /* ---- Layout ---- */
+    --gutter: var(--space-4);
+    --container-feed: 48rem; /* lists: Home, Essays, Scribbles, Archive */
+    --container-prose: 42rem; /* reading: essays, scribbles, policies */
+    --header-h: var(--space-16);
+    --control-h: var(--space-10); /* buttons, nav links, theme switcher */
+    --icon-button: var(--space-8);
+
+    /* ---- Type: one family per script, one ramp, paired line heights on the 4-point grid ---- */
+    --font-sans: var(--font-ui), system-ui, sans-serif;
+    --font-post: var(--font-ml), var(--font-ui), sans-serif;
+
+    --fw-regular: 400;
+    --fw-bold: 700;
+    --fw-heavy: 800;
+
+    --fs-display: 2.5rem; /* page titles, hero */
+    --lh-display: 3rem;
+    --fs-h2: 1.75rem; /* section headings */
+    --lh-h2: 2.25rem;
+    --fs-h3: 1.25rem; /* card titles, in-article headings */
+    --lh-h3: 1.75rem;
+    --fs-lead: 1.25rem; /* hero tagline, long-form body */
+    --lh-lead: 1.75rem;
+    --fs-body: 1.125rem;
+    --lh-body: 1.75rem;
+    --fs-small: 1rem; /* navigation, buttons */
+    --lh-small: 1.5rem;
+    --fs-meta: 0.875rem; /* dates, footer */
+    --lh-meta: 1.25rem;
+    --fs-label: 0.75rem; /* uppercase labels and badges */
+    --lh-label: 1rem;
+    --tracking-label: 0.08em;
+
+    /* ---- Shape ---- */
+    --radius-sm: 4px; /* badges, code */
+    --radius-md: 8px; /* images inside cards */
+    --radius-lg: 12px; /* cards and panels */
+    --radius-full: 999px; /* buttons, pills, icon buttons */
+    --border-width: 1px;
+
+    /* ---- Motion ---- */
+    --ease: cubic-bezier(0.2, 0, 0, 1);
+    --duration-fast: 150ms;
+    --duration: 250ms;
+
+    /* ---- Colour: the "monsoon" palette (light) ---- */
     --bg: #ffffff;
     --surface: #f2f7f6;
     --surface-strong: #e2eeec;
     --text: #15212c;
     --muted: #4b5a68;
-    --accent: #0a6c67;
-    --accent-soft: #e0f1ee;
-    --essay: #b8400f;
-    --essay-soft: #fcebe2;
-    --sun: #e0a21a;
     --border: #d9e4e2;
-    --focus: #1d4ed8;
-    --shadow: 0 1px 2px rgb(21 33 44 / 0.06), 0 10px 26px -14px rgb(10 60 66 / 0.28);
-    --highlight: #fff0bf;
-    --rail: linear-gradient(to bottom, #9fd3cc, #f1c3a8);
+    --accent: #0a6c67; /* interface and scribbles */
+    --accent-soft: #e0f1ee;
+    --essay: #b8400f; /* essays */
+    --essay-soft: #fcebe2;
+    --sun: #f6c453; /* highlights on dark surfaces only */
+    --rail: #cfe3df;
     --tint-scribble: #f0f7f5;
-    --scribble-edge: #9fd3cc;
-    --ink: #15212c;
+    --highlight: #fff0bf;
+    --focus: #1d4ed8;
+    --ink: #15212c; /* header and footer */
     --on-ink: #e6efee;
     --on-ink-muted: #a9bcbf;
+    --on-image: #ffffff;
+    --on-image-muted: rgb(255 255 255 / 0.86);
     --veil: 8 30 38;
-
-    --font-sans: var(--font-ui), system-ui, sans-serif;
-    --font-post: var(--font-ml), var(--font-ui), sans-serif;
-
-    --step--1: clamp(0.875rem, 0.85rem + 0.1vw, 0.95rem);
-    --step-0: clamp(1.0625rem, 1rem + 0.25vw, 1.1875rem);
-    --step-1: clamp(1.25rem, 1.15rem + 0.5vw, 1.5rem);
-    --step-2: clamp(1.5rem, 1.3rem + 1vw, 2.125rem);
-    --step-3: clamp(2rem, 1.6rem + 2vw, 3.25rem);
-
-    --space-xs: 0.5rem;
-    --space-s: 1rem;
-    --space-m: 1.5rem;
-    --space-l: 2.5rem;
-    --space-xl: 4rem;
-
-    --radius: 14px;
-    --measure: 42rem;
-    --wide: 60rem;
-    --feed: 48rem;
-    --header-h: 4rem;
+    --text-shadow-image: 0 1px 12px rgb(0 0 0 / 0.4);
+    --shadow-sm: 0 1px 2px rgb(21 33 44 / 0.08);
+    --shadow-md: 0 2px 4px rgb(21 33 44 / 0.05), 0 12px 24px -8px rgb(10 60 66 / 0.2);
 
     color-scheme: light;
   }
 
+  @media (min-width: 48rem) {
+    :root {
+      --gutter: var(--space-6);
+      --fs-display: 3.25rem;
+      --lh-display: 3.75rem;
+      --fs-h2: 2rem;
+      --lh-h2: 2.5rem;
+      --fs-h3: 1.5rem;
+      --lh-h3: 2rem;
+    }
+  }
+
+  @media (min-width: 80rem) {
+    :root {
+      --gutter: var(--space-10);
+    }
+  }
+
+  /* Malayalam's stacked glyphs need taller lines. The same tokens, redefined for any lang="ml" subtree. */
+  :lang(ml) {
+    font-family: var(--font-post);
+    --lh-display: 3.5rem;
+    --lh-h2: 2.75rem;
+    --lh-h3: 2rem;
+    --lh-lead: 2.25rem;
+    --lh-body: 2rem;
+    --lh-small: 1.75rem;
+  }
+
+  @media (min-width: 48rem) {
+    :lang(ml) {
+      --lh-display: 4.5rem;
+      --lh-h2: 3rem;
+      --lh-h3: 2.25rem;
+    }
+  }
+
+  /* ---- Colour: dark ---- */
   :root[data-theme='dark'] {
     --bg: #0d181d;
     --surface: #13232a;
     --surface-strong: #1b3038;
     --text: #e6efed;
     --muted: #9cb0b1;
+    --border: #22373e;
     --accent: #52d0c4;
     --accent-soft: #10332f;
     --essay: #ff9e6e;
     --essay-soft: #3a2219;
-    --sun: #f2c14e;
-    --border: #22373e;
-    --focus: #93c5fd;
-    --shadow: 0 1px 2px rgb(0 0 0 / 0.4), 0 12px 30px -14px rgb(0 0 0 / 0.75);
-    --highlight: #3a3418;
-    --rail: linear-gradient(to bottom, #1f5a55, #5a3424);
+    --rail: #22403f;
     --tint-scribble: #112128;
-    --scribble-edge: #1f5a55;
+    --highlight: #3a3418;
+    --focus: #93c5fd;
     --ink: #081115;
-    --on-ink: #e6efed;
     --on-ink-muted: #8fa6a8;
     --veil: 4 16 20;
+    --shadow-sm: 0 1px 2px rgb(0 0 0 / 0.4);
+    --shadow-md: 0 2px 4px rgb(0 0 0 / 0.3), 0 12px 24px -8px rgb(0 0 0 / 0.6);
     color-scheme: dark;
   }
 
@@ -148,27 +272,27 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
       --surface-strong: #1b3038;
       --text: #e6efed;
       --muted: #9cb0b1;
+      --border: #22373e;
       --accent: #52d0c4;
       --accent-soft: #10332f;
       --essay: #ff9e6e;
       --essay-soft: #3a2219;
-      --sun: #f2c14e;
-      --border: #22373e;
-      --focus: #93c5fd;
-      --shadow: 0 1px 2px rgb(0 0 0 / 0.4), 0 12px 30px -14px rgb(0 0 0 / 0.75);
-      --highlight: #3a3418;
-      --rail: linear-gradient(to bottom, #1f5a55, #5a3424);
+      --rail: #22403f;
       --tint-scribble: #112128;
-      --scribble-edge: #1f5a55;
+      --highlight: #3a3418;
+      --focus: #93c5fd;
       --ink: #081115;
-      --on-ink: #e6efed;
       --on-ink-muted: #8fa6a8;
       --veil: 4 16 20;
+      --shadow-sm: 0 1px 2px rgb(0 0 0 / 0.4);
+      --shadow-md: 0 2px 4px rgb(0 0 0 / 0.3), 0 12px 24px -8px rgb(0 0 0 / 0.6);
       color-scheme: dark;
     }
   }
 
-  /* ---------- Base ---------- */
+  /* =====================================================================
+     Base
+     ===================================================================== */
   *,
   *::before,
   *::after {
@@ -178,7 +302,7 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
   html {
     -webkit-text-size-adjust: 100%;
     text-size-adjust: 100%;
-    scroll-padding-top: calc(var(--header-h) + var(--space-s));
+    scroll-padding-top: calc(var(--header-h) + var(--space-4));
   }
 
   @media (prefers-reduced-motion: no-preference) {
@@ -195,25 +319,20 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
     background: var(--bg);
     color: var(--text);
     font-family: var(--font-sans);
-    font-size: var(--step-0);
-    line-height: 1.6;
+    font-size: var(--fs-body);
+    font-weight: var(--fw-regular);
+    line-height: var(--lh-body);
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
     transition:
-      background-color 0.25s ease,
-      color 0.25s ease;
+      background-color var(--duration) var(--ease),
+      color var(--duration) var(--ease);
   }
 
   main {
     flex: 1;
     width: 100%;
     outline: none;
-  }
-
-  /* Any Malayalam text uses Arima, with a taller line height for its stacked glyphs. */
-  :lang(ml) {
-    font-family: var(--font-post);
-    line-height: 1.85;
   }
 
   img,
@@ -227,8 +346,15 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
   h1,
   h2,
   h3,
+  h4,
+  p {
+    margin: 0;
+  }
+
+  h1,
+  h2,
+  h3,
   h4 {
-    line-height: 1.25;
     text-wrap: balance;
   }
 
@@ -244,13 +370,23 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
 
   :focus-visible {
     outline: 3px solid var(--focus);
-    outline-offset: 3px;
-    border-radius: 4px;
+    outline-offset: 2px;
+    border-radius: var(--radius-sm);
   }
 
   ::selection {
     background: var(--accent);
     color: var(--bg);
+  }
+
+  /* Loading state for photographs: a placeholder colour, then a short fade once the image arrives. */
+  html[data-js] img[data-fade] {
+    opacity: 0;
+    transition: opacity var(--duration) var(--ease);
+  }
+
+  html[data-js] img[data-fade][data-loaded] {
+    opacity: 1;
   }
 
   .sr-only {
@@ -267,14 +403,19 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
 
   .skip-link {
     position: absolute;
-    top: var(--space-xs);
-    left: var(--space-xs);
+    top: var(--space-2);
+    left: var(--space-2);
     z-index: 100;
-    padding: 0.6rem 1rem;
+    display: inline-flex;
+    align-items: center;
+    height: var(--control-h);
+    padding: 0 var(--space-4);
+    border-radius: var(--radius-full);
     background: var(--text);
     color: var(--bg);
-    font-weight: 700;
-    border-radius: 8px;
+    font-size: var(--fs-small);
+    font-weight: var(--fw-bold);
+    text-decoration: none;
     transform: translateY(-200%);
   }
 

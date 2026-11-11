@@ -43,22 +43,30 @@ const kind = (post: Post) => (isEssay(post) ? 'essay' : 'scribble');
   .post-nav {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: var(--space-s);
-    margin-top: var(--space-l);
+    gap: var(--space-4);
+    margin-top: var(--space-16);
+    padding-top: var(--space-8);
+    border-top: var(--border-width) solid var(--border);
   }
 
+  /* Same card language as essay cards: 1px border, large radius, elevation only on hover. */
   a {
     display: grid;
-    gap: 0.2rem;
-    padding: var(--space-s);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
+    align-content: start;
+    gap: var(--space-1);
+    padding: var(--space-4) var(--space-5);
+    border: var(--border-width) solid var(--border);
+    border-radius: var(--radius-lg);
     color: var(--text);
     text-decoration: none;
+    transition:
+      border-color var(--duration) var(--ease),
+      box-shadow var(--duration) var(--ease);
   }
 
   a:hover {
-    border-color: var(--accent);
+    border-color: color-mix(in srgb, var(--accent) 40%, var(--border));
+    box-shadow: var(--shadow-md);
   }
 
   .older {
@@ -67,16 +75,20 @@ const kind = (post: Post) => (isEssay(post) ? 'essay' : 'scribble');
 
   .dir {
     color: var(--muted);
-    font-size: var(--step--1);
-    font-weight: 700;
+    font-size: var(--fs-label);
+    font-weight: var(--fw-bold);
+    line-height: var(--lh-label);
+    letter-spacing: var(--tracking-label);
+    text-transform: uppercase;
   }
 
   .name {
-    font-weight: 700;
-    line-height: 1.6;
+    font-size: var(--fs-small);
+    font-weight: var(--fw-bold);
+    line-height: var(--lh-small);
   }
 
-  @media (max-width: 34rem) {
+  @media (max-width: 40rem) {
     .post-nav {
       grid-template-columns: 1fr;
     }
