@@ -153,12 +153,19 @@ const links = [
       height: var(--space-16);
     }
 
+    /* The four links share the full row, with the free space spread between them (flexbox), and a 48px-tall
+       touch target each. The first and last text still line up with the page margin. */
     nav {
       justify-self: stretch;
-      height: var(--space-10);
+      height: var(--space-12);
       margin-inline: calc(-1 * var(--space-4));
       border-top: var(--border-width) solid var(--border);
       padding-inline: var(--space-1);
+    }
+
+    ul {
+      justify-content: space-between;
+      gap: var(--space-2);
     }
 
     nav a {
