@@ -31,24 +31,4 @@ const { post } = Astro.props;
     letter-spacing: var(--tracking-label);
     text-transform: uppercase;
   }
-
-  /* The featured photograph floats highest. */
-  .latest :global(.cover) {
-    box-shadow: var(--depth-2);
-  }
-
-  /* On large screens it is pulled up over the hero's bottom edge (the container above adds --space-12 of padding),
-     so the photograph straddles the hero and the page. The label then sits on the hero, so it turns gold. */
-  @media (min-width: 64rem) {
-    .latest {
-      position: relative;
-      z-index: 1;
-      margin-top: calc(-1 * (var(--overlap) + var(--space-12)));
-    }
-
-    h2 {
-      color: var(--sun);
-      text-shadow: var(--text-shadow-image);
-    }
-  }
 </style>

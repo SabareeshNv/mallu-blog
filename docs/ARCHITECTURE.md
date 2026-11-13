@@ -95,10 +95,6 @@ All visual decisions are tokens, and a component uses nothing else.
   element that uses it, so these are set in the text's own font (`Container size="reading"`, with `lang="ml"` or `"en"`,
   and the essay masthead). Inside a reading container, interface text (labels, dates) sets `font-family: var(--font-sans)`
   explicitly, so it keeps the interface font.
-- **Depth**: three levels of light, all tinted by one colour (`--lift`). `--depth-1` lifts photographs in lists and the
-  timeline's circles; `--depth-2` lifts the latest essay's photograph; `--inset` sinks the search fields; `--glass` is the
-  translucent header. Two faint colour washes sit behind every page (`main` in `base.css`). On large screens the latest
-  essay overlaps the hero by `--overlap`; below 1024px the search bar sits there instead, so there is no overlap.
 - **Shape and motion**: three radii plus full, one border width, two durations, one easing curve.
 
 ## Making changes

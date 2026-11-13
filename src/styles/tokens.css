@@ -30,7 +30,6 @@
   --container-feed: 48rem; /* lists: Home, Essays, Scribbles, Archive */
   --container-wide: 72rem; /* the home page: writing plus side column */
   --rail-width: 19rem; /* the home page's side column */
-  --overlap: 7rem; /* how far above the hero's bottom edge the latest essay begins (hero and LatestEssay) */
   /* Reading measures for essays. `ch` is the width of a "0" in the font of the element that uses the value, so these
      are always used on an element set in the reading font (Container size="reading", the essay masthead). The
      masthead column is a little wider than the text column below it. */

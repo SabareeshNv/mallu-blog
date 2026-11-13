@@ -72,14 +72,6 @@ import { SITE } from '@/config/site';
     text-shadow: var(--text-shadow-image);
   }
 
-  /* Beside the side column (1024px and up) the latest essay overlaps the hero's bottom edge; the bottom padding keeps
-     the text clear of it. Below that the search bar sits there instead, so there is no overlap. */
-  @media (min-width: 64rem) {
-    .content {
-      padding-bottom: calc(var(--overlap) + var(--space-6));
-    }
-  }
-
   .eyebrow {
     color: var(--sun);
     font-size: var(--fs-label);

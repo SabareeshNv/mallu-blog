@@ -54,10 +54,7 @@ const monthName = formatMonthName(group.posts[0].data.date);
   .year {
     padding: var(--space-1) var(--space-2);
     border-radius: var(--radius-sm);
-    background: var(--accent) linear-gradient(180deg, color-mix(in srgb, white 22%, transparent), transparent);
-    box-shadow:
-      var(--depth-1),
-      inset 0 1px 0 color-mix(in srgb, white 28%, transparent);
+    background: var(--accent);
     color: var(--bg);
     font-size: var(--fs-label);
     font-weight: var(--fw-bold);
@@ -103,9 +100,6 @@ const monthName = formatMonthName(group.posts[0].data.date);
     border: 2px solid currentColor;
     border-radius: var(--radius-full);
     background: var(--bg);
-    box-shadow:
-      0 0 0 var(--space-1) var(--bg),
-      var(--depth-1);
   }
 
   .node :global(svg) {
