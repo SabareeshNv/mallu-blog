@@ -57,10 +57,3 @@ export async function getScribbleEntries(): Promise<PostEntry[]> {
 export async function getRecentScribbles(exceptId: string, limit = SITE.moreScribblesCount): Promise<Post[]> {
   return (await getScribbles()).filter((post) => post.id !== exceptId).slice(0, limit);
 }
-
-/** The newest essay, and the posts that remain; used to feature the latest essay at the top of the home page. */
-export function splitFeatured(posts: Post[]): { featured?: Post; rest: Post[] } {
-  const index = posts.findIndex(isEssay);
-  if (index === -1) return { rest: posts };
-  return { featured: posts[index], rest: posts.filter((_, i) => i !== index) };
-}

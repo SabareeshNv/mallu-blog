@@ -6,18 +6,14 @@ import { SITE } from '@/config/site';
 
 interface Props {
   post: Post;
-  /**
-   * "timeline" is the entry in the month timeline; "featured" is the large latest-essay block on the home page;
-   * "grid" is the compact entry on the Essays page.
-   */
-  variant?: 'timeline' | 'featured' | 'grid';
+  /** "timeline" is the entry in the month timeline; "grid" is the compact entry on the Essays page. */
+  variant?: 'timeline' | 'grid';
 }
 
 const { post, variant = 'timeline' } = Astro.props;
-const excerptLength = { timeline: 90, featured: 220, grid: 70 }[variant];
+const excerptLength = { timeline: 90, grid: 70 }[variant];
 const coverSizes = {
   timeline: '(min-width: 48rem) 43rem, 100vw',
-  featured: '(min-width: 48rem) 43rem, 100vw',
   grid: '(min-width: 48rem) 22rem, 100vw',
 }[variant];
 const { title, date, cover, coverAlt } = post.data;
@@ -48,16 +44,6 @@ const minutes = readingMinutes(post);
     <span aria-hidden="true">·</span>
     <span>{minutes} min read</span>
   </p>
-  {variant === 'featured' && (
-    <p class="more">
-      <a href={url} aria-label={`Read the essay: ${title}`}>
-        Read the essay{' '}
-        <span class="arrow" aria-hidden="true">
-          →
-        </span>
-      </a>
-    </p>
-  )}
 </article>
 
 <style>
@@ -178,53 +164,6 @@ const minutes = readingMinutes(post);
     color: var(--sun);
   }
 
-  /* ---------- Featured: the latest essay, set larger at the top of the home page ---------- */
-  .featured .cover {
-    aspect-ratio: 16 / 9;
-  }
-
-  .featured .title {
-    font-size: var(--fs-display);
-    line-height: var(--lh-display);
-  }
-
-  .featured.has-cover .title {
-    padding: var(--space-24) var(--space-8) var(--space-6);
-  }
-
-  .featured .summary {
-    -webkit-line-clamp: 4;
-    line-clamp: 4;
-    margin-top: var(--space-4);
-    font-size: var(--fs-lead);
-    line-height: var(--lh-lead);
-  }
-
-  .more {
-    margin-top: var(--space-4);
-    color: var(--essay);
-    font-size: var(--fs-small);
-    font-weight: var(--fw-bold);
-    line-height: var(--lh-small);
-  }
-
-  /* A real link that looks exactly as the plain text did; it sits above the card's stretched title link. */
-  .more a {
-    position: relative;
-    z-index: 1;
-    color: inherit;
-    text-decoration: none;
-  }
-
-  .arrow {
-    display: inline-block;
-    transition: transform var(--duration-fast) var(--ease);
-  }
-
-  .essay:hover .arrow {
-    transform: translateX(var(--space-1));
-  }
-
   /* ---------- Grid: compact entries, two across, on the Essays page ---------- */
   .grid .cover {
     aspect-ratio: 3 / 2;
@@ -249,7 +188,6 @@ const minutes = readingMinutes(post);
 
   @media (max-width: 40rem) {
     .cover,
-    .featured .cover,
     .grid .cover {
       aspect-ratio: 4 / 3;
     }
@@ -257,15 +195,6 @@ const minutes = readingMinutes(post);
     .has-cover .title,
     .grid.has-cover .title {
       padding: var(--space-12) var(--space-4) var(--space-4);
-    }
-
-    .featured.has-cover .title {
-      padding: var(--space-16) var(--space-4) var(--space-4);
-    }
-
-    .featured .title {
-      font-size: var(--fs-h2);
-      line-height: var(--lh-h2);
     }
   }
 </style>

@@ -46,8 +46,8 @@ draft: true                  # optional: hidden from production builds
 - **Topics**: the optional `tags` list. Every tag gets its own page (`/topics/<tag>/`), and `/topics/` lists them all,
   most used first. On a post's page the topics are links, and an essay ends with a "Keep reading" list of other posts that
   share its topics.
-- **Latest essay**: the newest essay is featured, larger, at the top of the home page. On the Essays page essays are
-  shown two across, grouped by year. A long essay shows a thin progress bar under the header as it is read.
+- **Home**: every entry in one timeline grouped by month, newest first. On the Essays page essays are shown two across,
+  grouped by year. A long essay shows a thin progress bar under the header as it is read.
 
 Put cover images in `src/assets/images/`. Astro optimises them into responsive WebP at build time.
 

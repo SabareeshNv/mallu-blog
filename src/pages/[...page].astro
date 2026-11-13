@@ -5,8 +5,7 @@ import Feed from '@/components/feed/Feed.astro';
 import Hero from '@/components/home/Hero.astro';
 import HomeRail from '@/components/home/HomeRail.astro';
 import HomeShell from '@/components/home/HomeShell.astro';
-import LatestEssay from '@/components/home/LatestEssay.astro';
-import { getSortedPosts, splitFeatured, type Post } from '@/lib/content';
+import { getSortedPosts, type Post } from '@/lib/content';
 import { SITE } from '@/config/site';
 
 export const getStaticPaths = (async ({ paginate }) => {
@@ -20,8 +19,6 @@ interface Props {
 
 const { page } = Astro.props;
 const isFirst = page.currentPage === 1;
-// On the first page the newest essay is featured above the timeline, and left out of the timeline itself.
-const { featured, rest } = isFirst ? splitFeatured(page.data) : { featured: undefined, rest: page.data };
 ---
 
 <BaseLayout title={isFirst ? undefined : `Earlier entries · Page ${page.currentPage}`}>
@@ -29,13 +26,11 @@ const { featured, rest } = isFirst ? splitFeatured(page.data) : { featured: unde
   <HomeShell>
     <Feed
       flush
-      page={{ ...page, data: rest }}
+      page={page}
       title={isFirst ? undefined : 'Earlier entries'}
       intro={isFirst ? undefined : 'Older essays and scribbles, newest first.'}
-      emptyText={featured ? '' : 'Nothing has been published yet.'}
-    >
-      {featured && <LatestEssay slot="before" post={featured} />}
-    </Feed>
+      emptyText="Nothing has been published yet."
+    />
     <HomeRail slot="rail" />
   </HomeShell>
 </BaseLayout>

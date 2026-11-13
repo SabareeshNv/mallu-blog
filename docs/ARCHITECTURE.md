@@ -45,9 +45,9 @@ src/
 
   components/    Reusable pieces, grouped by role.
     layout/        Header, footer, theme switcher
-    feed/          Lists of posts: timeline, essay and scribble entries (EssayEntry has timeline, featured and grid
+    feed/          Lists of posts: timeline, essay and scribble entries (EssayEntry has timeline and grid
                    variants), EssayGrid, PostList, PostSection ("Keep reading"), TopicLinks, TopicList, archive, pagination
-    home/          The home page: Hero, LatestEssay, HomeShell (two columns) and HomeRail (search, About, topics, RSS)
+    home/          The home page: Hero, HomeShell (two columns) and HomeRail (search, About, topics, RSS)
     ui/            Small building blocks: Container, Prose, PageHeader, FormattedDate, ContactLink, ReadingProgress
     seo/           Seo.astro: title, description, social cards, structured data
     search/        SearchDialog (Pagefind), SearchBar (above the posts; hidden on the home page beside the side column)
