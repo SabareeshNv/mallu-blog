@@ -5,13 +5,9 @@ export type Post = CollectionEntry<'posts'>;
 
 export type PostKind = 'essay' | 'scribble';
 
-/** A post with what a page needs to link around it. */
+/** A post with where it sits in the home feed. */
 export interface PostEntry {
   post: Post;
-  /** The next newer post, across both kinds. */
-  newer?: Post;
-  /** The next older post, across both kinds. */
-  older?: Post;
   /** The home-feed page (1, 2, ...) this post appears on. */
   feedPage: number;
 }

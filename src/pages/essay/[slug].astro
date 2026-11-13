@@ -17,6 +17,6 @@ const { entry } = Astro.props;
 const { Content } = await render(entry.post);
 ---
 
-<EssayLayout post={entry.post} newer={entry.newer} older={entry.older}>
+<EssayLayout post={entry.post}>
   <Content />
 </EssayLayout>

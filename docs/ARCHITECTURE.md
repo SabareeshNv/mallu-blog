@@ -40,8 +40,8 @@ src/
     BaseLayout     <head>, skip link, header, <main>, footer
     PageLayout     A text page (the policies, About)
     MarkdownLayout The layout for pages written in Markdown (src/pages/*.md)
-    EssayLayout    An essay: full-width masthead, text, neighbouring posts
-    ScribbleLayout A scribble's own page
+    EssayLayout    An essay: full-width masthead, text, topics, Keep reading
+    ScribbleLayout A scribble's own page: text, topics, More scribbles
 
   components/    Reusable pieces, grouped by role.
     layout/        Header, footer, theme switcher

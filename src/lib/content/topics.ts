@@ -42,6 +42,18 @@ export async function getTopics(): Promise<Topic[]> {
   );
 }
 
+/**
+ * What "Keep reading" lists after an essay: posts that share its topics first, then the newest other posts to fill the
+ * list. So it is never empty, even for an essay with no topics.
+ */
+export async function getKeepReadingPosts(post: Post, limit = SITE.relatedCount): Promise<Post[]> {
+  const related = await getRelatedPosts(post, limit);
+  if (related.length >= limit) return related;
+  const have = new Set([post.id, ...related.map((other) => other.id)]);
+  const recent = (await getSortedPosts()).filter((other) => !have.has(other.id));
+  return [...related, ...recent].slice(0, limit);
+}
+
 /** Other posts that share topics with `post`: the most shared topics first, then the newest. */
 export async function getRelatedPosts(post: Post, limit = SITE.relatedCount): Promise<Post[]> {
   const mine = new Set(postTopics(post).map((topic) => topic.slug));

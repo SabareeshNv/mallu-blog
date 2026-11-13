@@ -23,13 +23,11 @@ export async function getSortedPosts(): Promise<Post[]> {
 export const getEssays = async () => (await getSortedPosts()).filter(isEssay);
 export const getScribbles = async () => (await getSortedPosts()).filter(isScribble);
 
-/** Every post with its neighbours and feed page, newest first. */
+/** Every post with its feed page, newest first. */
 export async function getPostEntries(): Promise<PostEntry[]> {
   const posts = await getSortedPosts();
   return posts.map((post, i) => ({
     post,
-    newer: posts[i - 1],
-    older: posts[i + 1],
     feedPage: Math.floor(i / SITE.feedPageSize) + 1,
   }));
 }

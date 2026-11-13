@@ -8,26 +8,23 @@ import { Image } from 'astro:assets';
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import Container from '@/components/ui/Container.astro';
 import FormattedDate from '@/components/ui/FormattedDate.astro';
-import PostNav from '@/components/feed/PostNav.astro';
 import PostSection from '@/components/feed/PostSection.astro';
 import TopicLinks from '@/components/feed/TopicLinks.astro';
 import ReadingProgress from '@/components/ui/ReadingProgress.astro';
 import Prose from '@/components/ui/Prose.astro';
 import EssayIcon from '@/components/icons/EssayIcon.astro';
-import { excerpt, getRelatedPosts, readingMinutes, type Post } from '@/lib/content';
+import { excerpt, getKeepReadingPosts, readingMinutes, type Post } from '@/lib/content';
 import { SITE } from '@/config/site';
 import { isoDate } from '@/lib/format';
 
 interface Props {
   post: Post;
-  newer?: Post;
-  older?: Post;
 }
 
-const { post, newer, older } = Astro.props;
+const { post } = Astro.props;
 const { title, date, cover, coverAlt } = post.data;
 const minutes = readingMinutes(post);
-const related = await getRelatedPosts(post);
+const related = await getKeepReadingPosts(post);
 ---
 
 <BaseLayout
@@ -81,7 +78,6 @@ const related = await getRelatedPosts(post);
       <TopicLinks post={post} />
       <div data-pagefind-ignore>
         <PostSection heading="Keep reading" posts={related} />
-        <PostNav newer={newer} older={older} />
       </div>
     </Container>
     <span hidden data-pagefind-weight="3">
