@@ -50,6 +50,10 @@
     flex: 1;
     width: 100%;
     outline: none;
+    /* Two faint washes of colour, so the page is not one flat plane: teal at the top right, orange at the left. */
+    background:
+      radial-gradient(46rem 26rem at 88% 0, color-mix(in srgb, var(--accent) 10%, transparent), transparent 70%),
+      radial-gradient(40rem 22rem at 0 16rem, color-mix(in srgb, var(--essay) 7%, transparent), transparent 70%);
   }
 
   img,

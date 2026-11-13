@@ -60,8 +60,12 @@ const links = MAIN_NAV.map((item) => ({ ...item, active: isActiveNavItem(item, A
     position: sticky;
     top: 0;
     z-index: 50;
-    background: var(--bg);
-    box-shadow: 0 var(--border-width) 0 var(--border);
+    background: var(--glass);
+    -webkit-backdrop-filter: blur(14px) saturate(1.5);
+    backdrop-filter: blur(14px) saturate(1.5);
+    box-shadow:
+      0 var(--border-width) 0 var(--border),
+      0 12px 32px -16px color-mix(in srgb, var(--lift) 38%, transparent);
     transition: background-color var(--duration) var(--ease);
   }
 

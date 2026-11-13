@@ -115,6 +115,8 @@ All tokens live in `src/styles/` (`tokens.css` for spacing, type and shape; `the
 - **Layout:** two widths: lists are `--container-feed` (48rem); reading text is `--measure-reading` (75ch, measured in the
   text's own font, so a line holds about the same number of characters in Malayalam and English); plus one
   responsive gutter (16 / 24 / 40px).
+- **Depth:** photographs float on soft shadows (`--depth-1`, `--depth-2`), search fields are sunken (`--inset`), the header
+  is frosted glass (`--glass`), and on large screens the latest essay overlaps the hero. All are tokens in `theme.css`.
 - **Shape:** radius 4px (badges), 8px (images inside cards), 12px (cards and panels), full (buttons and pills).
   Cards have a 1px border; elevation (`--shadow-md`) appears only on hover.
 - **Controls:** buttons, navigation links and the theme switcher are all 40px tall; icon buttons are 32px.

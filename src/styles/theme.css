@@ -44,7 +44,16 @@
   --logo-wave: #b47c45;
 
   /* Elevation */
-  --shadow-sm: 0 1px 2px light-dark(rgb(21 33 44 / 0.08), rgb(0 0 0 / 0.4));
+  --lift: light-dark(rgb(10 60 66), rgb(0 0 0)); /* the colour shadows are tinted with */
+  --depth-1:
+    0 1px 2px color-mix(in srgb, var(--lift) 14%, transparent),
+    0 6px 16px -6px color-mix(in srgb, var(--lift) 26%, transparent);
+  --depth-2:
+    0 2px 4px color-mix(in srgb, var(--lift) 10%, transparent),
+    0 14px 28px -10px color-mix(in srgb, var(--lift) 30%, transparent),
+    0 36px 64px -28px color-mix(in srgb, var(--lift) 38%, transparent);
+  --inset: inset 0 1px 3px color-mix(in srgb, var(--lift) 22%, transparent); /* sunken fields */
+  --glass: color-mix(in srgb, var(--bg) 86%, transparent); /* the header, over the page */
   --shadow-md:
     0 2px 4px light-dark(rgb(21 33 44 / 0.05), rgb(0 0 0 / 0.3)),
     0 12px 24px -8px light-dark(rgb(10 60 66 / 0.2), rgb(0 0 0 / 0.6));
