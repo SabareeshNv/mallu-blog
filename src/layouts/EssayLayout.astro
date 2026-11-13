@@ -36,8 +36,12 @@ const related = await getKeepReadingPosts(post);
   article={{ section: 'essay', publishedTime: date, modifiedTime: revised, tags: post.data.tags }}
 >
   <ReadingProgress />
-  <article class="essay" data-pagefind-body>
-    <span hidden data-pagefind-filter="kind:Essay" data-pagefind-meta={`date:${isoDate(date)}`}></span>
+  <article
+    class="essay"
+    data-pagefind-body
+    data-pagefind-filter="kind:Essay"
+    data-pagefind-meta={`date:${isoDate(date)}`}
+  >
     <header class:list={['masthead', { 'has-cover': cover }]}>
       {cover && (
         <>

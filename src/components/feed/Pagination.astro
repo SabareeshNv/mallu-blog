@@ -18,9 +18,7 @@ const { current, last, prevUrl, nextUrl, prevLabel = 'Newer', nextLabel = 'Older
       <a href={prevUrl} rel="prev">
         <span aria-hidden="true">←</span> {prevLabel}
       </a>
-    ) : (
-      <span />
-    )}
+    ) : null}
     <span class="status" aria-current="page">
       Page {current} of {last}
     </span>
@@ -28,9 +26,7 @@ const { current, last, prevUrl, nextUrl, prevLabel = 'Newer', nextLabel = 'Older
       <a href={nextUrl} rel="next">
         {nextLabel} <span aria-hidden="true">→</span>
       </a>
-    ) : (
-      <span />
-    )}
+    ) : null}
   </nav>
 )}
 
@@ -65,7 +61,12 @@ const { current, last, prevUrl, nextUrl, prevLabel = 'Newer', nextLabel = 'Older
       color var(--duration-fast) var(--ease);
   }
 
+  a[rel='prev'] {
+    grid-column: 1;
+  }
+
   a[rel='next'] {
+    grid-column: 3;
     justify-self: end;
   }
 
@@ -75,6 +76,7 @@ const { current, last, prevUrl, nextUrl, prevLabel = 'Newer', nextLabel = 'Older
   }
 
   .status {
+    grid-column: 2;
     color: var(--muted);
     font-size: var(--fs-meta);
     line-height: var(--lh-meta);

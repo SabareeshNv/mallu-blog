@@ -21,8 +21,7 @@ const { title, description, updated, lang = 'en' } = Astro.props;
 
 <BaseLayout title={title} description={description}>
   <Container as="article" size="reading" lang={lang}>
-    <div data-pagefind-body>
-      <span hidden data-pagefind-filter="kind:Page"></span>
+    <div data-pagefind-body data-pagefind-filter="kind:Page">
       <PageHeader title={title} intro={updated ? `Last updated ${updated}.` : undefined} />
       <Prose lang={lang}>
         <slot />
