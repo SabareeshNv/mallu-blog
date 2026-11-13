@@ -8,7 +8,7 @@ const path = Astro.url.pathname;
 
 <footer class="site-footer">
   <div class="inner">
-    <nav class="start" aria-label="Footer">
+    <nav aria-label="Footer">
       <ul class="links">
         {FOOTER_NAV.map((link) => (
           <li>
@@ -35,10 +35,9 @@ const path = Astro.url.pathname;
     line-height: var(--lh-meta);
   }
 
-  /* Small screens: the links on one row, spread evenly (equal margins and gaps), with the copyright centred beneath. */
+  /* Small screens: two rows. The links are spread evenly (equal margins and gaps), and the copyright is centred below. */
   .inner {
-    display: flex;
-    flex-direction: column;
+    display: grid;
     gap: var(--space-4);
     padding: var(--space-8) var(--gutter);
   }
@@ -69,15 +68,12 @@ const path = Astro.url.pathname;
     text-align: center;
   }
 
-  /* From 480px: the links on the left, the copyright on the right. If the copyright still does not fit beside the
-     links (a long name), it wraps onto its own line and a small script (below) centres it. */
+  /* From 480px: side by side, the links on the left and the copyright on the right. */
   @media (min-width: 30rem) {
     .inner {
-      flex-direction: row;
-      flex-wrap: wrap;
+      grid-template-columns: 1fr auto;
       align-items: center;
-      justify-content: space-between;
-      gap: var(--space-4) var(--space-8);
+      gap: var(--space-8);
     }
 
     ul {
@@ -86,31 +82,7 @@ const path = Astro.url.pathname;
     }
 
     .copy {
-      flex: 1 1 auto;
       text-align: end;
-    }
-
-    .site-footer[data-wrapped] .copy {
-      text-align: center;
     }
   }
 </style>
-
-<script>
-  // Marks the footer when the copyright has wrapped below the links, so it can be centred there.
-  const footer = document.querySelector<HTMLElement>('.site-footer');
-  const start = footer?.querySelector<HTMLElement>('.start');
-  const copy = footer?.querySelector<HTMLElement>('.copy');
-
-  if (footer && start && copy) {
-    const update = () => {
-      const wrapped = copy.getBoundingClientRect().top >= start.getBoundingClientRect().bottom - 1;
-      footer.toggleAttribute('data-wrapped', wrapped);
-    };
-    const observer = new ResizeObserver(update);
-    [footer, start, copy].forEach((element) => observer.observe(element));
-    update();
-    // Web fonts change text widths when they arrive.
-    document.fonts?.ready.then(update);
-  }
-</script>

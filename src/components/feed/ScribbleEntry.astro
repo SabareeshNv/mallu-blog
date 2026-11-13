@@ -72,16 +72,15 @@ const longDate = formatDate(date);
     outline-offset: var(--space-2);
   }
 
-  /* Reaching a scribble through its permalink marks the text like a highlighter, then fades. */
-  .scribble:target,
-  .scribble.is-highlighted {
+  /* Arriving at a scribble through "See it in the stream" (a #scribble-… address): the browser scrolls to it and focuses
+     it, and :target marks the text like a highlighter, then fades. No script is needed. */
+  .scribble:target {
     background: var(--highlight);
     box-shadow: 0 0 0 var(--space-2) var(--highlight);
   }
 
   @media (prefers-reduced-motion: no-preference) {
-    .scribble:target,
-    .scribble.is-highlighted {
+    .scribble:target {
       animation: arrive 2000ms var(--ease) forwards;
     }
 
@@ -157,26 +156,3 @@ const longDate = formatDate(date);
     background: var(--surface-strong);
   }
 </style>
-
-<script>
-  // Arriving with a #scribble-… hash (from "See it in the stream" on a scribble's page): scroll to that scribble,
-  // focus it and highlight it. A scribble's permalink icon is a normal link to its own page, /scribble/<name>/.
-  const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)');
-
-  function reveal(target: HTMLElement) {
-    target.scrollIntoView({ behavior: reduceMotion.matches ? 'auto' : 'smooth', block: 'start' });
-    target.focus({ preventScroll: true });
-    target.classList.remove('is-highlighted');
-    void target.offsetWidth; // restart the highlight animation
-    target.classList.add('is-highlighted');
-  }
-
-  function fromHash() {
-    const id = decodeURIComponent(location.hash.slice(1));
-    const target = id ? document.getElementById(id) : null;
-    if (target?.matches('[data-scribble]')) reveal(target);
-  }
-
-  fromHash();
-  window.addEventListener('popstate', fromHash);
-</script>
