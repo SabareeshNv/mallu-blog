@@ -9,7 +9,7 @@ Posts are written in Malayalam; the interface is in English.
 | ----------------- | --------------------------------------- |
 | `npm install`     | Install dependencies                    |
 | `npm run dev`     | Start the dev server at `localhost:4321` |
-| `npm run build`   | Build the static site into `dist/`      |
+| `npm run build`   | Build the static site into `dist/` and create the search index |
 | `npm run preview` | Preview the built site                  |
 | `npm run check`   | Type-check the project                  |
 | `npm run validate`| Type-check, build, then verify the output |
@@ -44,6 +44,13 @@ draft: true                  # optional: hidden from production builds
   shown two across, grouped by year. A long essay shows a thin progress bar under the header as it is read.
 
 Put cover images in `src/assets/images/`. Astro optimises them into responsive WebP at build time.
+
+## Search
+
+Search is [Pagefind](https://pagefind.app): a header button (tablet and up), a box in the home page's side column,
+and a search bar above the posts on phones. Ctrl/⌘+K or `/` opens it anywhere. It finds Malayalam and English, can be
+filtered to essays or scribbles, and loads only when someone searches. The index is built by `npm run build`, so search
+works on the built site (`npm run build`, then `npm run preview`), not under `npm run dev`.
 
 ## Pages
 

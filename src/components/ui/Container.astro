@@ -2,13 +2,15 @@
 /**
  * The page-width wrapper: centres its content in a column and applies the page's side margins.
  *
- *   size="feed"   the width of lists (Home, Essays, Scribbles, Archive)
+ *   size="feed"   the width of lists (Essays, Scribbles, Archive, Topics)
+ *   size="wide"    the home page: the writing and its side column (HomeShell)
+ *   size="flush"   no width, margin or padding: a list placed inside another container
  *   size="reading" the width of reading text: 75ch, measured in the text's own font (Malayalam by default, or
  *                 `lang="en"` for English pages), so a line holds about the same number of characters in each
  *   top           space above the content: the default is 48px; "tight" is 32px; "none" is 0
  */
 interface Props {
-  size: 'feed' | 'reading';
+  size: 'feed' | 'reading' | 'wide' | 'flush';
   /** The language of the reading text; decides which font the 75ch is measured in. */
   lang?: 'ml' | 'en';
   top?: 'default' | 'tight' | 'none';
@@ -47,6 +49,16 @@ const { size, lang = 'ml', top = 'default', as: Tag = 'div' } = Astro.props;
   .reading-en {
     font-family: var(--font-sans);
     font-size: var(--fs-body);
+  }
+
+  .wide {
+    max-width: calc(var(--container-wide) + 2 * var(--gutter));
+  }
+
+  .flush {
+    max-width: none;
+    margin: 0;
+    padding: 0;
   }
 
   .tight {

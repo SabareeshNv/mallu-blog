@@ -1,0 +1,184 @@
+---
+/**
+ * The home page's side column: search, a short About, topics with their counts, and the RSS feed.
+ * Beside the writing on wide screens (and sticky while scrolling); below it on narrower ones.
+ */
+import RssIcon from '@/components/icons/RssIcon.astro';
+import SearchIcon from '@/components/icons/SearchIcon.astro';
+import { ROUTES } from '@/config/routes';
+import { SITE } from '@/config/site';
+import { getTopics, topicUrl } from '@/lib/content';
+
+const topics = await getTopics();
+---
+
+<aside class="rail" aria-label="About and topics">
+  <button type="button" class="search" data-search-open aria-keyshortcuts="Control+K Meta+K">
+    <SearchIcon />
+    <span>Search</span>
+    <kbd>Ctrl K</kbd>
+  </button>
+
+  <section aria-labelledby="rail-about">
+    <h2 id="rail-about">About</h2>
+    <p>{SITE.description}</p>
+    <a class="link" href={ROUTES.about}>
+      About this notebook <span aria-hidden="true">→</span>
+    </a>
+  </section>
+
+  {topics.length > 0 && (
+    <section aria-labelledby="rail-topics">
+      <h2 id="rail-topics">Topics</h2>
+      <ul role="list">
+        {topics.map((topic) => (
+          <li>
+            <a href={topicUrl(topic)}>
+              <span lang={SITE.postLang}>{topic.name}</span>
+              <span class="count">{topic.posts.length}</span>
+            </a>
+          </li>
+        ))}
+      </ul>
+      <a class="link" href={ROUTES.topics}>
+        All topics <span aria-hidden="true">→</span>
+      </a>
+    </section>
+  )}
+
+  <section aria-labelledby="rail-follow">
+    <h2 id="rail-follow">Follow</h2>
+    <a class="link" href={ROUTES.rss}>
+      <RssIcon />
+      RSS feed
+    </a>
+  </section>
+</aside>
+
+<style>
+  .rail {
+    display: grid;
+    gap: var(--space-8);
+    margin-top: var(--space-16);
+    font-size: var(--fs-small);
+    line-height: var(--lh-small);
+  }
+
+  /* Beside the writing: sticky, and no taller than the window. */
+  @media (min-width: 64rem) {
+    .rail {
+      position: sticky;
+      top: calc(var(--header-h) + var(--space-6));
+      align-self: start;
+      max-height: calc(100dvh - var(--header-h) - 2 * var(--space-6));
+      margin-top: 0;
+      overflow-y: auto;
+      overscroll-behavior: contain;
+    }
+  }
+
+  /* Search lives here only beside the writing; elsewhere the header or the bar above the posts has it. */
+  .search {
+    display: none;
+    align-items: center;
+    gap: var(--space-3);
+    width: 100%;
+    height: var(--space-12);
+    padding: 0 var(--space-4);
+    border: var(--border-width) solid var(--border);
+    border-radius: var(--radius-full);
+    background: transparent;
+    color: var(--muted);
+    font: inherit;
+    font-size: var(--fs-small);
+    cursor: pointer;
+    transition:
+      border-color var(--duration-fast) var(--ease),
+      color var(--duration-fast) var(--ease);
+  }
+
+  .search span {
+    flex: 1;
+    text-align: start;
+  }
+
+  .search:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  @media (min-width: 64rem) {
+    :global(html[data-js]) .search {
+      display: flex;
+    }
+  }
+
+  kbd {
+    padding: 0 var(--space-2);
+    border: var(--border-width) solid var(--border);
+    border-radius: var(--radius-sm);
+    font: inherit;
+    font-size: var(--fs-label);
+    font-weight: var(--fw-bold);
+    letter-spacing: var(--tracking-label);
+  }
+
+  h2 {
+    margin-bottom: var(--space-3);
+    padding-bottom: var(--space-2);
+    border-bottom: 2px solid var(--accent);
+    font-size: var(--fs-label);
+    font-weight: var(--fw-bold);
+    line-height: var(--lh-label);
+    letter-spacing: var(--tracking-label);
+    text-transform: uppercase;
+  }
+
+  p {
+    margin: 0;
+    color: var(--muted);
+  }
+
+  ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  li a {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--space-3);
+    padding-block: var(--space-2);
+    border-bottom: var(--border-width) solid var(--border);
+    color: var(--text);
+    font-weight: var(--fw-bold);
+    text-decoration: none;
+  }
+
+  li a:hover {
+    color: var(--accent);
+  }
+
+  .count {
+    color: var(--muted);
+    font-size: var(--fs-meta);
+    font-weight: var(--fw-regular);
+  }
+
+  .link {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    min-height: var(--control-h);
+    color: var(--accent);
+    font-weight: var(--fw-bold);
+    text-decoration: none;
+  }
+
+  .link:hover {
+    text-decoration: underline;
+    text-underline-offset: 0.25em;
+  }
+</style>

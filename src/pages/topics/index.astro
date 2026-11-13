@@ -2,6 +2,7 @@
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import Container from '@/components/ui/Container.astro';
 import PageHeader from '@/components/ui/PageHeader.astro';
+import SearchBar from '@/components/search/SearchBar.astro';
 import TopicList from '@/components/feed/TopicList.astro';
 import { getTopics } from '@/lib/content';
 import { countOf } from '@/lib/format';
@@ -20,6 +21,7 @@ const topics = await getTopics();
           : 'No topics yet.'
       }
     />
+    <SearchBar />
     <TopicList topics={topics} />
   </Container>
 </BaseLayout>

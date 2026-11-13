@@ -4,6 +4,7 @@
  */
 import type { Page } from 'astro';
 import Container from '@/components/ui/Container.astro';
+import SearchBar from '@/components/search/SearchBar.astro';
 import EssayEntry from '@/components/feed/EssayEntry.astro';
 import PageHeader from '@/components/ui/PageHeader.astro';
 import Pagination from '@/components/feed/Pagination.astro';
@@ -24,6 +25,7 @@ const lead = [intro, pageNote].filter(Boolean).join(' ');
 
 <Container size="feed">
   <PageHeader title={title} intro={lead} />
+  <SearchBar />
 
   {groups.length === 0 && <p class="empty">{emptyText}</p>}
   {groups.map((group) => (

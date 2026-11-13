@@ -1,0 +1,51 @@
+---
+/**
+ * A search field shown above the posts on small screens, where the header has no room for a search button.
+ * It looks like a field but opens the search dialog. Hidden on larger screens and when JavaScript is off.
+ */
+import SearchIcon from '@/components/icons/SearchIcon.astro';
+---
+
+<button type="button" class="searchbar" data-search-open aria-keyshortcuts="Control+K Meta+K">
+  <SearchIcon />
+  <span>Search essays and scribbles</span>
+</button>
+
+<style>
+  .searchbar {
+    display: none;
+    align-items: center;
+    gap: var(--space-3);
+    width: 100%;
+    height: var(--space-12);
+    margin-bottom: var(--space-8);
+    padding: 0 var(--space-4);
+    border: var(--border-width) solid var(--border);
+    border-radius: var(--radius-full);
+    background: transparent;
+    color: var(--muted);
+    font: inherit;
+    font-size: var(--fs-small);
+    text-align: start;
+    cursor: pointer;
+    transition:
+      border-color var(--duration-fast) var(--ease),
+      color var(--duration-fast) var(--ease);
+  }
+
+  .searchbar:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  :global(html[data-js]) .searchbar {
+    display: flex;
+  }
+
+  /* From tablet width up the header has a search button, and on the home page the side column has one too. */
+  @media (min-width: 48.0625rem) {
+    :global(html[data-js]) .searchbar {
+      display: none;
+    }
+  }
+</style>

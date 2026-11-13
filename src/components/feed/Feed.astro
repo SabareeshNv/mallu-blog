@@ -4,6 +4,7 @@
  */
 import type { Page } from 'astro';
 import Container from '@/components/ui/Container.astro';
+import SearchBar from '@/components/search/SearchBar.astro';
 import MonthGroup from '@/components/feed/MonthGroup.astro';
 import PageHeader from '@/components/ui/PageHeader.astro';
 import Pagination from '@/components/feed/Pagination.astro';
@@ -17,16 +18,19 @@ interface Props {
   titleLang?: string;
   intro?: string;
   emptyText?: string;
+  /** Render without the page-width wrapper, when the feed sits inside another column (the home page). */
+  flush?: boolean;
 }
 
-const { page, title, titleLang, intro, emptyText = 'Nothing here yet.' } = Astro.props;
+const { page, title, titleLang, intro, emptyText = 'Nothing here yet.', flush = false } = Astro.props;
 const groups = groupByMonth(page.data);
 const pageNote = page.lastPage > 1 ? `Page ${page.currentPage} of ${page.lastPage}.` : '';
 const lead = [intro, pageNote].filter(Boolean).join(' ');
 ---
 
-<Container size="feed">
+<Container size={flush ? 'flush' : 'feed'}>
   {title ? <PageHeader title={title} intro={lead} lang={titleLang} /> : <h2 class="sr-only">Latest entries</h2>}
+  <SearchBar />
   <slot name="before" />
 
   {groups.length === 0 && emptyText && <p class="empty">{emptyText}</p>}

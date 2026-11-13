@@ -3,6 +3,8 @@ import type { GetStaticPaths, Page } from 'astro';
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import Feed from '@/components/feed/Feed.astro';
 import Hero from '@/components/home/Hero.astro';
+import HomeRail from '@/components/home/HomeRail.astro';
+import HomeShell from '@/components/home/HomeShell.astro';
 import LatestEssay from '@/components/home/LatestEssay.astro';
 import { getSortedPosts, splitFeatured, type Post } from '@/lib/content';
 import { SITE } from '@/config/site';
@@ -24,12 +26,16 @@ const { featured, rest } = isFirst ? splitFeatured(page.data) : { featured: unde
 
 <BaseLayout title={isFirst ? undefined : `Earlier entries · Page ${page.currentPage}`}>
   {isFirst && <Hero slot="hero" />}
-  <Feed
-    page={{ ...page, data: rest }}
-    title={isFirst ? undefined : 'Earlier entries'}
-    intro={isFirst ? undefined : 'Older essays and scribbles, newest first.'}
-    emptyText={featured ? '' : 'Nothing has been published yet.'}
-  >
-    {featured && <LatestEssay slot="before" post={featured} />}
-  </Feed>
+  <HomeShell>
+    <Feed
+      flush
+      page={{ ...page, data: rest }}
+      title={isFirst ? undefined : 'Earlier entries'}
+      intro={isFirst ? undefined : 'Older essays and scribbles, newest first.'}
+      emptyText={featured ? '' : 'Nothing has been published yet.'}
+    >
+      {featured && <LatestEssay slot="before" post={featured} />}
+    </Feed>
+    <HomeRail slot="rail" />
+  </HomeShell>
 </BaseLayout>

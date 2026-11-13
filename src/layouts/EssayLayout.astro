@@ -16,6 +16,7 @@ import Prose from '@/components/ui/Prose.astro';
 import EssayIcon from '@/components/icons/EssayIcon.astro';
 import { excerpt, getRelatedPosts, readingMinutes, type Post } from '@/lib/content';
 import { SITE } from '@/config/site';
+import { isoDate } from '@/lib/format';
 
 interface Props {
   post: Post;
@@ -37,7 +38,8 @@ const related = await getRelatedPosts(post);
   article={{ section: 'essay', publishedTime: date, tags: post.data.tags }}
 >
   <ReadingProgress />
-  <article class="essay">
+  <article class="essay" data-pagefind-body>
+    <span hidden data-pagefind-filter="kind:Essay" data-pagefind-meta={`date:${isoDate(date)}`}></span>
     <header class:list={['masthead', { 'has-cover': cover }]}>
       {cover && (
         <>
@@ -55,12 +57,14 @@ const related = await getRelatedPosts(post);
         </>
       )}
       <div class="masthead-inner">
-        <p class="kind">
+        <p class="kind" data-pagefind-ignore>
           <EssayIcon size={20} />
           Essay
         </p>
-        <h1 lang={SITE.postLang}>{title}</h1>
-        <p class="meta">
+        <h1 lang={SITE.postLang} data-pagefind-weight="5">
+          {title}
+        </h1>
+        <p class="meta" data-pagefind-ignore>
           <FormattedDate date={date} />
           <span aria-hidden="true">·</span>
           <span>{minutes} min read</span>
@@ -75,9 +79,14 @@ const related = await getRelatedPosts(post);
         </Prose>
       </div>
       <TopicLinks post={post} />
-      <PostSection heading="Keep reading" posts={related} />
-      <PostNav newer={newer} older={older} />
+      <div data-pagefind-ignore>
+        <PostSection heading="Keep reading" posts={related} />
+        <PostNav newer={newer} older={older} />
+      </div>
     </Container>
+    <span hidden data-pagefind-weight="3">
+      {post.data.tags.join(' ')}
+    </span>
   </article>
 </BaseLayout>
 

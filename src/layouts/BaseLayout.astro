@@ -3,6 +3,7 @@ import { Font } from 'astro:assets';
 import Seo from '@/components/seo/Seo.astro';
 import SiteHeader from '@/components/layout/SiteHeader.astro';
 import SiteFooter from '@/components/layout/SiteFooter.astro';
+import SearchDialog from '@/components/search/SearchDialog.astro';
 import themeInit from '@/scripts/theme-init.js?raw';
 import imageFade from '@/scripts/image-fade.js?raw';
 import type { ArticleMeta } from '@/lib/seo/types';
@@ -58,6 +59,7 @@ interface Props {
       <slot />
     </main>
     <SiteFooter />
+    <SearchDialog />
 
     <!-- Images marked data-fade sit on a placeholder colour and fade in once loaded. -->
     <script is:inline set:html={imageFade} />

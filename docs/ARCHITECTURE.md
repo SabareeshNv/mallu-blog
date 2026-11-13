@@ -47,9 +47,10 @@ src/
     layout/        Header, footer, theme switcher
     feed/          Lists of posts: timeline, essay and scribble entries (EssayEntry has timeline, featured and grid
                    variants), EssayGrid, PostList, PostSection ("Keep reading"), TopicLinks, TopicList, archive, pagination
-    home/          The home page: Hero, LatestEssay
+    home/          The home page: Hero, LatestEssay, HomeShell (two columns) and HomeRail (search, About, topics, RSS)
     ui/            Small building blocks: Container, Prose, PageHeader, FormattedDate, ContactLink, ReadingProgress
     seo/           Seo.astro: title, description, social cards, structured data
+    search/        SearchDialog (Pagefind), SearchBar (above the posts on small screens)
     icons/         Inline SVG icons
 
   pages/         Routes. Each file maps to URLs. about.md is the About page; topics/ holds the topic pages.
@@ -114,6 +115,7 @@ All visual decisions are tokens, and a component uses nothing else.
 | Change the header or footer          | `components/layout/SiteHeader.astro`, `SiteFooter.astro`                                        |
 | Change what search engines see       | `components/seo/Seo.astro`, `lib/seo/schema.ts`                                                 |
 | Add a field to posts                 | `src/content.config.ts`, then use it from the components that need it                           |
+| Change what search indexes         | `data-pagefind-*` attributes in the layouts (essay, scribble, text page); the dialog is `components/search/` |
 | Add a topic                          | Add the word to a post's `tags`; its page and the `/topics/` entry appear on their own          |
 | Edit the About page                  | `src/pages/about.md`                                                                            |
 | Change how many related posts show   | `relatedCount`, `moreScribblesCount` in `config/site.ts`                                        |

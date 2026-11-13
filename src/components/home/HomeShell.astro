@@ -1,0 +1,31 @@
+---
+/**
+ * The home page's two columns: the writing (default slot) and its side column (slot "rail").
+ * One column below 1024px, with the side column after the writing.
+ */
+import Container from '@/components/ui/Container.astro';
+---
+
+<Container size="wide">
+  <div class="shell">
+    <div class="main">
+      <slot />
+    </div>
+    <slot name="rail" />
+  </div>
+</Container>
+
+<style>
+  .main {
+    min-width: 0;
+  }
+
+  @media (min-width: 64rem) {
+    .shell {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) var(--rail-width);
+      gap: var(--space-16);
+      align-items: start;
+    }
+  }
+</style>

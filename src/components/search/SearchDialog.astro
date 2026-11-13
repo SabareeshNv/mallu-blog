@@ -1,0 +1,387 @@
+---
+/**
+ * Site search, powered by Pagefind (https://pagefind.app). A modal dialog opened by any [data-search-open] element,
+ * by Ctrl/⌘+K, or by "/". The index is written by `pagefind` after `astro build` (see the "build" script) and
+ * loaded the first time someone searches.
+ */
+import SearchIcon from '@/components/icons/SearchIcon.astro';
+---
+
+<dialog id="search-dialog" class="search" aria-labelledby="search-label">
+  <form class="top" role="search" method="dialog">
+    <SearchIcon />
+    <label id="search-label" class="sr-only" for="search-input">
+      Search essays and scribbles
+    </label>
+    <input
+      id="search-input"
+      type="search"
+      placeholder="Search essays and scribbles"
+      autocomplete="off"
+      autocapitalize="off"
+      spellcheck="false"
+      enterkeyhint="search"
+    />
+    <button class="close" type="submit" aria-label="Close search">
+      Esc
+    </button>
+  </form>
+
+  <div class="filters" role="group" aria-label="Show">
+    <button type="button" aria-pressed="true" data-kind="">
+      All
+    </button>
+    <button type="button" aria-pressed="false" data-kind="Essay">
+      Essays
+    </button>
+    <button type="button" aria-pressed="false" data-kind="Scribble">
+      Scribbles
+    </button>
+  </div>
+
+  <p class="status" role="status" aria-live="polite"></p>
+  <ol class="results" role="list"></ol>
+</dialog>
+
+<style>
+  .search {
+    flex-direction: column;
+    width: min(40rem, calc(100vw - 2 * var(--gutter)));
+    max-height: min(40rem, 82dvh);
+    margin: 10dvh auto auto;
+    padding: 0;
+    overflow: hidden;
+    border: var(--border-width) solid var(--border);
+    border-radius: var(--radius-lg);
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-sans);
+    box-shadow: var(--shadow-md);
+  }
+
+  .search[open] {
+    display: flex;
+  }
+
+  .search::backdrop {
+    background: rgb(8 14 20 / 0.6);
+  }
+
+  :global(html:has(#search-dialog[open])) {
+    overflow: hidden;
+  }
+
+  .top {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    padding: 0 var(--space-4);
+    border-bottom: var(--border-width) solid var(--border);
+    color: var(--muted);
+  }
+
+  input {
+    flex: 1;
+    min-width: 0;
+    height: var(--space-16);
+    border: 0;
+    background: transparent;
+    color: var(--text);
+    font: inherit;
+    font-size: var(--fs-lead);
+  }
+
+  input::placeholder {
+    color: var(--muted);
+  }
+
+  input:focus-visible {
+    outline: none;
+  }
+
+  .top:has(input:focus-visible) {
+    box-shadow: inset 0 -2px 0 var(--accent);
+  }
+
+  .close {
+    height: var(--icon-button);
+    padding: 0 var(--space-2);
+    border: var(--border-width) solid var(--border);
+    border-radius: var(--radius-sm);
+    background: transparent;
+    color: var(--muted);
+    font: inherit;
+    font-size: var(--fs-label);
+    font-weight: var(--fw-bold);
+    letter-spacing: var(--tracking-label);
+    cursor: pointer;
+  }
+
+  .close:hover {
+    color: var(--text);
+  }
+
+  .filters {
+    display: flex;
+    gap: var(--space-2);
+    padding: var(--space-3) var(--space-4) 0;
+  }
+
+  .filters button {
+    height: var(--icon-button);
+    padding: 0 var(--space-3);
+    border: var(--border-width) solid var(--border);
+    border-radius: var(--radius-full);
+    background: transparent;
+    color: var(--muted);
+    font: inherit;
+    font-size: var(--fs-meta);
+    font-weight: var(--fw-bold);
+    cursor: pointer;
+    transition:
+      background-color var(--duration-fast) var(--ease),
+      color var(--duration-fast) var(--ease);
+  }
+
+  .filters button:hover {
+    color: var(--text);
+  }
+
+  .filters button[aria-pressed='true'] {
+    border-color: var(--accent);
+    background: var(--accent-soft);
+    color: var(--accent);
+  }
+
+  .status {
+    margin: 0;
+    padding: var(--space-3) var(--space-4);
+    color: var(--muted);
+    font-size: var(--fs-meta);
+    line-height: var(--lh-meta);
+  }
+
+  .results {
+    flex: 1;
+    margin: 0;
+    padding: 0 0 var(--space-2);
+    overflow-y: auto;
+    list-style: none;
+  }
+
+  .results :global(a) {
+    display: grid;
+    gap: var(--space-1);
+    padding: var(--space-3) var(--space-4);
+    border-top: var(--border-width) solid var(--border);
+    color: var(--text);
+    text-decoration: none;
+  }
+
+  .results :global(a:hover),
+  .results :global(a:focus-visible) {
+    background: var(--accent-soft);
+    outline: none;
+  }
+
+  .results :global(a:focus-visible) {
+    box-shadow: inset 3px 0 0 var(--accent);
+  }
+
+  .results :global(.meta) {
+    display: flex;
+    gap: var(--space-2);
+    color: var(--muted);
+    font-size: var(--fs-meta);
+    line-height: var(--lh-meta);
+  }
+
+  .results :global(.kind) {
+    font-weight: var(--fw-bold);
+  }
+
+  .results :global(.kind-essay) {
+    color: var(--essay);
+  }
+
+  .results :global(.kind-scribble),
+  .results :global(.kind-page) {
+    color: var(--accent);
+  }
+
+  .results :global(.title) {
+    font-size: var(--fs-body);
+    font-weight: var(--fw-bold);
+    line-height: var(--lh-body);
+  }
+
+  .results :global(.excerpt) {
+    color: var(--muted);
+    font-size: var(--fs-small);
+    line-height: var(--lh-small);
+  }
+
+  .results :global(mark) {
+    padding: 0 var(--space-1);
+    border-radius: var(--radius-sm);
+    background: var(--highlight);
+    color: var(--text);
+  }
+</style>
+
+<script>
+  type Data = { url: string; excerpt: string; meta: { title?: string; date?: string }; filters: { kind?: string[] } };
+  type Search = { results: { data: () => Promise<Data> }[] };
+  type Pagefind = { search: (q: string, o?: object) => Promise<Search>; options?: (o: object) => Promise<void> };
+
+  const dialog = document.querySelector<HTMLDialogElement>('#search-dialog');
+  const input = dialog?.querySelector<HTMLInputElement>('#search-input');
+  const list = dialog?.querySelector<HTMLOListElement>('.results');
+  const status = dialog?.querySelector<HTMLElement>('.status');
+  const filters = dialog?.querySelectorAll<HTMLButtonElement>('.filters button');
+
+  if (dialog && input && list && status && filters) {
+    const MAX = 10;
+    let pagefind: Pagefind | undefined;
+    let kind = '';
+    let timer: number | undefined;
+    let run = 0;
+
+    // Malayalam typed the older way (consonant + virama + ZWJ) becomes the single chillu letter the pages use.
+    const CHILLU: Record<string, string> = { ണ: 'ൺ', ന: 'ൻ', ര: 'ർ', ല: 'ൽ', ള: 'ൾ', ക: 'ൿ' };
+    const LEGACY_CHILLU = new RegExp('([ണനരലളക])\\u0D4D\\u200D', 'g');
+    // A word often ends in a virama (കാട്, എഴുത്ത്) that disappears when it takes an ending (കാടിന്റെ). Pagefind matches
+    // the start of a word, so a trailing virama is dropped from each search term.
+    const TRAILING_VIRAMA = new RegExp('\\u0D4D+$');
+    const normalise = (text: string) =>
+      text
+        .normalize('NFC')
+        .replace(LEGACY_CHILLU, (_, letter: string) => CHILLU[letter])
+        .split(/\s+/)
+        .map((word) => word.replace(TRAILING_VIRAMA, ''))
+        .join(' ')
+        .trim();
+
+    const date = (value?: string) =>
+      value
+        ? new Intl.DateTimeFormat('en-GB', { day: 'numeric', month: 'short', year: 'numeric', timeZone: 'UTC' }).format(
+            new Date(value),
+          )
+        : '';
+
+    async function load(): Promise<Pagefind | undefined> {
+      if (pagefind) return pagefind;
+      try {
+        const url = '/pagefind/pagefind.js'; // written by `pagefind` after the build
+        pagefind = (await import(/* @vite-ignore */ url)) as Pagefind;
+        await pagefind.options?.({ basePath: '/pagefind/' });
+      } catch {
+        pagefind = undefined;
+      }
+      return pagefind;
+    }
+
+    function span(className: string, text: string, lang?: string) {
+      const element = document.createElement('span');
+      element.className = className;
+      element.textContent = text;
+      if (lang) element.lang = lang;
+      return element;
+    }
+
+    function show(items: Data[]) {
+      list!.replaceChildren(
+        ...items.map((item) => {
+          const type = item.filters.kind?.[0] ?? 'Page';
+          const link = document.createElement('a');
+          link.href = item.url;
+          const meta = span('meta', '');
+          meta.append(span(`kind kind-${type.toLowerCase()}`, type));
+          if (item.meta.date) meta.append(span('', `· ${date(item.meta.date)}`));
+          const excerpt = span('excerpt', '', 'ml');
+          excerpt.innerHTML = item.excerpt; // Pagefind escapes the text and adds <mark> around the matches
+          link.append(meta, span('title', item.meta.title ?? item.url, 'ml'), excerpt);
+          const li = document.createElement('li');
+          li.append(link);
+          return li;
+        }),
+      );
+    }
+
+    async function search() {
+      const query = normalise(input!.value);
+      const mine = ++run;
+      if (!query) {
+        list!.replaceChildren();
+        status!.textContent = 'Type to search. Malayalam and English both work.';
+        return;
+      }
+      status!.textContent = 'Searching…';
+      const pf = await load();
+      if (!pf) {
+        list!.replaceChildren();
+        status!.textContent = 'Search works on the built site: run "npm run build", then "npm run preview".';
+        return;
+      }
+      const found = await pf.search(query, kind ? { filters: { kind } } : {});
+      const items = await Promise.all(found.results.slice(0, MAX).map((result) => result.data()));
+      if (mine !== run) return; // a newer search has started
+      show(items);
+      const total = found.results.length;
+      status!.textContent =
+        total === 0
+          ? `No results for “${query}”.`
+          : `${total} ${total === 1 ? 'result' : 'results'} for “${query}”${total > MAX ? `, showing the first ${MAX}` : ''}.`;
+    }
+
+    const open = () => {
+      if (!dialog.open) dialog.showModal();
+      input.select();
+      if (!input.value) void search();
+      void load(); // warm up, so the first search is quick
+    };
+
+    document.addEventListener('click', (event) => {
+      if ((event.target as Element).closest('[data-search-open]')) open();
+      else if (event.target === dialog) dialog.close(); // a click on the dimmed area
+    });
+
+    document.addEventListener('keydown', (event) => {
+      const typing = /^(INPUT|TEXTAREA|SELECT)$/.test((event.target as Element).tagName);
+      if ((event.key === 'k' && (event.ctrlKey || event.metaKey)) || (event.key === '/' && !typing && !dialog.open)) {
+        event.preventDefault();
+        open();
+      }
+    });
+
+    input.addEventListener('input', () => {
+      clearTimeout(timer);
+      timer = window.setTimeout(search, 120);
+    });
+
+    filters.forEach((button) =>
+      button.addEventListener('click', () => {
+        kind = button.dataset.kind ?? '';
+        filters.forEach((other) => other.setAttribute('aria-pressed', String(other === button)));
+        void search();
+      }),
+    );
+
+    dialog.addEventListener('keydown', (event) => {
+      // In a search field Escape would first clear the text; here one press closes the dialog.
+      if (event.key === 'Escape') {
+        event.preventDefault();
+        dialog.close();
+        return;
+      }
+      if (event.key !== 'ArrowDown' && event.key !== 'ArrowUp') return;
+      const links = [...list.querySelectorAll<HTMLAnchorElement>('a')];
+      if (links.length === 0) return;
+      const at = links.indexOf(document.activeElement as HTMLAnchorElement);
+      const next = event.key === 'ArrowDown' ? at + 1 : at - 1;
+      event.preventDefault();
+      if (next < 0) input.focus();
+      else links[Math.min(next, links.length - 1)].focus();
+    });
+  }
+</script>

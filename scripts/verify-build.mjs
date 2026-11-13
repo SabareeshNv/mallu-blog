@@ -126,6 +126,14 @@ for (const entry of internalLinks) {
   if (!exists) error(page, `broken internal link: ${target}`);
 }
 
+// ---- the search index (written by Pagefind after the build)
+if (!existsSync(join(DIST, 'pagefind', 'pagefind.js')))
+  error('pagefind', 'no search index: the build must run "pagefind --site dist"');
+else {
+  const indexed = files.filter((file) => file.endsWith('.pf_meta')).length;
+  if (indexed === 0) error('pagefind', 'the search index is empty');
+}
+
 // ---- sitemap, robots and feed
 const read = (name) => (existsSync(join(DIST, name)) ? readFileSync(join(DIST, name), 'utf8') : null);
 const robots = read('robots.txt');

@@ -10,7 +10,7 @@ import PostSection from '@/components/feed/PostSection.astro';
 import ScribbleEntry from '@/components/feed/ScribbleEntry.astro';
 import TopicLinks from '@/components/feed/TopicLinks.astro';
 import { excerpt, getRecentScribbles, type Post } from '@/lib/content';
-import { formatDate } from '@/lib/format';
+import { formatDate, isoDate } from '@/lib/format';
 
 interface Props {
   post: Post;
@@ -33,9 +33,17 @@ const more = await getRecentScribbles(post.id);
   article={{ section: 'scribble', publishedTime: post.data.date, tags: post.data.tags }}
 >
   <Container size="reading">
-    <h1 class="sr-only">Scribble from {date}</h1>
-    <ScribbleEntry post={post} variant="page" />
-    <TopicLinks post={post} />
+    <h1 class="sr-only" data-pagefind-ignore>
+      Scribble from {date}
+    </h1>
+    <div data-pagefind-body data-pagefind-meta={`title:${excerpt(post, 60)}`}>
+      <span hidden data-pagefind-filter="kind:Scribble" data-pagefind-meta={`date:${isoDate(post.data.date)}`}></span>
+      <ScribbleEntry post={post} variant="page" />
+      <TopicLinks post={post} />
+      <span hidden data-pagefind-weight="3">
+        {post.data.tags.join(' ')}
+      </span>
+    </div>
     <p class="context">
       <a class="button" href={streamUrl}>
         See it in the stream <span aria-hidden="true">→</span>

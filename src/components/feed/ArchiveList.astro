@@ -5,6 +5,7 @@
 import type { Page } from 'astro';
 import ArchiveYear from '@/components/feed/ArchiveYear.astro';
 import Container from '@/components/ui/Container.astro';
+import SearchBar from '@/components/search/SearchBar.astro';
 import PageHeader from '@/components/ui/PageHeader.astro';
 import Pagination from '@/components/feed/Pagination.astro';
 import { groupByYear, type Post } from '@/lib/content';
@@ -28,6 +29,7 @@ const intro = [
 
 <Container size="feed">
   <PageHeader title="Archive" intro={intro} />
+  <SearchBar />
   {groups.length === 0 && <p class="empty">Nothing has been published yet.</p>}
   {groups.map((group) => (
     <ArchiveYear group={group} />
