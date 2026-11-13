@@ -204,8 +204,7 @@ import SearchIcon from '@/components/icons/SearchIcon.astro';
     color: var(--essay);
   }
 
-  .results :global(.kind-scribble),
-  .results :global(.kind-page) {
+  .results :global(.kind-scribble) {
     color: var(--accent);
   }
 
@@ -292,7 +291,7 @@ import SearchIcon from '@/components/icons/SearchIcon.astro';
     function show(items: Data[]) {
       list!.replaceChildren(
         ...items.map((item) => {
-          const type = item.filters.kind?.[0] ?? 'Page';
+          const type = item.filters.kind?.[0] ?? '';
           const link = document.createElement('a');
           link.href = item.url;
           const meta = span('meta', '');

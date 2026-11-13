@@ -113,7 +113,7 @@ Removed on purpose: scribble hash script, footer wrap check, parallax. Before ad
 
 - `components/seo/Seo.astro` + `lib/seo/schema.ts`: title, description, canonical, OG/Twitter, JSON-LD (WebSite, Blog, BlogPosting, BreadcrumbList). 404 is `noindex`.
 - Sitemap (`@astrojs/sitemap`), RSS (`@astrojs/rss`), generated `robots.txt`.
-- Search: Pagefind, index built after `astro build`. Index markup via `data-pagefind-*` in layouts: filters and date meta go on the `data-pagefind-body` element. Three hidden spans remain (scribble date; summary and tags weights). The build runs `scripts/prune-pagefind.mjs` to delete Pagefind's unused UI files.
+- Search: Pagefind, index built after `astro build`. **Posts only** (essays and scribbles); About, Privacy and Content Policy are deliberately not indexed, so `PageLayout` has no `data-pagefind-body`. Index markup via `data-pagefind-*` in layouts: filters and date meta go on the `data-pagefind-body` element. Three hidden spans remain (scribble date; summary and tags weights). The build runs `scripts/prune-pagefind.mjs` to delete Pagefind's unused UI files.
 - `verify-build.mjs` enforces: titles, descriptions, canonical, og:image, single h1, valid JSON-LD, alt text, duplicate ids, placeholder text, broken internal links, sitemap/robots/RSS consistency, Pagefind index present. Extend it when a new rule matters.
 
 ## 9. Workflow and conventions
