@@ -54,204 +54,82 @@ const links = MAIN_NAV.map((item) => ({ ...item, active: isActiveNavItem(item, A
 </header>
 
 <style>
-  /* The header sits on the page itself: the page background, one hairline beneath, and nothing else. */
-  .site-header {
-    --bar-h: var(--space-16);
-    position: sticky;
-    top: 0;
-    z-index: 50;
-    background: var(--bg);
-    box-shadow: 0 var(--border-width) 0 var(--border);
-    transition: background-color var(--duration) var(--ease);
-  }
+  /* Mobile first, in two cascade layers: `header-small` styles the phone header and everything shared; `header-wide`
+     (from 48rem) puts the regular layout back. Layers decide the winner, so the wide rules need no extra specificity.
+     This statement fixes the layer order (the reset in base.css is `base`, and must stay the weakest), whichever
+     stylesheet the browser meets first. */
+  @layer base, header-small, header-wide;
 
-  .inner {
-    display: grid;
-    grid-template-columns: auto 1fr auto;
-    grid-template-areas: 'brand nav switcher';
-    align-items: center;
-    column-gap: var(--space-6);
-    min-height: var(--bar-h);
-    padding-inline: var(--gutter);
-  }
-
-  /* justify-self keeps the link as wide as the logo and name; the free space beside it is not clickable. */
-  .brand {
-    grid-area: brand;
-    justify-self: start;
-    display: inline-flex;
-    align-items: center;
-    min-height: var(--space-12);
-    gap: var(--space-3);
-    color: var(--text);
-    font-size: var(--fs-lead);
-    font-weight: var(--fw-heavy);
-    line-height: var(--lh-lead);
-    letter-spacing: -0.01em;
-    text-decoration: none;
-  }
-
-  nav {
-    grid-area: nav;
-    justify-self: end;
-    align-self: stretch;
-  }
-
-  .theme {
-    grid-area: switcher;
-    display: flex;
-    align-items: center;
-  }
-
-  .theme-phone {
-    display: none;
-  }
-
-  ul {
-    display: flex;
-    height: 100%;
-    margin: 0;
-    padding: 0;
-    list-style: none;
-  }
-
-  /* Plain text links. The current page is marked with a bar that sits on the header's bottom line.
-     Hovering or focusing any other link turns it teal and brings up a small dot beneath the label. */
-  nav a {
-    position: relative;
-    display: flex;
-    align-items: center;
-    height: 100%;
-    padding-inline: var(--space-4);
-    color: var(--muted);
-    font-size: var(--fs-small);
-    line-height: var(--lh-small);
-    text-decoration: none;
-    transition: color var(--duration-fast) var(--ease);
-  }
-
-  nav a::before {
-    content: '';
-    position: absolute;
-    inset-inline-start: 50%;
-    bottom: var(--space-3);
-    width: var(--space-1);
-    height: var(--space-1);
-    margin-inline-start: calc(-0.5 * var(--space-1));
-    border-radius: var(--radius-full);
-    background: var(--accent);
-    transform: scale(0);
-    transition: transform var(--duration-fast) var(--ease);
-  }
-
-  nav a::after {
-    content: '';
-    position: absolute;
-    inset-inline: var(--space-4);
-    bottom: calc(-1 * var(--border-width));
-    height: 2px;
-    background: var(--accent);
-    transform: scaleX(0);
-    transform-origin: left;
-    transition: transform var(--duration) var(--ease);
-  }
-
-  nav a:hover,
-  nav a:focus-visible {
-    color: var(--accent);
-  }
-
-  nav a:hover::before,
-  nav a:focus-visible::before {
-    transform: scale(1);
-  }
-
-  nav a[aria-current='page'] {
-    color: var(--text);
-    font-weight: var(--fw-bold);
-  }
-
-  nav a[aria-current='page']::before {
-    transform: scale(0);
-  }
-
-  nav a[aria-current='page']::after {
-    transform: scaleX(1);
-  }
-
-  nav a:focus-visible {
-    outline-offset: calc(-1 * var(--space-2));
-  }
-
-  /* The menu button only exists on phones, and only when JavaScript can open it. */
-  .toggle {
-    display: none;
-  }
-
-  /* ---------- Phones ---------- */
-  /* Six links need a little less space each on mid-size screens. */
-  @media (max-width: 64rem) {
-    nav a {
-      padding-inline: var(--space-3);
-    }
-
-    nav a::after {
-      inset-inline: var(--space-3);
-    }
-  }
-
-  @media (max-width: 48rem) {
-    .theme-desktop {
-      display: none;
-    }
-
-    .theme-phone {
-      display: flex;
-    }
-
-    /* Without JavaScript the menu cannot open, so the links stay visible on a row of their own. */
-    :global(html:not([data-js])) .site-header {
+  @layer header-small {
+    /* The header sits on the page itself: the page background, one hairline beneath, and nothing else.
+       Without JavaScript it scrolls away (two rows); with it, it stays at the top. */
+    .site-header {
+      --bar-h: var(--space-16);
       position: relative;
+      top: 0;
+      z-index: 50;
+      background: var(--bg);
+      box-shadow: 0 var(--border-width) 0 var(--border);
+      transition: background-color var(--duration) var(--ease);
     }
 
-    :global(html:not([data-js])) .inner {
+    :global(html[data-js]) .site-header {
+      position: sticky;
+    }
+
+    /* Phones, no JavaScript: the logo and theme switch, then the links on a row of their own.
+       With JavaScript (below): logo, theme switch and menu button on one row; the links drop down. */
+    .inner {
+      display: grid;
       grid-template-columns: 1fr auto;
       grid-template-areas:
         'brand switcher'
         'nav nav';
-      row-gap: 0;
+      align-items: center;
+      column-gap: var(--space-6);
+      min-height: var(--bar-h);
+      padding-inline: var(--gutter);
     }
 
-    :global(html:not([data-js])) .brand {
-      height: var(--space-16);
-    }
-
-    :global(html:not([data-js])) nav {
-      justify-self: stretch;
-      height: var(--space-12);
-      margin-inline: calc(-1 * var(--space-4));
-      border-top: var(--border-width) solid var(--border);
-      padding-inline: var(--space-1);
-    }
-
-    :global(html:not([data-js])) ul {
-      justify-content: space-between;
-      gap: var(--space-2);
-    }
-
-    :global(html:not([data-js])) nav a {
-      padding-inline: var(--space-3);
-    }
-
-    :global(html:not([data-js])) nav a::after {
-      inset-inline: var(--space-3);
-    }
-
-    /* With JavaScript: one row (logo, theme switch, menu button) and a list that drops down beneath it. */
     :global(html[data-js]) .inner {
       grid-template-columns: 1fr auto auto;
       grid-template-areas: 'brand switcher toggle';
       column-gap: var(--space-3);
+    }
+
+    /* justify-self keeps the link as wide as the logo and name; the free space beside it is not clickable. */
+    .brand {
+      grid-area: brand;
+      justify-self: start;
+      display: inline-flex;
+      align-items: center;
+      height: var(--space-16);
+      gap: var(--space-3);
+      color: var(--text);
+      font-size: var(--fs-lead);
+      font-weight: var(--fw-heavy);
+      line-height: var(--lh-lead);
+      letter-spacing: var(--tracking-tight);
+      text-decoration: none;
+    }
+
+    :global(html[data-js]) .brand {
+      height: auto;
+      min-height: var(--space-12);
+    }
+
+    .theme {
+      grid-area: switcher;
+      display: flex;
+      align-items: center;
+    }
+
+    .theme-desktop {
+      display: none;
+    }
+
+    .toggle {
+      display: none;
     }
 
     :global(html[data-js]) .toggle {
@@ -291,15 +169,104 @@ const links = MAIN_NAV.map((item) => ({ ...item, active: isActiveNavItem(item, A
       display: grid;
     }
 
+    /* Without JavaScript the menu cannot open, so the links stay visible on their own row. */
+    nav {
+      grid-area: nav;
+      justify-self: stretch;
+      height: var(--space-12);
+      margin-inline: calc(-1 * var(--space-4));
+      padding-inline: var(--space-1);
+      border-top: var(--border-width) solid var(--border);
+    }
+
+    ul {
+      display: flex;
+      justify-content: space-between;
+      gap: var(--space-2);
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    /* Plain text links. The current page is marked with a bar that sits on the header's bottom line.
+       Hovering or focusing any other link turns it teal and brings up a small dot beneath the label. */
+    nav a {
+      position: relative;
+      display: flex;
+      align-items: center;
+      height: 100%;
+      padding-inline: var(--space-3);
+      color: var(--muted);
+      font-size: var(--fs-small);
+      line-height: var(--lh-small);
+      text-decoration: none;
+      transition: color var(--duration-fast) var(--ease);
+    }
+
+    nav a::before {
+      content: '';
+      position: absolute;
+      inset-inline-start: 50%;
+      bottom: var(--space-3);
+      width: var(--space-1);
+      height: var(--space-1);
+      margin-inline-start: calc(-0.5 * var(--space-1));
+      border-radius: var(--radius-full);
+      background: var(--accent);
+      transform: scale(0);
+      transition: transform var(--duration-fast) var(--ease);
+    }
+
+    nav a::after {
+      content: '';
+      position: absolute;
+      inset-inline: var(--space-3);
+      bottom: calc(-1 * var(--border-width));
+      height: var(--border-thick);
+      background: var(--accent);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform var(--duration) var(--ease);
+    }
+
+    nav a:hover,
+    nav a:focus-visible {
+      color: var(--accent);
+    }
+
+    nav a:hover::before,
+    nav a:focus-visible::before {
+      transform: scale(1);
+    }
+
+    nav a[aria-current='page'] {
+      color: var(--text);
+      font-weight: var(--fw-bold);
+    }
+
+    nav a[aria-current='page']::before {
+      transform: scale(0);
+    }
+
+    nav a[aria-current='page']::after {
+      transform: scaleX(1);
+    }
+
+    nav a:focus-visible {
+      outline-offset: calc(-1 * var(--space-2));
+    }
+
+    /* With JavaScript: the links drop down beneath the header. */
     :global(html[data-js]) nav {
       position: absolute;
       inset: 100% 0 auto;
-      justify-self: stretch;
-      align-self: auto;
       height: auto;
-      padding-block: var(--space-2);
-      background: var(--bg);
+      margin-inline: 0;
+      padding: var(--space-2) 0;
+      border-top: 0;
       border-bottom: var(--border-width) solid var(--border);
+      background: var(--bg);
       box-shadow: var(--shadow-md);
       visibility: hidden;
       opacity: 0;
@@ -319,6 +286,7 @@ const links = MAIN_NAV.map((item) => ({ ...item, active: isActiveNavItem(item, A
 
     :global(html[data-js]) ul {
       flex-direction: column;
+      gap: 0;
       height: auto;
     }
 
@@ -332,9 +300,6 @@ const links = MAIN_NAV.map((item) => ({ ...item, active: isActiveNavItem(item, A
       padding-inline: var(--gutter);
       font-size: var(--fs-body);
       line-height: var(--lh-body);
-    }
-
-    :global(html[data-js]) nav a {
       transition:
         background-color var(--duration-fast) var(--ease),
         color var(--duration-fast) var(--ease);
@@ -346,7 +311,7 @@ const links = MAIN_NAV.map((item) => ({ ...item, active: isActiveNavItem(item, A
 
     :global(html[data-js]) nav a::after {
       inset: var(--space-2) auto var(--space-2) 0;
-      width: 3px;
+      width: var(--focus-width);
       height: auto;
       transform: none;
       opacity: 0;
@@ -366,6 +331,119 @@ const links = MAIN_NAV.map((item) => ({ ...item, active: isActiveNavItem(item, A
 
     :global(html[data-js]) nav a:focus-visible {
       outline-offset: calc(-1 * var(--space-1));
+    }
+  }
+
+  /* ---------- 48rem and up: logo, links, theme switch on one row ---------- */
+  @layer header-wide {
+    @media (min-width: 48rem) {
+      .site-header {
+        position: sticky;
+      }
+
+      .inner {
+        grid-template-columns: auto 1fr auto;
+        grid-template-areas: 'brand nav switcher';
+        column-gap: var(--space-6);
+      }
+
+      .brand {
+        height: auto;
+        min-height: var(--space-12);
+      }
+
+      .theme-phone {
+        display: none;
+      }
+
+      .theme-desktop {
+        display: flex;
+      }
+
+      .toggle {
+        display: none;
+      }
+
+      nav {
+        position: static;
+        inset: auto;
+        justify-self: end;
+        align-self: stretch;
+        height: auto;
+        margin-inline: 0;
+        padding: 0;
+        border: 0;
+        background: none;
+        box-shadow: none;
+        visibility: visible;
+        opacity: 1;
+        transform: none;
+        transition: none;
+      }
+
+      ul {
+        flex-direction: row;
+        justify-content: flex-start;
+        gap: 0;
+        height: 100%;
+      }
+
+      li + li {
+        border-top: 0;
+      }
+
+      nav a {
+        height: 100%;
+        padding-inline: var(--space-3);
+        font-size: var(--fs-small);
+        line-height: var(--lh-small);
+        transition: color var(--duration-fast) var(--ease);
+      }
+
+      nav a::before {
+        display: block;
+      }
+
+      nav a::after {
+        inset: auto;
+        inset-inline: var(--space-3);
+        bottom: calc(-1 * var(--border-width));
+        width: auto;
+        height: var(--border-thick);
+        transform: scaleX(0);
+        opacity: 1;
+      }
+
+      nav a[aria-current='page']::after {
+        transform: scaleX(1);
+      }
+
+      nav a:hover,
+      nav a:focus-visible,
+      nav a:active {
+        background: none;
+        color: var(--accent);
+      }
+
+      nav a[aria-current='page'],
+      nav a[aria-current='page']:hover {
+        color: var(--text);
+      }
+
+      nav a:focus-visible {
+        outline-offset: calc(-1 * var(--space-2));
+      }
+    }
+
+    /* Roomier links once there is space for them. */
+    @media (min-width: 64rem) {
+      nav a {
+        padding-inline: var(--space-4);
+      }
+
+      nav a::after {
+        inset-inline: var(--space-4);
+      }
     }
   }
 </style>
@@ -401,7 +479,7 @@ const links = MAIN_NAV.map((item) => ({ ...item, active: isActiveNavItem(item, A
     });
 
     // Growing past the phone breakpoint shows the regular navigation, so reset the menu.
-    matchMedia('(min-width: 48.0625rem)').addEventListener('change', (event) => {
+    matchMedia('(min-width: 48rem)').addEventListener('change', (event) => {
       if (event.matches) setOpen(false);
     });
   }

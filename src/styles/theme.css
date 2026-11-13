@@ -29,6 +29,8 @@
   --rail: light-dark(#cfe3df, #22403f);
   --highlight: light-dark(#fff0bf, #3a3418);
   --focus: light-dark(#1d4ed8, #93c5fd);
+  --focus-on-ink: #93c5fd; /* the footer is dark in both themes */
+  --scrim: rgb(8 14 20 / 0.6); /* behind the search dialog */
 
   /* Deep surfaces: the footer and the fade over photographs */
   --ink: light-dark(#15212c, #081115);
@@ -44,7 +46,6 @@
   --logo-wave: #b47c45;
 
   /* Elevation */
-  --shadow-sm: 0 1px 2px light-dark(rgb(21 33 44 / 0.08), rgb(0 0 0 / 0.4));
   --shadow-md:
     0 2px 4px light-dark(rgb(21 33 44 / 0.05), rgb(0 0 0 / 0.3)),
     0 12px 24px -8px light-dark(rgb(10 60 66 / 0.2), rgb(0 0 0 / 0.6));

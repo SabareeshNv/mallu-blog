@@ -31,7 +31,7 @@ const { topics } = Astro.props;
     margin: 0;
     padding: 0;
     list-style: none;
-    border-top: 2px solid var(--accent);
+    border-top: var(--border-thick) solid var(--accent);
   }
 
   a {
@@ -60,6 +60,6 @@ const { topics } = Astro.props;
   a:hover .name {
     color: var(--accent);
     text-decoration: underline;
-    text-underline-offset: 0.25em;
+    text-underline-offset: var(--underline-offset);
   }
 </style>

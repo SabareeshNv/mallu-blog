@@ -3,10 +3,12 @@
  * Components use these tokens and nothing else; no raw pixel, rem or hex values belong in a component.
  * Colours live in theme.css.
  *
- * Breakpoints (CSS cannot use variables inside media queries, so these are the only values to use):
- *   max-width: 48rem   small screens: the header collapses into a menu (six links do not fit beside the logo)
- *   max-width: 40rem   phones: the footer wraps, grids and columns stack
- *   min-width: 48rem   tablets and up: larger type and side margins (see below)
+ * Mobile first: base styles are for the smallest screen and `min-width` queries add to them. CSS cannot use
+ * variables inside media queries, so these are the only breakpoints in use:
+ *   min-width: 30rem   footer: links and copyright share a row
+ *   min-width: 40rem   large phones: grids and columns open out
+ *   min-width: 48rem   tablets and up: the header shows its links; larger type and side margins
+ *   min-width: 64rem   laptops: the home page gains its side column; roomier header links
  *   min-width: 80rem   wide screens: widest side margins
  */
 
@@ -35,7 +37,7 @@
      masthead column is a little wider than the text column below it. */
   --measure-reading: 75ch;
   --measure-masthead: 90ch;
-  --header-h: var(--space-16);
+  --header-h: 0rem; /* without JavaScript the phone header scrolls away (two rows), so scroll targets need no offset */
   --control-h: var(--space-10); /* buttons, nav links, theme switcher */
   --icon-button: var(--space-8);
 
@@ -71,6 +73,14 @@
   --radius-lg: 12px; /* cards and panels */
   --radius-full: 999px; /* buttons, pills, icon buttons */
   --border-width: 1px;
+  --border-thick: 2px; /* underlines, rules and node rings */
+  --focus-width: 3px;
+  --focus-offset: 2px;
+  --underline-offset: 0.25em;
+  --tracking-tight: -0.02em; /* large headings */
+  --ratio-banner: 2 / 1; /* essay cover, wide screens */
+  --ratio-photo: 3 / 2;
+  --ratio-compact: 4 / 3; /* essay cover, phones */
 
   /* ---- Motion ---- */
   --ease: cubic-bezier(0.2, 0, 0, 1);
@@ -78,14 +88,17 @@
   --duration: 250ms;
 }
 
-/* Without JavaScript the phone header scrolls away (two rows), so scroll targets need no offset for it. */
-@media (max-width: 48rem) {
-  :root:not([data-js]) {
-    --header-h: 0rem;
-  }
+/* With JavaScript, or from 48rem, the header is a sticky bar. */
+:root[data-js] {
+  --header-h: var(--space-16);
 }
 
 @media (min-width: 48rem) {
+  :root[data-js],
+  :root:not([data-js]) {
+    --header-h: var(--space-16);
+  }
+
   :root {
     --gutter: var(--space-6);
     --fs-display: 3.25rem;

@@ -68,7 +68,7 @@ const longDate = formatDate(date);
   }
 
   .scribble:focus-visible {
-    outline: 3px solid var(--focus);
+    outline: var(--focus-width) solid var(--focus);
     outline-offset: var(--space-2);
   }
 
@@ -94,20 +94,18 @@ const longDate = formatDate(date);
 
   /* A scribble's photograph is a small snapshot beside the words, not a banner. */
   .cover {
-    float: inline-end;
-    width: 40%;
-    aspect-ratio: 3 / 2;
-    margin: var(--space-1) 0 var(--space-2) var(--space-6);
+    width: 100%;
+    aspect-ratio: var(--ratio-photo);
+    margin: 0 0 var(--space-4);
     background: var(--surface-strong);
     object-fit: cover;
   }
 
-  @media (max-width: 40rem) {
+  @media (min-width: 40rem) {
     .cover {
-      float: none;
-      width: 100%;
-      aspect-ratio: 3 / 2;
-      margin: 0 0 var(--space-4);
+      float: inline-end;
+      width: 40%;
+      margin: var(--space-1) 0 var(--space-2) var(--space-6);
     }
   }
 

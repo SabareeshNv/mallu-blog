@@ -77,17 +77,17 @@
 
   a {
     color: var(--accent);
-    text-decoration-thickness: 1px;
-    text-underline-offset: 0.2em;
+    text-decoration-thickness: var(--border-width);
+    text-underline-offset: var(--underline-offset);
   }
 
   a:hover {
-    text-decoration-thickness: 2px;
+    text-decoration-thickness: var(--border-thick);
   }
 
   :focus-visible {
-    outline: 3px solid var(--focus);
-    outline-offset: 2px;
+    outline: var(--focus-width) solid var(--focus);
+    outline-offset: var(--focus-offset);
     border-radius: var(--radius-sm);
   }
 

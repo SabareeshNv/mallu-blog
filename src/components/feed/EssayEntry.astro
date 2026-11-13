@@ -62,8 +62,8 @@ const minutes = readingMinutes(post);
     color: var(--text);
     text-decoration: underline;
     text-decoration-color: color-mix(in srgb, var(--essay) 45%, transparent);
-    text-decoration-thickness: 2px;
-    text-underline-offset: 0.3em;
+    text-decoration-thickness: var(--border-thick);
+    text-underline-offset: var(--underline-offset);
     text-decoration-skip-ink: none;
     transition: text-decoration-color var(--duration-fast) var(--ease);
   }
@@ -84,7 +84,7 @@ const minutes = readingMinutes(post);
   }
 
   .essay:has(.title a:focus-visible) {
-    outline: 3px solid var(--focus);
+    outline: var(--focus-width) solid var(--focus);
     outline-offset: var(--space-2);
   }
 
@@ -119,7 +119,7 @@ const minutes = readingMinutes(post);
     isolation: isolate;
     display: grid;
     align-items: end;
-    aspect-ratio: 2 / 1;
+    aspect-ratio: var(--ratio-compact);
     margin-bottom: var(--space-4);
     overflow: hidden;
     background: var(--surface-strong);
@@ -148,7 +148,7 @@ const minutes = readingMinutes(post);
   }
 
   .has-cover .title {
-    padding: var(--space-16) var(--space-6) var(--space-5);
+    padding: var(--space-12) var(--space-4) var(--space-4);
     text-shadow: var(--text-shadow-image);
   }
 
@@ -165,17 +165,9 @@ const minutes = readingMinutes(post);
   }
 
   /* ---------- Grid: compact entries, two across, on the Essays page ---------- */
-  .grid .cover {
-    aspect-ratio: 3 / 2;
-  }
-
   .grid .title {
     font-size: var(--fs-h3);
     line-height: var(--lh-h3);
-  }
-
-  .grid.has-cover .title {
-    padding: var(--space-12) var(--space-4) var(--space-4);
   }
 
   .grid .summary {
@@ -186,13 +178,20 @@ const minutes = readingMinutes(post);
     line-height: var(--lh-small);
   }
 
-  @media (max-width: 40rem) {
-    .cover,
-    .grid .cover {
-      aspect-ratio: 4 / 3;
+  /* Wider screens: a flatter picture and a more generous title block. */
+  @media (min-width: 40rem) {
+    .cover {
+      aspect-ratio: var(--ratio-banner);
     }
 
-    .has-cover .title,
+    .grid .cover {
+      aspect-ratio: var(--ratio-photo);
+    }
+
+    .has-cover .title {
+      padding: var(--space-16) var(--space-6) var(--space-5);
+    }
+
     .grid.has-cover .title {
       padding: var(--space-12) var(--space-4) var(--space-4);
     }

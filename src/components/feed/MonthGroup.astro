@@ -24,7 +24,7 @@ const monthName = formatMonthName(group.posts[0].data.date);
     {group.posts.map((post) => {
       const essay = isEssay(post);
       return (
-        <li class:list={['item', essay ? 'is-essay' : 'is-scribble']}>
+        <li class:list={['item', essay ? 'is-essay' : 'is-scribble', { 'has-cover': post.data.cover }]}>
           <span class="node" aria-hidden="true">
             {essay ? <EssayIcon size={16} /> : <ScribbleIcon size={16} />}
           </span>
@@ -48,7 +48,7 @@ const monthName = formatMonthName(group.posts[0].data.date);
     font-size: var(--fs-h2);
     font-weight: var(--fw-heavy);
     line-height: var(--lh-h2);
-    letter-spacing: -0.02em;
+    letter-spacing: var(--tracking-tight);
   }
 
   .year {
@@ -65,7 +65,7 @@ const monthName = formatMonthName(group.posts[0].data.date);
   /* A quiet vertical rail links the month's entries. Node: 32px; offset: 48px (40px on phones). */
   .timeline {
     --node: var(--space-8);
-    --offset: var(--space-12);
+    --offset: var(--space-10);
     position: relative;
     display: grid;
     gap: var(--space-12);
@@ -79,8 +79,8 @@ const monthName = formatMonthName(group.posts[0].data.date);
     position: absolute;
     top: var(--space-4);
     bottom: var(--space-4);
-    left: calc(var(--node) / 2 - 1px);
-    width: 2px;
+    left: calc(var(--node) / 2 - var(--border-width));
+    width: var(--border-thick);
     background: var(--rail);
   }
 
@@ -97,7 +97,7 @@ const monthName = formatMonthName(group.posts[0].data.date);
     place-items: center;
     width: var(--node);
     height: var(--node);
-    border: 2px solid currentColor;
+    border: var(--border-thick) solid currentColor;
     border-radius: var(--radius-full);
     background: var(--bg);
   }
@@ -112,14 +112,14 @@ const monthName = formatMonthName(group.posts[0].data.date);
     background: var(--essay-soft);
   }
 
+  /* An essay without a photograph starts with a headline taller than a line of text, so its node drops to meet it. */
+  .is-essay:not(.has-cover) .node {
+    top: var(--space-2);
+  }
+
   .is-scribble .node {
     color: var(--accent);
     background: var(--accent-soft);
-  }
-
-  /* An essay's headline is taller than a line of text, so its node drops to meet the first line. */
-  .is-essay:not(:has(.has-cover)) .node {
-    top: var(--space-2);
   }
 
   /* The scribble reached through a permalink is marked on the timeline too. */
@@ -127,9 +127,9 @@ const monthName = formatMonthName(group.posts[0].data.date);
     box-shadow: 0 0 0 var(--space-1) var(--highlight);
   }
 
-  @media (max-width: 40rem) {
+  @media (min-width: 40rem) {
     .timeline {
-      --offset: var(--space-10);
+      --offset: var(--space-12);
     }
   }
 </style>

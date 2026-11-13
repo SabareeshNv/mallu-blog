@@ -19,7 +19,7 @@ const { current, last, prevUrl, nextUrl, prevLabel = 'Newer', nextLabel = 'Older
         <span aria-hidden="true">←</span> {prevLabel}
       </a>
     ) : (
-      <span class="spacer" />
+      <span />
     )}
     <span class="status" aria-current="page">
       Page {current} of {last}
@@ -29,7 +29,7 @@ const { current, last, prevUrl, nextUrl, prevLabel = 'Newer', nextLabel = 'Older
         {nextLabel} <span aria-hidden="true">→</span>
       </a>
     ) : (
-      <span class="spacer" />
+      <span />
     )}
   </nav>
 )}

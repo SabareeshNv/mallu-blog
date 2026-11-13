@@ -79,7 +79,7 @@ const { size = 'regular', lang = SITE.postLang } = Astro.props;
 
   .prose :global(blockquote) {
     padding-inline-start: var(--space-5);
-    border-inline-start: 2px solid var(--accent);
+    border-inline-start: var(--border-thick) solid var(--accent);
     color: var(--muted);
   }
 
@@ -91,7 +91,7 @@ const { size = 'regular', lang = SITE.postLang } = Astro.props;
     width: var(--space-16);
     margin: var(--space-12) auto;
     border: 0;
-    border-top: 2px solid var(--border);
+    border-top: var(--border-thick) solid var(--border);
   }
 
   .prose :global(code) {

@@ -27,7 +27,7 @@ const path = Astro.url.pathname;
 
 <style>
   .site-footer {
-    --focus: #93c5fd;
+    --focus: var(--focus-on-ink);
     margin-top: var(--space-24);
     background: var(--ink);
     color: var(--on-ink-muted);
@@ -60,7 +60,7 @@ const path = Astro.url.pathname;
   .links a:hover,
   .links a[aria-current='page'] {
     text-decoration: underline;
-    text-underline-offset: 0.25em;
+    text-underline-offset: var(--underline-offset);
   }
 
   .copy {
