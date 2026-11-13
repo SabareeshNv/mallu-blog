@@ -116,7 +116,7 @@ const links = MAIN_NAV.map((item) => ({ ...item, active: isActiveNavItem(item, A
   }
 
   /* Plain text links. The current page is marked with a bar that sits on the header's bottom line.
-     Hovering or focusing any other link turns it to the accent colour and brings up a small dot beneath the label. */
+     Hovering or focusing any other link turns it teal and brings up a small dot beneath the label. */
   nav a {
     position: relative;
     display: flex;
@@ -345,7 +345,7 @@ const links = MAIN_NAV.map((item) => ({ ...item, active: isActiveNavItem(item, A
       opacity: 1;
     }
 
-    /* Hover, keyboard focus and the moment of a touch: a soft tint and an accent-coloured label. */
+    /* Hover, keyboard focus and the moment of a touch: a soft tint and a teal label. */
     :global(html[data-js]) nav a:hover,
     :global(html[data-js]) nav a:focus-visible,
     :global(html[data-js]) nav a:active {
