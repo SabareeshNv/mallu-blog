@@ -1,12 +1,23 @@
 ---
 /**
- * A search field shown above the posts on small screens, where the header has no room for a search button.
- * It looks like a field but opens the search dialog. Hidden on larger screens and when JavaScript is off.
+ * A search field shown above the posts. It looks like a field but opens the search dialog.
+ * On the home page, `hideBesideRail` hides it from 1024px up, where the side column has the search instead.
+ * Hidden when JavaScript is off.
  */
 import SearchIcon from '@/components/icons/SearchIcon.astro';
+interface Props {
+  hideBesideRail?: boolean;
+}
+
+const { hideBesideRail = false } = Astro.props;
 ---
 
-<button type="button" class="searchbar" data-search-open aria-keyshortcuts="Control+K Meta+K">
+<button
+  type="button"
+  class:list={['searchbar', { 'beside-rail': hideBesideRail }]}
+  data-search-open
+  aria-keyshortcuts="Control+K Meta+K"
+>
   <SearchIcon />
   <span>Search essays and scribbles</span>
 </button>
@@ -42,9 +53,8 @@ import SearchIcon from '@/components/icons/SearchIcon.astro';
     display: flex;
   }
 
-  /* From tablet width up the header has a search button, and on the home page the side column has one too. */
-  @media (min-width: 48.0625rem) {
-    :global(html[data-js]) .searchbar {
+  @media (min-width: 64rem) {
+    :global(html[data-js]) .searchbar.beside-rail {
       display: none;
     }
   }

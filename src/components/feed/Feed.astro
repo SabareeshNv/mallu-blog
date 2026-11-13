@@ -30,7 +30,7 @@ const lead = [intro, pageNote].filter(Boolean).join(' ');
 
 <Container size={flush ? 'flush' : 'feed'}>
   {title ? <PageHeader title={title} intro={lead} lang={titleLang} /> : <h2 class="sr-only">Latest entries</h2>}
-  <SearchBar />
+  <SearchBar hideBesideRail={flush} />
   <slot name="before" />
 
   {groups.length === 0 && emptyText && <p class="empty">{emptyText}</p>}

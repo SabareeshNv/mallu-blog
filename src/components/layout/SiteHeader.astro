@@ -2,7 +2,6 @@
 import ThemeSwitcher from '@/components/layout/ThemeSwitcher.astro';
 import LogoMark from '@/components/icons/LogoMark.astro';
 import MenuIcon from '@/components/icons/MenuIcon.astro';
-import SearchIcon from '@/components/icons/SearchIcon.astro';
 import CloseIcon from '@/components/icons/CloseIcon.astro';
 import { SITE } from '@/config/site';
 import { ROUTES } from '@/config/routes';
@@ -48,10 +47,6 @@ const links = MAIN_NAV.map((item) => ({ ...item, active: isActiveNavItem(item, A
         ))}
       </ul>
     </nav>
-    <button type="button" class="search-open" data-search-open aria-label="Search" aria-keyshortcuts="Control+K Meta+K">
-      <SearchIcon />
-      <span class="search-label">Search</span>
-    </button>
     <div class="theme theme-desktop">
       <ThemeSwitcher />
     </div>
@@ -72,8 +67,8 @@ const links = MAIN_NAV.map((item) => ({ ...item, active: isActiveNavItem(item, A
 
   .inner {
     display: grid;
-    grid-template-columns: auto 1fr auto auto;
-    grid-template-areas: 'brand nav search switcher';
+    grid-template-columns: auto 1fr auto;
+    grid-template-areas: 'brand nav switcher';
     align-items: center;
     column-gap: var(--space-6);
     min-height: var(--bar-h);
@@ -94,49 +89,6 @@ const links = MAIN_NAV.map((item) => ({ ...item, active: isActiveNavItem(item, A
     line-height: var(--lh-lead);
     letter-spacing: -0.01em;
     text-decoration: none;
-  }
-
-  .search-open {
-    grid-area: search;
-    display: inline-flex;
-    align-items: center;
-    gap: var(--space-2);
-    height: var(--control-h);
-    margin-inline: var(--space-2);
-    padding: 0 var(--space-3);
-    border: var(--border-width) solid var(--border);
-    border-radius: var(--radius-full);
-    background: transparent;
-    color: var(--muted);
-    font: inherit;
-    font-size: var(--fs-small);
-    cursor: pointer;
-    transition:
-      background-color var(--duration-fast) var(--ease),
-      color var(--duration-fast) var(--ease);
-  }
-
-  .search-open:hover {
-    background: var(--accent-soft);
-    color: var(--accent);
-  }
-
-  /* Search needs JavaScript, and on small screens it moves above the posts (the header has no room). */
-  :global(html:not([data-js])) .search-open {
-    display: none;
-  }
-
-  /* The word "Search" only where there is room; on mid-size screens just the icon. */
-  @media (max-width: 64rem) {
-    .search-label {
-      display: none;
-    }
-
-    .search-open {
-      width: var(--control-h);
-      justify-content: center;
-      padding: 0;
-    }
   }
 
   nav {
@@ -249,10 +201,6 @@ const links = MAIN_NAV.map((item) => ({ ...item, active: isActiveNavItem(item, A
   }
 
   @media (max-width: 48rem) {
-    .search-open {
-      display: none !important;
-    }
-
     .theme-desktop {
       display: none;
     }

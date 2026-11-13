@@ -47,8 +47,8 @@ Put cover images in `src/assets/images/`. Astro optimises them into responsive W
 
 ## Search
 
-Search is [Pagefind](https://pagefind.app): a header button (tablet and up), a box in the home page's side column,
-and a search bar above the posts on phones. Ctrl/⌘+K or `/` opens it anywhere. It finds Malayalam and English, can be
+Search is [Pagefind](https://pagefind.app): a box in the home page's side column on large screens, and a search bar
+above the posts everywhere else (tablets, phones, and the Essays, Scribbles, Archive and Topics pages). The header has no search button. Ctrl/⌘+K or `/` opens it anywhere. It finds Malayalam and English, can be
 filtered to essays or scribbles, and loads only when someone searches. The index is built by `npm run build`, so search
 works on the built site (`npm run build`, then `npm run preview`), not under `npm run dev`.
 

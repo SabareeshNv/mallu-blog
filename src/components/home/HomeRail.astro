@@ -1,7 +1,7 @@
 ---
 /**
  * The home page's side column: search, a short About, topics with their counts, and the RSS feed.
- * Beside the writing on wide screens (and sticky while scrolling); below it on narrower ones.
+ * Beside the writing on wide screens; below it on narrower ones.
  */
 import RssIcon from '@/components/icons/RssIcon.astro';
 import SearchIcon from '@/components/icons/SearchIcon.astro';
@@ -64,20 +64,15 @@ const topics = await getTopics();
     line-height: var(--lh-small);
   }
 
-  /* Beside the writing: sticky, and no taller than the window. */
+  /* Beside the writing it scrolls with the page, level with the top of the posts. */
   @media (min-width: 64rem) {
     .rail {
-      position: sticky;
-      top: calc(var(--header-h) + var(--space-6));
       align-self: start;
-      max-height: calc(100dvh - var(--header-h) - 2 * var(--space-6));
       margin-top: 0;
-      overflow-y: auto;
-      overscroll-behavior: contain;
     }
   }
 
-  /* Search lives here only beside the writing; elsewhere the header or the bar above the posts has it. */
+  /* Search lives here only beside the writing; below that width the bar above the posts has it. */
   .search {
     display: none;
     align-items: center;

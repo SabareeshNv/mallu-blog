@@ -50,7 +50,7 @@ src/
     home/          The home page: Hero, LatestEssay, HomeShell (two columns) and HomeRail (search, About, topics, RSS)
     ui/            Small building blocks: Container, Prose, PageHeader, FormattedDate, ContactLink, ReadingProgress
     seo/           Seo.astro: title, description, social cards, structured data
-    search/        SearchDialog (Pagefind), SearchBar (above the posts on small screens)
+    search/        SearchDialog (Pagefind), SearchBar (above the posts; hidden on the home page beside the side column)
     icons/         Inline SVG icons
 
   pages/         Routes. Each file maps to URLs. about.md is the About page; topics/ holds the topic pages.
