@@ -3,13 +3,14 @@
 const date = (options: Intl.DateTimeFormatOptions) => new Intl.DateTimeFormat('en-GB', { timeZone: 'UTC', ...options });
 
 const longDate = date({ day: 'numeric', month: 'long', year: 'numeric' });
+const mediumDate = date({ day: 'numeric', month: 'short', year: 'numeric' });
 const shortDate = date({ day: 'numeric', month: 'short' });
 const monthName = date({ month: 'long' });
 const monthAndYear = date({ month: 'long', year: 'numeric' });
 
-/** "12 March 2026" ("long") or "12 Mar" ("short"). */
-export const formatDate = (value: Date, style: 'long' | 'short' = 'long') =>
-  (style === 'long' ? longDate : shortDate).format(value);
+/** "12 March 2026" ("long"), "12 Mar 2026" ("medium") or "12 Mar" ("short"). */
+export const formatDate = (value: Date, style: 'long' | 'medium' | 'short' = 'long') =>
+  ({ long: longDate, medium: mediumDate, short: shortDate })[style].format(value);
 
 /** "March" */
 export const formatMonthName = (value: Date) => monthName.format(value);

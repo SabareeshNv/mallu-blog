@@ -1,6 +1,7 @@
 ---
 title: മഴയുടെ ഓർമ്മകൾ
 date: 2026-10-28
+tags: [ഓർമ്മ, പ്രകൃതി]
 cover: ../../assets/images/rain-window.jpg
 coverAlt: Raindrops on a window with blurred city lights behind
 ---

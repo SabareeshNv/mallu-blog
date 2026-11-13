@@ -1,6 +1,7 @@
 ---
 title: വഴികൾ നമ്മളെ മാറ്റുമ്പോൾ
 date: 2026-09-14
+tags: [യാത്ര, ഓർമ്മ]
 cover: ../../assets/images/open-road.jpg
 coverAlt: A winding road through red rock canyons
 ---

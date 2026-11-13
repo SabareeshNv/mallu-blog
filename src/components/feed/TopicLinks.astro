@@ -1,0 +1,75 @@
+---
+/**
+ * The topics of a post, as links to each topic's page. Renders nothing when the post has no tags.
+ */
+import { postTopics, topicUrl, type Post } from '@/lib/content';
+import { SITE } from '@/config/site';
+
+interface Props {
+  post: Post;
+}
+
+const topics = postTopics(Astro.props.post);
+---
+
+{topics.length > 0 && (
+  <nav class="topics" aria-labelledby="topics-heading">
+    <h2 id="topics-heading">Topics</h2>
+    <ul role="list">
+      {topics.map((topic) => (
+        <li>
+          <a href={topicUrl(topic)} lang={SITE.postLang}>
+            {topic.name}
+          </a>
+        </li>
+      ))}
+    </ul>
+  </nav>
+)}
+
+<style>
+  .topics {
+    margin-top: var(--space-10);
+    font-family: var(--font-sans);
+  }
+
+  h2 {
+    color: var(--muted);
+    font-size: var(--fs-label);
+    font-weight: var(--fw-bold);
+    line-height: var(--lh-label);
+    letter-spacing: var(--tracking-label);
+    text-transform: uppercase;
+  }
+
+  ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0 var(--space-6);
+    margin: var(--space-1) 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  a {
+    display: inline-flex;
+    align-items: center;
+    min-height: var(--control-h);
+    color: var(--accent);
+    font-size: var(--fs-small);
+    font-weight: var(--fw-bold);
+    line-height: var(--lh-small);
+    text-decoration: none;
+  }
+
+  a::before {
+    content: '#';
+    margin-inline-end: var(--space-1);
+    opacity: 0.6;
+  }
+
+  a:hover {
+    text-decoration: underline;
+    text-underline-offset: 0.25em;
+  }
+</style>

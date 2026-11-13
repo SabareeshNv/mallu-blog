@@ -26,7 +26,7 @@ src/
   content.config.ts   The schema every post must follow (title, date, cover, ...).
 
   lib/           Logic with no markup. Pure TypeScript, easy to test.
-    content/       Reading posts: queries, kinds (essay or scribble), slugs, grouping, excerpts
+    content/       Reading posts: queries, kinds (essay or scribble), slugs, topics and related posts, grouping, excerpts
     seo/           schema.org structured data
     format.ts      Dates and counts, formatted for the interface
     graphemes.ts   Splits Malayalam text between letters, never inside one
@@ -38,19 +38,21 @@ src/
 
   layouts/       The frame of a page.
     BaseLayout     <head>, skip link, header, <main>, footer
-    PageLayout     A text page (the policies)
+    PageLayout     A text page (the policies, About)
+    MarkdownLayout The layout for pages written in Markdown (src/pages/*.md)
     EssayLayout    An essay: full-width masthead, text, neighbouring posts
     ScribbleLayout A scribble's own page
 
   components/    Reusable pieces, grouped by role.
     layout/        Header, footer, theme switcher
-    feed/          Lists of posts: timeline, essay and scribble entries, archive, pagination
-    home/          The home page hero
-    ui/            Small building blocks: Container, Prose, PageHeader, FormattedDate, ContactLink
+    feed/          Lists of posts: timeline, essay and scribble entries (EssayEntry has timeline, featured and grid
+                   variants), EssayGrid, PostList, PostSection ("Keep reading"), TopicLinks, TopicList, archive, pagination
+    home/          The home page: Hero, LatestEssay
+    ui/            Small building blocks: Container, Prose, PageHeader, FormattedDate, ContactLink, ReadingProgress
     seo/           Seo.astro: title, description, social cards, structured data
     icons/         Inline SVG icons
 
-  pages/         Routes. Each file maps to URLs.
+  pages/         Routes. Each file maps to URLs. about.md is the About page; topics/ holds the topic pages.
   scripts/       Plain scripts that must run inline, before the page paints (theme) or right after (image fade)
   assets/images/ Photographs (optimised at build time)
 
@@ -87,9 +89,11 @@ All visual decisions are tokens, and a component uses nothing else.
 - **Colour** lives in `theme.css`. Each colour is written once as `light-dark(<light>, <dark>)`. Which theme is active
   is decided by `color-scheme` on `<html>` (set by the theme switcher, or by the operating system when JavaScript is off).
 - **Breakpoints** are listed at the top of `tokens.css`. CSS cannot use variables in media queries, so use only those.
-- **Reading measure**: an essay's text column is `--measure-reading` (75ch) and the label, title and date on its cover
-  sit in a slightly wider column, `--measure-masthead` (90ch). `ch` is measured in the font of the element that uses it,
-  so both are set in the reading font (`Container size="reading"` and the essay masthead).
+- **Widths**: two, on purpose. Lists use `--container-feed`. Reading text uses `--measure-reading` (75ch). The label, title
+  and date on an essay's cover sit in a slightly wider column, `--measure-masthead` (90ch). `ch` is measured in the font of the
+  element that uses it, so these are set in the text's own font (`Container size="reading"`, with `lang="ml"` or `"en"`,
+  and the essay masthead). Inside a reading container, interface text (labels, dates) sets `font-family: var(--font-sans)`
+  explicitly, so it keeps the interface font.
 - **Shape and motion**: three radii plus full, one border width, two durations, one easing curve.
 
 ## Making changes
@@ -110,6 +114,9 @@ All visual decisions are tokens, and a component uses nothing else.
 | Change the header or footer          | `components/layout/SiteHeader.astro`, `SiteFooter.astro`                                        |
 | Change what search engines see       | `components/seo/Seo.astro`, `lib/seo/schema.ts`                                                 |
 | Add a field to posts                 | `src/content.config.ts`, then use it from the components that need it                           |
+| Add a topic                          | Add the word to a post's `tags`; its page and the `/topics/` entry appear on their own          |
+| Edit the About page                  | `src/pages/about.md`                                                                            |
+| Change how many related posts show   | `relatedCount`, `moreScribblesCount` in `config/site.ts`                                        |
 
 ## Rules to keep it tidy
 

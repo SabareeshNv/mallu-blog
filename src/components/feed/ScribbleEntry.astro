@@ -9,18 +9,31 @@ import { formatDate } from '@/lib/format';
 
 interface Props {
   post: Post;
-  /** "large" is used when a scribble has a page of its own. */
-  size?: 'regular' | 'large';
+  /** "feed" in lists; "page" when a scribble has a page of its own: larger text, with the date above it. */
+  variant?: 'feed' | 'page';
 }
 
-const { post, size = 'regular' } = Astro.props;
+const { post, variant = 'feed' } = Astro.props;
 const { date, cover, coverAlt } = post.data;
 const { Content } = await render(post);
 const anchor = postAnchor(post);
 const longDate = formatDate(date);
 ---
 
-<article class="scribble" id={anchor} tabindex="-1" aria-label={`Scribble from ${longDate}`} data-scribble>
+<article
+  class:list={['scribble', variant]}
+  id={anchor}
+  tabindex="-1"
+  aria-label={`Scribble from ${longDate}`}
+  data-scribble
+>
+  {variant === 'page' && (
+    <p class="when">
+      <span class="kind">Scribble</span>
+      <span aria-hidden="true">·</span>
+      <FormattedDate date={date} />
+    </p>
+  )}
   {cover && (
     <Image
       class="cover"
@@ -31,24 +44,26 @@ const longDate = formatDate(date);
       data-fade
     />
   )}
-  <Prose size={size}>
+  <Prose size={variant === 'page' ? 'xl' : 'regular'}>
     <Content />
   </Prose>
-  <footer class="meta">
-    <span class="kind">Scribble</span>
-    <span aria-hidden="true">·</span>
-    <FormattedDate date={date} />
-    <span aria-hidden="true">·</span>
-    <a
-      class="permalink"
-      href={postUrl(post)}
-      data-scribble-permalink={anchor}
-      aria-label={`Permalink to scribble from ${longDate}`}
-      title="Permalink"
-    >
-      <PermalinkIcon />
-    </a>
-  </footer>
+  {variant === 'feed' && (
+    <footer class="meta">
+      <span class="kind">Scribble</span>
+      <span aria-hidden="true">·</span>
+      <FormattedDate date={date} />
+      <span aria-hidden="true">·</span>
+      <a
+        class="permalink"
+        href={postUrl(post)}
+        data-scribble-permalink={anchor}
+        aria-label={`Permalink to scribble from ${longDate}`}
+        title="Permalink"
+      >
+        <PermalinkIcon />
+      </a>
+    </footer>
+  )}
 </article>
 
 <style>
@@ -101,6 +116,17 @@ const longDate = formatDate(date);
       aspect-ratio: 3 / 2;
       margin: 0 0 var(--space-4);
     }
+  }
+
+  /* On its own page the date leads, larger, above the text. */
+  .when {
+    display: flex;
+    gap: var(--space-2);
+    margin-bottom: var(--space-4);
+    color: var(--muted);
+    font-family: var(--font-sans);
+    font-size: var(--fs-body);
+    line-height: var(--lh-body);
   }
 
   .meta {

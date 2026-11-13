@@ -16,7 +16,7 @@ export async function GET(context: APIContext) {
       description: excerpt(post, 300),
       pubDate: post.data.date,
       link: postUrl(post),
-      categories: [isEssay(post) ? 'Essay' : 'Scribble'],
+      categories: [isEssay(post) ? 'Essay' : 'Scribble', ...post.data.tags],
     })),
   });
 }

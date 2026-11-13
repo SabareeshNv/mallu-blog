@@ -5,3 +5,4 @@ export * from './slug';
 export * from './posts';
 export * from './group';
 export * from './text';
+export * from './topics';

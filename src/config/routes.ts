@@ -6,7 +6,9 @@ export const ROUTES = {
   home: '/',
   essays: '/essays/',
   scribbles: '/scribbles/',
+  topics: '/topics/',
   archive: '/archive/',
+  about: '/about/',
   privacy: '/privacy/',
   contentPolicy: '/content-policy/',
   rss: '/rss.xml',
@@ -17,6 +19,9 @@ export const essayPath = (slug: string) => `/essay/${slug}/`;
 
 /** Address of a scribble's own page. */
 export const scribblePath = (slug: string) => `/scribble/${slug}/`;
+
+/** Address of a topic's page. The slug is made from the tag by lib/content (it may contain Malayalam). */
+export const topicPath = (slug: string) => `/topics/${slug}/`;
 
 /** Address of page `page` of the home feed (page 1 is the home page itself). */
 export const feedPagePath = (page: number) => (page === 1 ? ROUTES.home : `/${page}/`);

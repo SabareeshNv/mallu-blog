@@ -13,20 +13,23 @@ interface Props {
   page: Page<Post>;
   /** Visible page title. When omitted, a hidden heading is used (the hero provides the visible one). */
   title?: string;
+  /** Language of the title when it is not English (for example a topic name). */
+  titleLang?: string;
   intro?: string;
   emptyText?: string;
 }
 
-const { page, title, intro, emptyText = 'Nothing here yet.' } = Astro.props;
+const { page, title, titleLang, intro, emptyText = 'Nothing here yet.' } = Astro.props;
 const groups = groupByMonth(page.data);
 const pageNote = page.lastPage > 1 ? `Page ${page.currentPage} of ${page.lastPage}.` : '';
 const lead = [intro, pageNote].filter(Boolean).join(' ');
 ---
 
 <Container size="feed">
-  {title ? <PageHeader title={title} intro={lead} /> : <h2 class="sr-only">Latest entries</h2>}
+  {title ? <PageHeader title={title} intro={lead} lang={titleLang} /> : <h2 class="sr-only">Latest entries</h2>}
+  <slot name="before" />
 
-  {groups.length === 0 && <p class="empty">{emptyText}</p>}
+  {groups.length === 0 && emptyText && <p class="empty">{emptyText}</p>}
   {groups.map((group) => (
     <MonthGroup group={group} />
   ))}

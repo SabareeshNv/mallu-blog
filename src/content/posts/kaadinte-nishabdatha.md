@@ -1,6 +1,7 @@
 ---
 title: കാടിന്റെ നിശ്ശബ്ദത
 date: 2026-08-03
+tags: [പ്രകൃതി, യാത്ര]
 cover: ../../assets/images/forest-path.jpg
 coverAlt: Sunlight filtering through tall trees onto a forest path
 ---

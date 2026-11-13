@@ -1,0 +1,38 @@
+---
+/**
+ * A titled list of posts at the end of a page ("Keep reading", "More scribbles"). Renders nothing when empty.
+ */
+import PostList from '@/components/feed/PostList.astro';
+import type { Post } from '@/lib/content';
+
+interface Props {
+  heading: string;
+  posts: Post[];
+  dateFormat?: 'short' | 'medium';
+}
+
+const { heading, posts, dateFormat = 'medium' } = Astro.props;
+const id = `section-${heading.toLowerCase().replace(/\W+/g, '-')}`;
+---
+
+{posts.length > 0 && (
+  <section class="section" aria-labelledby={id}>
+    <h2 id={id}>{heading}</h2>
+    <PostList posts={posts} dateFormat={dateFormat} />
+  </section>
+)}
+
+<style>
+  .section {
+    margin-top: var(--space-12);
+    font-family: var(--font-sans);
+  }
+
+  h2 {
+    padding-bottom: var(--space-3);
+    border-bottom: 2px solid var(--accent);
+    font-size: var(--fs-h3);
+    font-weight: var(--fw-heavy);
+    line-height: var(--lh-h3);
+  }
+</style>

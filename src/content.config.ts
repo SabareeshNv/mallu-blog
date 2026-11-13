@@ -22,6 +22,8 @@ const posts = defineCollection({
       coverAlt: z.string().optional(),
       /** Optional URL override for an essay. Defaults to a slug made from the title. */
       slug: z.string().optional(),
+      /** Optional topics, e.g. tags: [ഓർമ്മ, യാത്ര]. Each topic gets its own page under /topics/. */
+      tags: z.array(z.string().trim().min(1)).default([]),
       draft: z.boolean().default(false),
     }),
 });

@@ -1,0 +1,38 @@
+---
+import type { GetStaticPaths, Page } from 'astro';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Feed from '@/components/feed/Feed.astro';
+import { getTopics, type Post } from '@/lib/content';
+import { countOf } from '@/lib/format';
+import { SITE } from '@/config/site';
+
+export const getStaticPaths = (async ({ paginate }) => {
+  const topics = await getTopics();
+  return topics.flatMap((topic) =>
+    paginate(topic.posts, {
+      params: { tag: topic.slug },
+      pageSize: SITE.feedPageSize,
+      props: { name: topic.name },
+    }),
+  );
+}) satisfies GetStaticPaths;
+
+interface Props {
+  page: Page<Post>;
+  name: string;
+}
+
+const { page, name } = Astro.props;
+---
+
+<BaseLayout
+  title={page.currentPage === 1 ? `Topic: ${name}` : `Topic: ${name} · Page ${page.currentPage}`}
+  description={`${countOf(page.total, 'essay or scribble', 'essays and scribbles')} about ${name} on ${SITE.title}.`}
+>
+  <Feed
+    page={page}
+    title={name}
+    titleLang={SITE.postLang}
+    intro={`A topic — ${countOf(page.total, 'entry', 'entries')}, newest first.`}
+  />
+</BaseLayout>

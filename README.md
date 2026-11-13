@@ -24,6 +24,7 @@ All posts live in one collection: `src/content/posts/`. Copy `_template-scribble
 ---
 title: മഴയുടെ ഓർമ്മകൾ        # with a title → Essay   (/essay/<title-slug>/)
 date: 2026-10-28             # required
+tags: [ഓർമ്മ, പ്രകൃതി]       # optional: topics (each gets a page under /topics/)
 cover: ../../assets/images/rain-window.jpg   # optional
 coverAlt: Raindrops on a window              # describe the cover for screen readers
 slug: mazha                  # optional: custom essay URL instead of the Malayalam title
@@ -36,7 +37,18 @@ draft: true                  # optional: hidden from production builds
   Clicking the permalink in a list scrolls to the scribble and highlights it. The scribble's own page has a
   "See it in the stream" link that opens the right feed page, scrolled to that scribble.
 
+- **Topics**: the optional `tags` list. Every tag gets its own page (`/topics/<tag>/`), and `/topics/` lists them all,
+  most used first. On a post's page the topics are links, and an essay ends with a "Keep reading" list of other posts that
+  share its topics.
+- **Latest essay**: the newest essay is featured, larger, at the top of the home page. On the Essays page essays are
+  shown two across, grouped by year. A long essay shows a thin progress bar under the header as it is read.
+
 Put cover images in `src/assets/images/`. Astro optimises them into responsive WebP at build time.
+
+## Pages
+
+`/about/` is plain Markdown: edit `src/pages/about.md` to tell readers who writes here. Other text pages (the policies) are
+`.astro` files in `src/pages/`; a new Markdown page only needs `layout: '@/layouts/MarkdownLayout.astro'` and a `title`.
 
 ## Settings
 
@@ -87,7 +99,8 @@ All tokens live in `src/styles/` (`tokens.css` for spacing, type and shape; `the
 - **Type:** Alegreya Sans for English, Arima for Malayalam. One ramp (`--fs-display`, `--fs-h2`, `--fs-h3`,
   `--fs-lead`, `--fs-body`, `--fs-small`, `--fs-meta`, `--fs-label`) with paired line heights on the same grid.
   Any `lang="ml"` element automatically gets taller line heights. Weights: 400, 700, 800.
-- **Layout:** two containers (`--container-feed` 48rem for lists, `--container-prose` 42rem for reading) and one
+- **Layout:** two widths: lists are `--container-feed` (48rem); reading text is `--measure-reading` (75ch, measured in the
+  text's own font, so a line holds about the same number of characters in Malayalam and English); plus one
   responsive gutter (16 / 24 / 40px).
 - **Shape:** radius 4px (badges), 8px (images inside cards), 12px (cards and panels), full (buttons and pills).
   Cards have a 1px border; elevation (`--shadow-md`) appears only on hover.

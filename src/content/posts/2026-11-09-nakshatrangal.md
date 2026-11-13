@@ -1,5 +1,6 @@
 ---
 date: 2026-11-09
+tags: [പ്രകൃതി]
 cover: ../../assets/images/night-sky.jpg
 coverAlt: The Milky Way over snow-capped mountains at night
 ---

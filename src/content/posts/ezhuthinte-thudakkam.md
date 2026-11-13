@@ -1,6 +1,7 @@
 ---
 title: എന്തിനാണ് ഞാൻ എഴുതുന്നത്
 date: 2026-05-12
+tags: [എഴുത്ത്, വായന]
 cover: ../../assets/images/fountain-pen.jpg
 coverAlt: A fountain pen writing on lined paper
 ---

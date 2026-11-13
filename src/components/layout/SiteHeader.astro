@@ -189,7 +189,18 @@ const links = MAIN_NAV.map((item) => ({ ...item, active: isActiveNavItem(item, A
   }
 
   /* ---------- Phones ---------- */
-  @media (max-width: 40rem) {
+  /* Six links need a little less space each on mid-size screens. */
+  @media (max-width: 64rem) {
+    nav a {
+      padding-inline: var(--space-3);
+    }
+
+    nav a::after {
+      inset-inline: var(--space-3);
+    }
+  }
+
+  @media (max-width: 48rem) {
     .theme-desktop {
       display: none;
     }
@@ -390,7 +401,7 @@ const links = MAIN_NAV.map((item) => ({ ...item, active: isActiveNavItem(item, A
     });
 
     // Growing past the phone breakpoint shows the regular navigation, so reset the menu.
-    matchMedia('(min-width: 40.0625rem)').addEventListener('change', (event) => {
+    matchMedia('(min-width: 48.0625rem)').addEventListener('change', (event) => {
       if (event.matches) setOpen(false);
     });
   }

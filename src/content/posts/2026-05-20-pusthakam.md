@@ -1,5 +1,6 @@
 ---
 date: 2026-05-20
+tags: [വായന]
 cover: ../../assets/images/book-and-coffee.jpg
 coverAlt: An open book beside a cup of coffee and reading glasses
 ---

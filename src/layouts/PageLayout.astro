@@ -1,6 +1,6 @@
 ---
 /**
- * A page of English text (the policy pages): page header, then prose at reading width.
+ * A page of text (the policies, About): page header, then prose at reading width. English by default.
  */
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import Container from '@/components/ui/Container.astro';
@@ -12,15 +12,17 @@ interface Props {
   description: string;
   /** e.g. "11 November 2026" */
   updated?: string;
+  /** The language of the text. */
+  lang?: 'en' | 'ml';
 }
 
-const { title, description, updated } = Astro.props;
+const { title, description, updated, lang = 'en' } = Astro.props;
 ---
 
 <BaseLayout title={title} description={description}>
-  <Container as="article" size="prose">
+  <Container as="article" size="reading" lang={lang}>
     <PageHeader title={title} intro={updated ? `Last updated ${updated}.` : undefined} />
-    <Prose lang="en">
+    <Prose lang={lang}>
       <slot />
     </Prose>
   </Container>

@@ -3,8 +3,8 @@ import { formatDate, isoDate } from '@/lib/format';
 
 interface Props {
   date: Date;
-  /** "long" → 12 March 2026, "short" → 12 Mar */
-  format?: 'long' | 'short';
+  /** "long" → 12 March 2026, "medium" → 12 Mar 2026, "short" → 12 Mar */
+  format?: 'long' | 'medium' | 'short';
   class?: string;
 }
 

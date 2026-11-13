@@ -1,0 +1,30 @@
+---
+/**
+ * The layout for pages written in Markdown (src/pages/*.md), such as About. Set it in the file's frontmatter:
+ *
+ *   layout: '@/layouts/MarkdownLayout.astro'
+ *   title: About
+ *   description: One sentence for search results.
+ *   lang: en          (optional: "ml" for a page written in Malayalam)
+ *   updated: 11 November 2026   (optional)
+ *   contact: true     (optional: adds "Get in touch" after the text)
+ */
+import PageLayout from '@/layouts/PageLayout.astro';
+import ContactLink from '@/components/ui/ContactLink.astro';
+
+const { frontmatter } = Astro.props;
+---
+
+<PageLayout
+  title={frontmatter.title}
+  description={frontmatter.description}
+  updated={frontmatter.updated}
+  lang={frontmatter.lang ?? 'en'}
+>
+  <slot />
+  {frontmatter.contact && (
+    <p>
+      Get in touch through <ContactLink />.
+    </p>
+  )}
+</PageLayout>

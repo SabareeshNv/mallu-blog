@@ -1,0 +1,116 @@
+---
+/**
+ * A plain list of posts, one per row: date, kind badge, and the title (essays) or the start of the text (scribbles).
+ * Used by the archive, the topic pages and the "keep reading" lists.
+ */
+import FormattedDate from '@/components/ui/FormattedDate.astro';
+import { excerpt, isEssay, postUrl, type Post } from '@/lib/content';
+import { SITE } from '@/config/site';
+
+interface Props {
+  posts: Post[];
+  /** "short" (12 Mar) when a year heading is shown above; "medium" (12 Mar 2026) when it is not. */
+  dateFormat?: 'short' | 'medium';
+}
+
+const { posts, dateFormat = 'short' } = Astro.props;
+---
+
+<ol class="rows" role="list">
+  {posts.map((post) => {
+    const essay = isEssay(post);
+    return (
+      <li class:list={['row', dateFormat]}>
+        <FormattedDate class="date" date={post.data.date} format={dateFormat} />
+        <span class:list={['kind', essay ? 'is-essay' : 'is-scribble']}>{essay ? 'Essay' : 'Scribble'}</span>
+        <a class:list={['link', { 'is-excerpt': !essay }]} href={postUrl(post)} lang={SITE.postLang}>
+          {essay ? post.data.title : excerpt(post, 70)}
+        </a>
+      </li>
+    );
+  })}
+</ol>
+
+<style>
+  .rows {
+    font-family: var(--font-sans);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .row {
+    display: grid;
+    grid-template-columns: var(--space-16) var(--space-24) 1fr;
+    align-items: baseline;
+    gap: var(--space-4);
+    padding-block: var(--space-4);
+    border-bottom: var(--border-width) solid var(--border);
+  }
+
+  .row.medium {
+    grid-template-columns: var(--space-32) var(--space-24) 1fr;
+  }
+
+  .date {
+    color: var(--muted);
+    font-size: var(--fs-meta);
+    line-height: var(--lh-meta);
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* Badge: same shape and type as the year badge on the timeline. */
+  .kind {
+    justify-self: start;
+    padding: var(--space-1) var(--space-2);
+    border-radius: var(--radius-sm);
+    font-size: var(--fs-label);
+    font-weight: var(--fw-bold);
+    line-height: var(--lh-label);
+    letter-spacing: var(--tracking-label);
+    text-transform: uppercase;
+  }
+
+  .is-essay {
+    background: var(--essay-soft);
+    color: var(--essay);
+  }
+
+  .is-scribble {
+    background: var(--accent-soft);
+    color: var(--accent);
+  }
+
+  .link {
+    color: var(--text);
+    font-weight: var(--fw-bold);
+    text-decoration: none;
+  }
+
+  .link.is-excerpt {
+    display: -webkit-box;
+    overflow: hidden;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    color: var(--muted);
+    font-weight: var(--fw-regular);
+  }
+
+  .link:hover {
+    color: var(--accent);
+    text-decoration: underline;
+  }
+
+  @media (max-width: 40rem) {
+    .row,
+    .row.medium {
+      grid-template-columns: auto 1fr;
+      gap: var(--space-2) var(--space-3);
+    }
+
+    .link {
+      grid-column: 1 / -1;
+    }
+  }
+</style>

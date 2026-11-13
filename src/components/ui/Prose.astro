@@ -6,8 +6,8 @@
 import { SITE } from '@/config/site';
 
 interface Props {
-  /** "regular" for lists and short notes, "large" for long-form reading. */
-  size?: 'regular' | 'large';
+  /** "regular" for lists and short notes, "large" for long-form reading, "xl" for a short note on its own page. */
+  size?: 'regular' | 'large' | 'xl';
   lang?: string;
 }
 
@@ -28,6 +28,11 @@ const { size = 'regular', lang = SITE.postLang } = Astro.props;
   .prose.large {
     font-size: var(--fs-lead);
     line-height: var(--lh-lead);
+  }
+
+  .prose.xl {
+    font-size: var(--fs-h3);
+    line-height: var(--lh-h3);
   }
 
   /* One rhythm for every block: the gap after a block is always 24px. */

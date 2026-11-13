@@ -18,6 +18,10 @@ export const SITE = {
   postLang: 'ml',
   /** Maximum number of entries on each page of Home, Essays and Scribbles. */
   feedPageSize: 30,
+  /** How many related essays and scribbles to suggest after a post. */
+  relatedCount: 3,
+  /** How many other scribbles to show after a scribble's own page. */
+  moreScribblesCount: 3,
   /** Maximum number of entries on each page of the Archive. */
   archivePageSize: 30,
 } as const;

@@ -1,6 +1,7 @@
 ---
 title: കടലിന്റെ അരികിൽ
 date: 2025-12-30
+tags: [പ്രകൃതി, ഓർമ്മ]
 cover: ../../assets/images/quiet-shore.jpg
 coverAlt: Gentle waves on a sandy beach at sunrise
 ---

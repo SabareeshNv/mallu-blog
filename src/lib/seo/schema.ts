@@ -48,6 +48,7 @@ export interface PostSchemaInput {
   imageUrl: URL;
   publishedTime?: Date;
   section: 'essay' | 'scribble';
+  tags?: string[];
 }
 
 /** An essay or scribble: the post itself, and its breadcrumb trail (Home > Essays > title). */
@@ -59,6 +60,7 @@ export function postSchemas({
   imageUrl,
   publishedTime,
   section,
+  tags = [],
 }: PostSchemaInput): Schema[] {
   const published = publishedTime?.toISOString();
   const sectionName = section === 'essay' ? 'Essays' : 'Scribbles';
@@ -72,6 +74,7 @@ export function postSchemas({
       mainEntityOfPage: canonical.href,
       ...(published && { datePublished: published, dateModified: published }),
       inLanguage: SITE.postLang,
+      ...(tags.length > 0 && { keywords: tags.join(', ') }),
       image: imageUrl.href,
       author: { '@type': 'Organization', name: SITE.author, url: site.href },
       publisher: publisherOf(site),

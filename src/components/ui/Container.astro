@@ -3,21 +3,23 @@
  * The page-width wrapper: centres its content in a column and applies the page's side margins.
  *
  *   size="feed"   the width of lists (Home, Essays, Scribbles, Archive)
- *   size="prose"  the width of reading text in scribbles and policies
- *   size="reading" the width of an essay's text: 75ch, measured in the essay's own (Malayalam) reading font
+ *   size="reading" the width of reading text: 75ch, measured in the text's own font (Malayalam by default, or
+ *                 `lang="en"` for English pages), so a line holds about the same number of characters in each
  *   top           space above the content: the default is 48px; "tight" is 32px; "none" is 0
  */
 interface Props {
-  size: 'feed' | 'prose' | 'reading';
+  size: 'feed' | 'reading';
+  /** The language of the reading text; decides which font the 75ch is measured in. */
+  lang?: 'ml' | 'en';
   top?: 'default' | 'tight' | 'none';
   /** The element to render. */
   as?: 'div' | 'article' | 'section';
 }
 
-const { size, top = 'default', as: Tag = 'div' } = Astro.props;
+const { size, lang = 'ml', top = 'default', as: Tag = 'div' } = Astro.props;
 ---
 
-<Tag class:list={['container', size, top]}>
+<Tag class:list={['container', size, size === 'reading' && `reading-${lang}`, top]}>
   <slot />
 </Tag>
 
@@ -32,15 +34,19 @@ const { size, top = 'default', as: Tag = 'div' } = Astro.props;
     max-width: calc(var(--container-feed) + 2 * var(--gutter));
   }
 
-  .prose {
-    max-width: calc(var(--container-prose) + 2 * var(--gutter));
-  }
-
   /* Set in the reading font and size, so that "ch" below means characters of the text itself. */
   .reading {
     max-width: calc(var(--measure-reading) + 2 * var(--gutter));
+  }
+
+  .reading-ml {
     font-family: var(--font-post);
     font-size: var(--fs-lead);
+  }
+
+  .reading-en {
+    font-family: var(--font-sans);
+    font-size: var(--fs-body);
   }
 
   .tight {

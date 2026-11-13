@@ -1,7 +1,7 @@
 ---
-import FormattedDate from '@/components/ui/FormattedDate.astro';
-import { excerpt, isEssay, postUrl, type Group } from '@/lib/content';
-import { SITE } from '@/config/site';
+import PostList from '@/components/feed/PostList.astro';
+import { countOf } from '@/lib/format';
+import type { Group } from '@/lib/content';
 
 interface Props {
   group: Group;
@@ -14,24 +14,9 @@ const headingId = `year-${group.key}`;
 <section class="year" aria-labelledby={headingId}>
   <h2 id={headingId}>
     {group.label}
-    <span class="count">
-      {group.posts.length} {group.posts.length === 1 ? 'entry' : 'entries'}
-    </span>
+    <span class="count">{countOf(group.posts.length, 'entry', 'entries')}</span>
   </h2>
-  <ol class="rows" role="list">
-    {group.posts.map((post) => {
-      const essay = isEssay(post);
-      return (
-        <li class="row">
-          <FormattedDate class="date" date={post.data.date} format="short" />
-          <span class:list={['kind', essay ? 'is-essay' : 'is-scribble']}>{essay ? 'Essay' : 'Scribble'}</span>
-          <a class:list={['link', { 'is-excerpt': !essay }]} href={postUrl(post)} lang={SITE.postLang}>
-            {essay ? post.data.title : excerpt(post, 70)}
-          </a>
-        </li>
-      );
-    })}
-  </ol>
+  <PostList posts={group.posts} />
 </section>
 
 <style>
@@ -55,81 +40,5 @@ const headingId = `year-${group.key}`;
     font-size: var(--fs-meta);
     font-weight: var(--fw-regular);
     line-height: var(--lh-meta);
-  }
-
-  .rows {
-    margin: 0;
-    padding: 0;
-    list-style: none;
-  }
-
-  .row {
-    display: grid;
-    grid-template-columns: var(--space-16) var(--space-24) 1fr;
-    align-items: baseline;
-    gap: var(--space-4);
-    padding-block: var(--space-4);
-    border-bottom: var(--border-width) solid var(--border);
-  }
-
-  .date {
-    color: var(--muted);
-    font-size: var(--fs-meta);
-    line-height: var(--lh-meta);
-    font-variant-numeric: tabular-nums;
-  }
-
-  /* Badge: same shape and type as the year badge on the timeline. */
-  .kind {
-    justify-self: start;
-    padding: var(--space-1) var(--space-2);
-    border-radius: var(--radius-sm);
-    font-size: var(--fs-label);
-    font-weight: var(--fw-bold);
-    line-height: var(--lh-label);
-    letter-spacing: var(--tracking-label);
-    text-transform: uppercase;
-  }
-
-  .is-essay {
-    background: var(--essay-soft);
-    color: var(--essay);
-  }
-
-  .is-scribble {
-    background: var(--accent-soft);
-    color: var(--accent);
-  }
-
-  .link {
-    color: var(--text);
-    font-weight: var(--fw-bold);
-    text-decoration: none;
-  }
-
-  .link.is-excerpt {
-    display: -webkit-box;
-    overflow: hidden;
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: 2;
-    line-clamp: 2;
-    color: var(--muted);
-    font-weight: var(--fw-regular);
-  }
-
-  .link:hover {
-    color: var(--accent);
-    text-decoration: underline;
-  }
-
-  @media (max-width: 40rem) {
-    .row {
-      grid-template-columns: auto 1fr;
-      gap: var(--space-2) var(--space-3);
-    }
-
-    .link {
-      grid-column: 1 / -1;
-    }
   }
 </style>

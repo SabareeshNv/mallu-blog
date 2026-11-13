@@ -1,7 +1,7 @@
 ---
 import type { GetStaticPaths, Page } from 'astro';
 import BaseLayout from '@/layouts/BaseLayout.astro';
-import Feed from '@/components/feed/Feed.astro';
+import EssayGrid from '@/components/feed/EssayGrid.astro';
 import { getEssays, type Post } from '@/lib/content';
 import { SITE } from '@/config/site';
 
@@ -20,7 +20,7 @@ const { page } = Astro.props;
   title={page.currentPage === 1 ? 'Essays' : `Essays · Page ${page.currentPage}`}
   description={`Essays on ${SITE.title}: longer pieces in Malayalam, each with a title.`}
 >
-  <Feed
+  <EssayGrid
     page={page}
     title="Essays"
     intro={`Longer pieces, each with a title — ${page.total} so far, newest first.`}

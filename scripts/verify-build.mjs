@@ -88,6 +88,13 @@ for (const file of pages) {
     }
   }
 
+  // ---- an id must be unique on its page (links, labels and scripts depend on it)
+  const seenIds = new Set();
+  for (const [, id] of html.matchAll(/\sid="([^"]+)"/gi)) {
+    if (seenIds.has(id)) error(page, `duplicate id="${id}"`);
+    seenIds.add(id);
+  }
+
   // ---- images need alt text (an empty alt is fine for decoration; Astro writes it as a bare `alt`)
   for (const [tag] of html.matchAll(/<img\b[^>]*>/gi)) {
     if (!/\balt(\s|=|>|\/)/i.test(tag)) error(page, `<img> without an alt attribute: ${tag.slice(0, 80)}`);
