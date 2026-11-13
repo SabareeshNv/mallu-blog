@@ -13,7 +13,6 @@ export const MAIN_NAV: readonly NavItem[] = [
   { label: 'Essays', href: ROUTES.essays, sections: ['essays', 'essay'] },
   { label: 'Scribbles', href: ROUTES.scribbles, sections: ['scribbles', 'scribble'] },
   { label: 'Archive', href: ROUTES.archive, sections: ['archive'] },
-  { label: 'About', href: ROUTES.about, sections: ['about'] },
 ];
 
 /** The links in the footer's bottom bar. */
