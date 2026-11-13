@@ -12,18 +12,9 @@ export const MAIN_NAV: readonly NavItem[] = [
   { label: 'Home', href: ROUTES.home, sections: [''] },
   { label: 'Essays', href: ROUTES.essays, sections: ['essays', 'essay'] },
   { label: 'Scribbles', href: ROUTES.scribbles, sections: ['scribbles', 'scribble'] },
-  { label: 'Topics', href: ROUTES.topics, sections: ['topics'] },
   { label: 'Archive', href: ROUTES.archive, sections: ['archive'] },
   { label: 'About', href: ROUTES.about, sections: ['about'] },
 ];
-
-/** "Browse" links in the footer. */
-export const EXPLORE_NAV = [
-  { label: 'Essays', href: ROUTES.essays },
-  { label: 'Scribbles', href: ROUTES.scribbles },
-  { label: 'Topics', href: ROUTES.topics },
-  { label: 'Archive', href: ROUTES.archive },
-] as const;
 
 /** The links in the footer's bottom bar. */
 export const FOOTER_NAV = [

@@ -105,7 +105,7 @@ All visual decisions are tokens, and a component uses nothing else.
 | Rename the site, change the tagline  | `config/site.ts`                                                                                |
 | Change how many posts per page       | `feedPageSize`, `archivePageSize` in `config/site.ts`                                           |
 | Add, remove or reorder a header link | `MAIN_NAV` in `config/navigation.ts`                                                            |
-| Add a footer link                    | `LEGAL_NAV` in `config/navigation.ts`                                                           |
+| Add a footer link                    | `FOOTER_NAV` in `config/navigation.ts`                                                           |
 | Change a URL                         | `config/routes.ts`                                                                              |
 | Change a colour (either theme)       | `styles/theme.css`: one line                                                                    |
 | Change spacing, type or radius       | `styles/tokens.css`                                                                             |
