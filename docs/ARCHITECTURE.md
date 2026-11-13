@@ -116,6 +116,7 @@ All visual decisions are tokens, and a component uses nothing else.
 | Change what search engines see       | `components/seo/Seo.astro`, `lib/seo/schema.ts`                                                 |
 | Add a field to posts                 | `src/content.config.ts`, then use it from the components that need it                           |
 | Change what search indexes         | `data-pagefind-*` attributes in the layouts (essay, scribble, text page); the dialog is `components/search/` |
+| Add a field to essays only          | `src/content.config.ts` (add it to the schema and, if it must be essay-only, to the `superRefine` check) |
 | Add a topic                          | Add the word to a post's `tags`; its page and the `/topics/` entry appear on their own          |
 | Edit the About page                  | `src/pages/about.md`                                                                            |
 | Change how many related posts show   | `relatedCount`, `moreScribblesCount` in `config/site.ts`                                        |

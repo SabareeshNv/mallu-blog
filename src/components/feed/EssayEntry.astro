@@ -1,7 +1,7 @@
 ---
 import { Image } from 'astro:assets';
 import FormattedDate from '@/components/ui/FormattedDate.astro';
-import { excerpt, postAnchor, postUrl, readingMinutes, type Post } from '@/lib/content';
+import { postSummary, postAnchor, postUrl, readingMinutes, type Post } from '@/lib/content';
 import { SITE } from '@/config/site';
 
 interface Props {
@@ -39,7 +39,7 @@ const minutes = readingMinutes(post);
     </h3>
   )}
   <p class="summary" lang={SITE.postLang}>
-    {excerpt(post, excerptLength)}
+    {postSummary(post, excerptLength)}
   </p>
   <p class="meta">
     <span class="kind">Essay</span>

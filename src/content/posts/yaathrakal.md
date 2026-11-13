@@ -1,6 +1,8 @@
 ---
 title: വഴികൾ നമ്മളെ മാറ്റുമ്പോൾ
 date: 2026-09-14
+updated: 2026-11-02
+summary: ഒറ്റയ്ക്കുള്ള ഒരു ബസ് യാത്രയിൽ കണ്ടുമുട്ടിയ ചെറിയ മുഖങ്ങളെക്കുറിച്ചും, യാത്രകൾ ബാക്കിവെക്കുന്ന ഓർമ്മകളെക്കുറിച്ചും ഒരു കുറിപ്പ്.
 tags: [യാത്ര, ഓർമ്മ]
 cover: ../../assets/images/open-road.jpg
 coverAlt: A winding road through red rock canyons

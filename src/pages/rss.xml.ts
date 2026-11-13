@@ -13,7 +13,7 @@ export async function GET(context: APIContext) {
     customData: `<language>${SITE.postLang}</language>`,
     items: posts.map((post) => ({
       title: isEssay(post) ? post.data.title! : excerpt(post, 36),
-      description: excerpt(post, 300),
+      description: post.data.summary ?? excerpt(post, 300),
       pubDate: post.data.date,
       link: postUrl(post),
       categories: [isEssay(post) ? 'Essay' : 'Scribble', ...post.data.tags],

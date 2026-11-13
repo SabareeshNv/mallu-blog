@@ -13,7 +13,7 @@ import TopicLinks from '@/components/feed/TopicLinks.astro';
 import ReadingProgress from '@/components/ui/ReadingProgress.astro';
 import Prose from '@/components/ui/Prose.astro';
 import EssayIcon from '@/components/icons/EssayIcon.astro';
-import { excerpt, getKeepReadingPosts, readingMinutes, type Post } from '@/lib/content';
+import { getKeepReadingPosts, postDescription, readingMinutes, updatedDate, type Post } from '@/lib/content';
 import { SITE } from '@/config/site';
 import { isoDate } from '@/lib/format';
 
@@ -24,15 +24,16 @@ interface Props {
 const { post } = Astro.props;
 const { title, date, cover, coverAlt } = post.data;
 const minutes = readingMinutes(post);
+const revised = updatedDate(post);
 const related = await getKeepReadingPosts(post);
 ---
 
 <BaseLayout
   title={title}
-  description={excerpt(post, 110)}
+  description={postDescription(post)}
   image={cover}
   imageAlt={coverAlt}
-  article={{ section: 'essay', publishedTime: date, tags: post.data.tags }}
+  article={{ section: 'essay', publishedTime: date, modifiedTime: revised, tags: post.data.tags }}
 >
   <ReadingProgress />
   <article class="essay" data-pagefind-body>
@@ -65,6 +66,14 @@ const related = await getKeepReadingPosts(post);
           <FormattedDate date={date} />
           <span aria-hidden="true">·</span>
           <span>{minutes} min read</span>
+          {revised && (
+            <>
+              <span aria-hidden="true">·</span>
+              <span>
+                Updated <FormattedDate date={revised} />
+              </span>
+            </>
+          )}
         </p>
       </div>
     </header>
@@ -80,6 +89,11 @@ const related = await getKeepReadingPosts(post);
         <PostSection heading="Keep reading" posts={related} />
       </div>
     </Container>
+    {post.data.summary && (
+      <span hidden data-pagefind-weight="2">
+        {post.data.summary}
+      </span>
+    )}
     <span hidden data-pagefind-weight="3">
       {post.data.tags.join(' ')}
     </span>

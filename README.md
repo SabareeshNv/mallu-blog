@@ -28,6 +28,8 @@ tags: [ഓർമ്മ, പ്രകൃതി]       # optional: topics (each ge
 cover: ../../assets/images/rain-window.jpg   # optional
 coverAlt: Raindrops on a window              # describe the cover for screen readers
 slug: mazha                  # optional: custom essay URL instead of the Malayalam title
+summary: ഒരു ചെറിയ വിവരണം      # optional, essays only: shown in lists, search results and the page description
+updated: 2026-11-02          # optional, essays only: date of the latest revision (not earlier than `date`)
 draft: true                  # optional: hidden from production builds
 ---
 ```
@@ -37,6 +39,10 @@ draft: true                  # optional: hidden from production builds
   that opens the scribble's own page. That page has a
   "See it in the stream" link that opens the right feed page, scrolled to that scribble.
 
+- **Summary and updated** (essays only): `summary` replaces the automatic excerpt in the lists, in the page description
+  (cut to 160 letters), in the RSS feed and in search; `updated` shows "Updated <date>" beside the reading time
+  (only when it is later than `date`) and is sent to search engines as the modified date. A scribble that has either is
+  rejected at build time, with a message.
 - **Topics**: the optional `tags` list. Every tag gets its own page (`/topics/<tag>/`), and `/topics/` lists them all,
   most used first. On a post's page the topics are links, and an essay ends with a "Keep reading" list of other posts that
   share its topics.

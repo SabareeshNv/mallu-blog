@@ -47,6 +47,7 @@ export interface PostSchemaInput {
   description: string;
   imageUrl: URL;
   publishedTime?: Date;
+  modifiedTime?: Date;
   section: 'essay' | 'scribble';
   tags?: string[];
 }
@@ -59,6 +60,7 @@ export function postSchemas({
   description,
   imageUrl,
   publishedTime,
+  modifiedTime,
   section,
   tags = [],
 }: PostSchemaInput): Schema[] {
@@ -72,7 +74,7 @@ export function postSchemas({
       description,
       url: canonical.href,
       mainEntityOfPage: canonical.href,
-      ...(published && { datePublished: published, dateModified: published }),
+      ...(published && { datePublished: published, dateModified: modifiedTime?.toISOString() ?? published }),
       inLanguage: SITE.postLang,
       ...(tags.length > 0 && { keywords: tags.join(', ') }),
       image: imageUrl.href,
