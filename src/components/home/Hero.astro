@@ -47,8 +47,7 @@ import { SITE } from '@/config/site';
     width: 100%;
     height: 100%;
     object-fit: cover;
-    /* The script below slides this as the page scrolls (parallax); 60% is where the photograph rests. */
-    object-position: center var(--photo-y, 60%);
+    object-position: center 60%;
   }
 
   .hero::before {
@@ -106,43 +105,3 @@ import { SITE } from '@/config/site';
     line-height: var(--lh-lead);
   }
 </style>
-
-<script>
-  // Parallax. The photograph's box never changes; as the page scrolls, the visible part of the picture slides, so the
-  // picture seems to move more slowly than the text over it. It needs spare picture to slide, so it shows only where the
-  // hero crops the photograph (wide screens), and not when the reader has asked for reduced motion.
-  const REST = 60; // where the photograph rests, as a percentage (matches the CSS)
-  const SPEED = 0.3; // the picture drifts by this fraction of the scroll distance
-
-  const hero = document.querySelector<HTMLElement>('.hero');
-  const photo = hero?.querySelector<HTMLImageElement>('.photo');
-  const reduced = matchMedia('(prefers-reduced-motion: reduce)');
-
-  if (hero && photo) {
-    let queued = false;
-
-    const update = () => {
-      queued = false;
-      const { clientWidth: boxW, clientHeight: boxH, naturalWidth, naturalHeight } = photo;
-      if (reduced.matches || !naturalWidth) return hero.style.removeProperty('--photo-y');
-      // The picture is scaled to cover the box (object-fit: cover); what is left over vertically is the room to slide.
-      const slack = naturalHeight * Math.max(boxW / naturalWidth, boxH / naturalHeight) - boxH;
-      if (slack <= 0) return hero.style.removeProperty('--photo-y');
-      const drift = Math.min(scrollY, hero.offsetHeight) * SPEED;
-      hero.style.setProperty('--photo-y', `${Math.max(0, REST - (100 * drift) / slack)}%`);
-    };
-
-    const schedule = () => {
-      if (!queued) {
-        queued = true;
-        requestAnimationFrame(update);
-      }
-    };
-
-    addEventListener('scroll', schedule, { passive: true });
-    addEventListener('resize', schedule);
-    reduced.addEventListener('change', schedule);
-    photo.addEventListener('load', schedule);
-    update();
-  }
-</script>

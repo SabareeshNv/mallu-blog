@@ -99,8 +99,6 @@ All visual decisions are tokens, and a component uses nothing else.
   timeline's circles; `--depth-2` lifts the latest essay's photograph; `--inset` sinks the search fields; `--glass` is the
   translucent header. Two faint colour washes sit behind every page (`main` in `base.css`). On large screens the latest
   essay overlaps the hero by `--overlap`; below 1024px the search bar sits there instead, so there is no overlap.
-  The hero photograph has a subtle parallax (`Hero.astro`): its visible crop slides at 30% of the scroll speed. It shows
-  only where the hero crops the photograph (wide screens), and not under reduced motion.
 - **Shape and motion**: three radii plus full, one border width, two durations, one easing curve.
 
 ## Making changes
