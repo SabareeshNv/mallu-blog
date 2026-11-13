@@ -33,8 +33,8 @@ draft: true                  # optional: hidden from production builds
 ```
 
 - **Essay**: has a `title`. Its URL is `/essay/<slug of the title>/`. The feed shows the title as a link, with the cover if there is one.
-- **Scribble**: no `title`. Its URL is `/scribble/<file-name>/`. The feed shows the full text and an icon-only permalink.
-  Clicking the permalink in a list scrolls to the scribble and highlights it. The scribble's own page has a
+- **Scribble**: no `title`. Its URL is `/scribble/<file-name>/`. The feed shows the full text and an icon-only permalink
+  that opens the scribble's own page. That page has a
   "See it in the stream" link that opens the right feed page, scrolled to that scribble.
 
 - **Topics**: the optional `tags` list. Every tag gets its own page (`/topics/<tag>/`), and `/topics/` lists them all,

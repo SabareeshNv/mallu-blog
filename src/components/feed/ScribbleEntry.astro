@@ -53,13 +53,7 @@ const longDate = formatDate(date);
       <span aria-hidden="true">·</span>
       <FormattedDate date={date} />
       <span aria-hidden="true">·</span>
-      <a
-        class="permalink"
-        href={postUrl(post)}
-        data-scribble-permalink={anchor}
-        aria-label={`Permalink to scribble from ${longDate}`}
-        title="Permalink"
-      >
+      <a class="permalink" href={postUrl(post)} aria-label={`Permalink to scribble from ${longDate}`} title="Permalink">
         <PermalinkIcon />
       </a>
     </footer>
@@ -165,35 +159,22 @@ const longDate = formatDate(date);
 </style>
 
 <script>
-  // Clicking a scribble's permalink inside a list scrolls to it (and focuses it)
-  // instead of leaving the page. Opening it in a new tab still goes to its own URL.
+  // Arriving with a #scribble-… hash (from "See it in the stream" on a scribble's page): scroll to that scribble,
+  // focus it and highlight it. A scribble's permalink icon is a normal link to its own page, /scribble/<name>/.
   const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)');
 
-  function reveal(target: HTMLElement, smooth: boolean) {
-    target.scrollIntoView({ behavior: smooth && !reduceMotion.matches ? 'smooth' : 'auto', block: 'start' });
+  function reveal(target: HTMLElement) {
+    target.scrollIntoView({ behavior: reduceMotion.matches ? 'auto' : 'smooth', block: 'start' });
     target.focus({ preventScroll: true });
     target.classList.remove('is-highlighted');
     void target.offsetWidth; // restart the highlight animation
     target.classList.add('is-highlighted');
   }
 
-  document.addEventListener('click', (event) => {
-    if (event.defaultPrevented || event.button !== 0) return;
-    if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
-    const link = (event.target as Element).closest<HTMLAnchorElement>('a[data-scribble-permalink]');
-    if (!link) return;
-    const target = document.getElementById(link.dataset.scribblePermalink!);
-    if (!target) return;
-    event.preventDefault();
-    history.pushState(null, '', `#${target.id}`);
-    reveal(target, true);
-  });
-
-  // Arriving with a #scribble-… hash (e.g. from "View in stream"): focus and highlight it.
   function fromHash() {
     const id = decodeURIComponent(location.hash.slice(1));
     const target = id ? document.getElementById(id) : null;
-    if (target?.matches('[data-scribble]')) reveal(target, false);
+    if (target?.matches('[data-scribble]')) reveal(target);
   }
 
   fromHash();

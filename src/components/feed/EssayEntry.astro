@@ -49,8 +49,13 @@ const minutes = readingMinutes(post);
     <span>{minutes} min read</span>
   </p>
   {variant === 'featured' && (
-    <p class="more" aria-hidden="true">
-      Read the essay <span class="arrow">→</span>
+    <p class="more">
+      <a href={url} aria-label={`Read the essay: ${title}`}>
+        Read the essay{' '}
+        <span class="arrow" aria-hidden="true">
+          →
+        </span>
+      </a>
     </p>
   )}
 </article>
@@ -201,6 +206,14 @@ const minutes = readingMinutes(post);
     font-size: var(--fs-small);
     font-weight: var(--fw-bold);
     line-height: var(--lh-small);
+  }
+
+  /* A real link that looks exactly as the plain text did; it sits above the card's stretched title link. */
+  .more a {
+    position: relative;
+    z-index: 1;
+    color: inherit;
+    text-decoration: none;
   }
 
   .arrow {
