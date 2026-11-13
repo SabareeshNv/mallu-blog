@@ -68,10 +68,11 @@ Behaviour:
 - Spacing: 4-point scale `--space-1…32`. Type: `--fs-*` / `--lh-*`, taller line-heights under `:lang(ml)`.
 - Radii: 4 / 8 / 12 / full. Motion tokens. Containers: feed 48rem, wide 72rem. Measures: reading 75ch, masthead 90ch. Rail 19rem.
 - Colours via `light-dark()` in `theme.css` only.
-- **Use tokens, not raw values.** Repeated literals (2px/3px outlines, underline offsets, letter-spacing, aspect ratios) should become tokens.
+- **Use tokens, not raw values.** Lines and focus: `--border-thick`, `--focus-width`, `--focus-offset`, `--underline-offset`, `--tracking-tight`, `--ratio-banner/photo/compact`. Remaining raw literals are deliberate (hairlines, `sr-only`, code font-size). New colours go in `theme.css`.
 
 **CSS standards:**
-- Mobile-first: base styles for small screens, `min-width` queries for larger. Breakpoints: 40 / 48 / 64 / 80rem. (Several components still use `max-width`; see §10.)
+- Mobile-first: base styles are for the smallest screen; `min-width` queries add to them. Breakpoints: 30 / 40 / 48 / 64 / 80rem. **No `max-width` queries remain; do not add any.**
+- The header is written in two cascade layers (`@layer base, header-small, header-wide;`): phone styles as the base, `min-width: 48rem` restoring the desktop layout. The layer-order line must stay, or `base.css` would override the header.
 - Put `min-width` blocks after the base rule they override.
 - Reset in `@layer base`. Prefer logical properties, grid/flex, no magic numbers.
 - Semantic HTML first; ARIA only where HTML can't express it.
@@ -84,7 +85,7 @@ Behaviour:
 - Topics, About and RSS in header/footer nav (RSS lives in the home rail "follow" section); section above the footer; "Written in Malayalam" text; post counts in the hero; text-decoration on titles that sit over images.
 
 **Layout facts:**
-- Header: wordmark links home only (not the whole bar); Home, Essays, Scribbles, Archive; collapses to a menu below 48rem; theme switcher at the right end (icons only).
+- Header: wordmark links home only (not the whole bar); Home, Essays, Scribbles, Archive; shows a menu below 48rem and the links from 48rem up (768px counts as wide); theme switcher at the right end (icons only).
 - Home: full-width hero (first page only), then feed + right rail (search, About blurb, Topics, RSS) on large screens; rail is not sticky. Hero text and posts share the same left edge.
 - On small screens the search sits above the posts, not in the header.
 - Footer: a single bar. Links left, copyright right; below 30rem, stacked, links evenly spaced, copyright centred. CSS only.
@@ -94,7 +95,7 @@ Behaviour:
 Only what is needed, all inline and small (~5–6 KB total):
 1. `theme-init` (head, before paint): sets `data-theme`, `data-js`.
 2. ThemeSwitcher: two real buttons with `aria-pressed` (Enter/Space must work).
-3. SiteHeader menu.
+3. SiteHeader menu (the breakpoint in its `matchMedia` must match the header's 48rem).
 4. SearchDialog (Ctrl/⌘+K or `/`; Essay/Scribble filters; query normalisation of legacy chillu spelling and trailing virama).
 5. `image-fade` (images with `data-fade`).
 6. ReadingProgress (essays only).
@@ -112,7 +113,7 @@ Removed on purpose: scribble hash script, footer wrap check, parallax. Before ad
 
 - `components/seo/Seo.astro` + `lib/seo/schema.ts`: title, description, canonical, OG/Twitter, JSON-LD (WebSite, Blog, BlogPosting, BreadcrumbList). 404 is `noindex`.
 - Sitemap (`@astrojs/sitemap`), RSS (`@astrojs/rss`), generated `robots.txt`.
-- Search: Pagefind, index built after `astro build`. Index markup via `data-pagefind-*` in layouts.
+- Search: Pagefind, index built after `astro build`. Index markup via `data-pagefind-*` in layouts: filters and date meta go on the `data-pagefind-body` element. Three hidden spans remain (scribble date; summary and tags weights). The build runs `scripts/prune-pagefind.mjs` to delete Pagefind's unused UI files.
 - `verify-build.mjs` enforces: titles, descriptions, canonical, og:image, single h1, valid JSON-LD, alt text, duplicate ids, placeholder text, broken internal links, sitemap/robots/RSS consistency, Pagefind index present. Extend it when a new rule matters.
 
 ## 9. Workflow and conventions
@@ -129,20 +130,17 @@ Removed on purpose: scribble hash script, footer wrap check, parallax. Before ad
 - Prettier reformatting can break string-match edits; re-read before editing.
 - Avoid toggling layout state from JS that depends on its own result (footer wrap-check feedback loop).
 - Verify at 320, 360, 641, 768, 1024, 1280, 1536+ widths and with long Malayalam titles.
+- Astro scoped CSS does not stop `:has(.child-class)` from matching elements in child components. Don't couple components that way; pass a class instead.
+- Cascade layers lose to unlayered CSS and are ordered by first appearance. Always state the order explicitly.
+- Verify visual refactors against recorded baselines: full-page screenshots, focus states and a width sweep. Mask or exclude timing-dependent captures such as the highlight fade.
 
 ## 10. Current plans
 
-Status: site complete and deployed; no feature in progress.
+Status: site complete and deployed. The code clean-up is **done** (merged at `f5130c8`): mobile-first CSS, tokens, unused CSS removed, Pagefind markup tidied.
 
-**Paused: codebase clean-up (user said "not right now"; start only when asked).**
-1. Remove unused HTML/CSS: `MonthGroup` `:has(.has-cover)`, `--shadow-sm` token, unused classes (`spacer`, `about`, `name`), after a coverage check.
-2. Consolidate repeated raw values into tokens (outline widths, underline offset, letter-spacing, aspect ratios, hard-coded colours like `#93c5fd`, `rgb(255 255 255 / …)`).
-3. Convert `max-width` queries to mobile-first `min-width`: SiteHeader (64/48rem), ScribbleEntry, MonthGroup, EssayEntry, PostList, EssayGrid (40rem), EssayLayout (48rem), `tokens.css` (48rem).
-4. Semantic HTML review; replace `<span hidden data-pagefind-…>` hacks with attributes on real elements if feasible.
-5. Remove unneeded Pagefind UI files from `dist`.
-6. Re-record screenshot/HTML regression baselines (scratchpad only) before starting, then compare after.
+Known small changes from it: wordmark tracking `-0.02em`; the header goes wide at exactly 768px; prose link underline offset `0.25em`.
 
-**Optional, not requested:** search entry on essay/scribble/text pages.
+**Optional, not requested:** search entry on essay, scribble and text pages; replacing the remaining hidden Pagefind weight spans.
 
 ## 11. Maintaining this file
 
