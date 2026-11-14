@@ -3,7 +3,7 @@ title: മഴയുടെ ഓർമ്മകൾ
 date: 2026-10-28
 tags: [ഓർമ്മ, പ്രകൃതി]
 cover: ../../assets/images/rain-window.jpg
-coverAlt: Raindrops on a window with blurred city lights behind
+coverAlt: Illustration of raindrops on a window with blurred city lights behind
 ---
 
 ജനലിനപ്പുറം മഴ പെയ്യുമ്പോൾ എനിക്ക് എപ്പോഴും കുട്ടിക്കാലം ഓർമ്മ വരും. ഓടിട്ട വീടിന്റെ മേൽക്കൂരയിൽ മഴത്തുള്ളികൾ താളം പിടിക്കുന്ന ശബ്ദം. ഉമ്മറത്തിരുന്ന് കടലാസുതോണി ഉണ്ടാക്കിയിരുന്ന വൈകുന്നേരങ്ങൾ.

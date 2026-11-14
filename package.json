@@ -9,6 +9,7 @@
     "preview": "astro preview",
     "check": "astro check",
     "verify": "node scripts/verify-build.mjs",
+    "art": "node scripts/art/generate.mjs",
     "validate": "astro check && npm run build && node scripts/verify-build.mjs",
     "format": "prettier --write .",
     "format:check": "prettier --check .",

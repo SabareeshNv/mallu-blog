@@ -5,7 +5,7 @@ updated: 2026-11-02
 summary: ഒറ്റയ്ക്കുള്ള ഒരു ബസ് യാത്രയിൽ കണ്ടുമുട്ടിയ ചെറിയ മുഖങ്ങളെക്കുറിച്ചും, യാത്രകൾ ബാക്കിവെക്കുന്ന ഓർമ്മകളെക്കുറിച്ചും ഒരു കുറിപ്പ്.
 tags: [യാത്ര, ഓർമ്മ]
 cover: ../../assets/images/open-road.jpg
-coverAlt: A winding road through red rock canyons
+coverAlt: Illustration of a winding road through red rock canyons at sunset
 ---
 
 ഓരോ യാത്രയും ഒരു ചോദ്യത്തോടെയാണ് തുടങ്ങുന്നത്: എന്തിനാണ് പോകുന്നത്? തിരിച്ചു വരുമ്പോൾ പലപ്പോഴും ഉത്തരം കിട്ടാറില്ല. പക്ഷേ ചോദ്യം മാറിയിട്ടുണ്ടാകും.

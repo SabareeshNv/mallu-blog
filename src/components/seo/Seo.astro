@@ -14,7 +14,7 @@ interface Props {
   /** Page title (without the site name). The home page has none and uses the site's own title. */
   title?: string;
   description?: string;
-  /** Social preview image (an imported image). Defaults to the site's hero photograph. */
+  /** Social preview image (an imported image). Defaults to the site's hero illustration. */
   image?: ImageMetadata;
   /** Alt text for the social preview image. */
   imageAlt?: string;
@@ -28,7 +28,7 @@ const {
   title,
   description = SITE.description,
   image = defaultShareImage,
-  imageAlt = 'A wooden jetty reaching into a calm lake at sunset',
+  imageAlt = 'A boatman with a lantern on a still backwater at dusk, palms on either bank',
   article,
   noindex = false,
 } = Astro.props;

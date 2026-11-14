@@ -3,7 +3,7 @@ title: കടലിന്റെ അരികിൽ
 date: 2025-12-30
 tags: [പ്രകൃതി, ഓർമ്മ]
 cover: ../../assets/images/quiet-shore.jpg
-coverAlt: Gentle waves on a sandy beach at sunrise
+coverAlt: Illustration of gentle waves on a sandy beach at sunrise
 ---
 
 വർഷത്തിന്റെ അവസാന ദിവസങ്ങളിൽ കടൽത്തീരത്ത് പോകുന്നത് ഒരു ശീലമായി മാറിയിരിക്കുന്നു. തിരമാലകൾ വരുന്നു, പോകുന്നു. ഒന്നും സ്ഥിരമല്ല എന്ന് അവ ഓർമ്മിപ്പിക്കുന്നു.

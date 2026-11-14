@@ -1,6 +1,6 @@
 ---
 /**
- * An essay's own page: a full-width masthead (the cover photograph with the label, title and date set on it,
+ * An essay's own page: a full-width masthead (the cover illustration with the label, title and date set on it,
  * or the same on the plain background), then the text, its topics, related posts and links to the neighbouring posts.
  * The essay's rendered Markdown goes in the default slot.
  */
@@ -139,7 +139,7 @@ const related = await getKeepReadingPosts(post);
     position: absolute;
     inset: 0;
     z-index: -1;
-    /* Never lighter than 35%, so the label and title stay readable even on a bright photograph. */
+    /* Never lighter than 35%, so the label and title stay readable even on a bright picture. */
     background: linear-gradient(
       to top,
       color-mix(in srgb, var(--veil) 92%, transparent) 0%,

@@ -3,7 +3,7 @@ title: എന്തിനാണ് ഞാൻ എഴുതുന്നത്
 date: 2026-05-12
 tags: [എഴുത്ത്, വായന]
 cover: ../../assets/images/fountain-pen.jpg
-coverAlt: A fountain pen writing on lined paper
+coverAlt: Illustration of a fountain pen resting on a handwritten page under lamplight
 ---
 
 ഈ ചോദ്യം പലരും ചോദിച്ചിട്ടുണ്ട്. ആരും വായിക്കാനില്ലെങ്കിൽ പിന്നെ എന്തിന്?

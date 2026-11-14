@@ -19,8 +19,15 @@ const { title, intro, lang } = Astro.props;
 </header>
 
 <style>
+  /* The heading sits on a tonal band that runs edge to edge. The band starts at the top of the page content, so the
+     header pulls itself up over the container's top padding (--space-12) and pays it back as its own. The shadow
+     paints the band sideways, and the clip keeps it from spilling above or below. */
   .page-header {
-    margin-bottom: var(--space-12);
+    margin: calc(-1 * var(--space-12)) 0 var(--space-12);
+    padding: var(--space-12) 0 var(--space-8);
+    background: var(--surface);
+    box-shadow: 0 0 0 100vmax var(--surface);
+    clip-path: inset(0 -100vmax);
   }
 
   h1 {

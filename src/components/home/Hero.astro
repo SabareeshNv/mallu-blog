@@ -50,6 +50,8 @@ import { SITE } from '@/config/site';
     object-position: center 60%;
   }
 
+  /* A veil keeps the words readable: darker towards the foot, and (on wider screens) darker on the text's side, so
+     the boatman and the lantern on the other side stay bright. */
   .hero::before {
     content: '';
     position: absolute;
@@ -57,10 +59,28 @@ import { SITE } from '@/config/site';
     z-index: -1;
     background: linear-gradient(
       to top,
-      color-mix(in srgb, var(--veil) 90%, transparent) 0%,
-      color-mix(in srgb, var(--veil) 50%, transparent) 50%,
-      color-mix(in srgb, var(--veil) 10%, transparent) 100%
+      color-mix(in srgb, var(--veil) 86%, transparent) 0%,
+      color-mix(in srgb, var(--veil) 56%, transparent) 55%,
+      color-mix(in srgb, var(--veil) 6%, transparent) 100%
     );
+  }
+
+  @media (min-width: 48rem) {
+    .hero::before {
+      background:
+        radial-gradient(
+          ellipse 75% 130% at 0% 100%,
+          color-mix(in srgb, var(--veil) 88%, transparent) 0%,
+          color-mix(in srgb, var(--veil) 66%, transparent) 45%,
+          color-mix(in srgb, var(--veil) 0%, transparent) 100%
+        ),
+        linear-gradient(
+          to top,
+          color-mix(in srgb, var(--veil) 70%, transparent) 0%,
+          color-mix(in srgb, var(--veil) 30%, transparent) 55%,
+          color-mix(in srgb, var(--veil) 0%, transparent) 100%
+        );
+    }
   }
 
   /* Same container as the home page's two columns below (HomeShell), so the text starts where the posts start. */
@@ -72,13 +92,24 @@ import { SITE } from '@/config/site';
     text-shadow: var(--text-shadow-image);
   }
 
+  /* White label with a short gold rule: gold text itself would not stay readable over the brightest part of the sky. */
   .eyebrow {
-    color: var(--sun);
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    color: var(--on-image);
     font-size: var(--fs-label);
     font-weight: var(--fw-bold);
     line-height: var(--lh-label);
     letter-spacing: var(--tracking-label);
     text-transform: uppercase;
+  }
+
+  .eyebrow::before {
+    content: '';
+    width: var(--space-6);
+    height: var(--border-thick);
+    background: var(--sun);
   }
 
   h1 {

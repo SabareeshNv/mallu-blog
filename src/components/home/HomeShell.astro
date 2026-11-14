@@ -23,9 +23,8 @@ import Container from '@/components/ui/Container.astro';
   @media (min-width: 64rem) {
     .shell {
       display: grid;
-      grid-template-columns: minmax(0, 1fr) var(--rail-width);
-      gap: var(--space-16);
-      align-items: start;
+      grid-template-columns: minmax(0, 1fr) calc(var(--rail-width) + var(--space-8));
+      gap: var(--space-8);
     }
   }
 </style>

@@ -56,19 +56,27 @@ const topics = await getTopics();
 </aside>
 
 <style>
+  /* A tonal band: below the writing it is a full-width strip that meets the footer; beside the writing it is a
+     column that fills the page's height and runs off the right edge. (The footer's top margin, --space-24, is
+     cancelled by the negative bottom margin and paid back as padding.) */
   .rail {
     display: grid;
     gap: var(--space-8);
-    margin-top: var(--space-16);
+    margin: var(--space-16) 0 calc(-1 * var(--space-24));
+    padding: var(--space-12) 0 calc(var(--space-12) + var(--space-24));
+    background: var(--surface);
+    box-shadow: 0 0 0 100vmax var(--surface);
+    clip-path: inset(0 -100vmax);
     font-size: var(--fs-small);
     line-height: var(--lh-small);
   }
 
-  /* Beside the writing it scrolls with the page, level with the top of the posts. */
   @media (min-width: 64rem) {
     .rail {
-      align-self: start;
-      margin-top: 0;
+      margin-top: calc(-1 * var(--space-12));
+      padding-inline-start: var(--space-8);
+      align-content: start;
+      clip-path: inset(0 -100vmax 0 0);
     }
   }
 
@@ -82,7 +90,7 @@ const topics = await getTopics();
     padding: 0 var(--space-4);
     border: var(--border-width) solid var(--border);
     border-radius: var(--radius-full);
-    background: transparent;
+    background: var(--bg);
     color: var(--muted);
     font: inherit;
     font-size: var(--fs-small);

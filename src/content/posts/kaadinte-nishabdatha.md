@@ -3,7 +3,7 @@ title: കാടിന്റെ നിശ്ശബ്ദത
 date: 2026-08-03
 tags: [പ്രകൃതി, യാത്ര]
 cover: ../../assets/images/forest-path.jpg
-coverAlt: Sunlight filtering through tall trees onto a forest path
+coverAlt: Illustration of sunlight falling through tall trees onto a forest path
 ---
 
 കാട്ടിൽ നിശ്ശബ്ദത എന്നൊന്നില്ല. ഇലകൾ ഇളകുന്ന ശബ്ദം, ദൂരെ ഒരു പക്ഷിയുടെ വിളി, കാൽക്കീഴിൽ ഉണങ്ങിയ ചില്ലകൾ ഒടിയുന്നത്. എന്നിട്ടും അവിടെ ഒരു ശാന്തതയുണ്ട്.
