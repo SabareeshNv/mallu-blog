@@ -12,6 +12,7 @@ Hosted on Cloudflare Pages (push to `main` → rebuild).
 - Light and dark themes. The light theme background is white.
 - Fonts via Astro's Font Provider (Google, self-hosted): Alegreya Sans (`--font-ui`, English), Arima (`--font-ml`, Malayalam).
 - Vanilla modern CSS and JS only. No UI framework, no CSS framework.
+- Covers and the hero are original illustrations drawn in code (`scripts/art/generate.mjs`), not stock photographs.
 
 ## 2. Commands
 
@@ -21,6 +22,7 @@ Hosted on Cloudflare Pages (push to `main` → rebuild).
 | `npm run build` | `astro build && pagefind --site dist` |
 | `npm run validate` | `astro check` + build + `scripts/verify-build.mjs`. **Run before every push.** |
 | `npm run format` / `format:check` | Prettier (printWidth 120, singleQuote, astro plugin) |
+| `npm run art` | Redraws the cover and hero illustrations into `src/assets/images/` (deterministic). `npm run art -- hero-lake-dusk` redraws one. |
 
 Node ≥ 22.23.4 (`.nvmrc` = 22). TypeScript strict. `@/` aliases `src/`.
 
@@ -36,7 +38,7 @@ src/lib/         content/ (posts, slug, topics, group, kind, text, types), seo/ 
 src/pages/       routes (see §4)
 src/scripts/     theme-init.js, image-fade.js
 src/styles/      tokens.css, theme.css, base.css
-scripts/verify-build.mjs
+scripts/           verify-build.mjs, prune-pagefind.mjs, art/generate.mjs
 docs/ARCHITECTURE.md
 ```
 
@@ -62,7 +64,7 @@ Behaviour:
 
 ## 5. Design system
 
-**Look:** teal "monsoon" palette (accent #0a6c67 / #52d0c4, essay orange #b8400f / #ff9e6e, sun gold #f6c453, ink header/footer). Flat, editorial, restrained.
+**Look:** teal "monsoon" palette (accent #0a6c67 / #52d0c4, essay orange #b8400f / #ff9e6e, sun gold #f6c453, ink header/footer). Editorial and restrained. Depth currently comes from tonal layering (below). Shadows, borders and cards remain available for non-post elements if there's a reason, but the feed, thread and essay and scribble entries stay un-carded.
 
 **Tokens (`styles/tokens.css`, `theme.css`):**
 - Spacing: 4-point scale `--space-1…32`. Type: `--fs-*` / `--lh-*`, taller line-heights under `:lang(ml)`.
@@ -77,8 +79,23 @@ Behaviour:
 - Reset in `@layer base`. Prefer logical properties, grid/flex, no magic numbers.
 - Semantic HTML first; ARIA only where HTML can't express it.
 
+**Tonal layering** (the user's choice of depth direction for the page structure):
+- Bands use `--surface` and run edge to edge with `box-shadow: 0 0 0 100vmax var(--surface)` plus `clip-path: inset(0 -100vmax)`, so no layout wrapper is needed.
+- Where: `PageHeader`; `HomeRail` (beside the writing it is a column that runs off the right edge; below 64rem it is a full-width strip); `PostSection` ("Keep reading", "More scribbles").
+- `PageHeader` pulls itself up over the container's top padding (`--space-12`). It assumes `Container` keeps its default top padding.
+- The rail and `PostSection` end in a negative bottom margin of `--space-24` that cancels the footer's top margin, so the band meets the footer. Don't change the footer's margin without checking these.
+- The search button in the rail uses `--bg` so it stands out on the band.
+
+**Illustrations:**
+- The covers and hero are original SVG drawn in `scripts/art/generate.mjs` and written as 2000px-wide JPEGs (`sharp`) over the same filenames in `src/assets/images/`. Nothing in the components or content schema changed.
+- Each cover keeps its subject in the upper two-thirds, because the title sits across the foot. The hero keeps its subject (the boatman) right of centre, clear of the text, and inside the centre half of the picture so phone crops still show it.
+- Alt text says "Illustration of…". Don't put a colon in `coverAlt` (it breaks the YAML front matter).
+- To add a cover: add a function in `generate.mjs`, run `npm run art -- <name>`, then reference it as usual.
+
 **Rejected by the user. Do not reintroduce without being asked:**
-- Card-like designs, parallax, scroll reveals.
+- **Card-based UI for posts**, above all on the home page and in the thread. Posts should read as an open timeline, not a stack of boxed cards. Shadows, borders and cards are *not* banned in themselves; they are fine in moderation elsewhere (controls, panels, small components), as long as they don't become the project's prominent pattern.
+- Parallax and scroll reveals.
+- Mood labels and icons in place of topics (tried as a mockup; the user did not want them).
 - The specific depth treatment tried earlier (reverted to commit `3526559`). The user is NOT against depth in general; a different, tasteful approach may be proposed (show it first), but never reinstate that one.
 - Kasavu / maroon-and-gold palette (teal was restored).
 - Coloured stripe across the top of the page; featured essay on the home page; sticky side column; search button in the header.
@@ -86,7 +103,7 @@ Behaviour:
 
 **Layout facts:**
 - Header: wordmark links home only (not the whole bar); Home, Essays, Scribbles, Archive; shows a menu below 48rem and the links from 48rem up (768px counts as wide); theme switcher at the right end (icons only).
-- Home: full-width hero (first page only), then feed + right rail (search, About blurb, Topics, RSS) on large screens; rail is not sticky. Hero text and posts share the same left edge.
+- Home: full-width hero illustration (first page only), then feed + right-hand tinted column (search, About blurb, Topics, RSS); rail is not sticky. Hero text and posts share the same left edge. The hero's veil is darker on the text side; its label is white with a gold rule because gold text failed contrast over the bright sky.
 - On small screens the search sits above the posts, not in the header.
 - Footer: a single bar. Links left, copyright right; below 30rem, stacked, links evenly spaced, copyright centred. CSS only.
 
@@ -133,14 +150,18 @@ Removed on purpose: scribble hash script, footer wrap check, parallax. Before ad
 - Astro scoped CSS does not stop `:has(.child-class)` from matching elements in child components. Don't couple components that way; pass a class instead.
 - Cascade layers lose to unlayered CSS and are ordered by first appearance. Always state the order explicitly.
 - Verify visual refactors against recorded baselines: full-page screenshots, focus states and a width sweep. Mask or exclude timing-dependent captures such as the highlight fade.
+- A negative margin plus matching padding lets a band reach the footer, but it relies on margin collapsing. Check it in a full-page screenshot.
+- Measure text contrast over illustrations at the brightest pixels, not the average. Gold small text over a sky failed even with a veil.
+- Illustrations are drawn with a seeded random generator. Never use `Math.random()` there, or every run changes the pictures.
+- When the user rejects a pattern, record the scope they actually mean (for example, "card UI for posts", not "all cards") and don't generalise it.
 
 ## 10. Current plans
 
-Status: site complete and deployed. The code clean-up is **done** (merged at `f5130c8`): mobile-first CSS, tokens, unused CSS removed, Pagefind markup tidied.
+Status: site complete and deployed. Done: code clean-up (`f5130c8`), search limited to posts (`8145141`), illustrated covers, new hero and tonal layering (`8496219`).
 
-Known small changes from it: wordmark tracking `-0.02em`; the header goes wide at exactly 768px; prose link underline offset `0.25em`.
+Known small things: wordmark tracking `-0.02em`; the header goes wide at exactly 768px; prose link underline offset `0.25em`; the hero label's contrast at tablet width measured about 2.9:1 against the brightest 5% of pixels (it reads clearly on screen).
 
-**Optional, not requested:** search entry on essay, scribble and text pages; replacing the remaining hidden Pagefind weight spans.
+**Optional, not requested:** search entry on essay, scribble and text pages; replacing the remaining hidden Pagefind weight spans; more illustrations as new posts are added.
 
 ## 11. Maintaining this file
 
