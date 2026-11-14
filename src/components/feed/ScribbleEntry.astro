@@ -36,11 +36,11 @@ const longDate = formatDate(date);
   )}
   {cover && (
     <Image
-      class="cover"
+      class:list={['cover', { thumb: variant === 'feed' }]}
       src={cover}
       alt={coverAlt ?? ''}
-      widths={[320, 480, 720, 1080]}
-      sizes="(min-width: 48rem) 16rem, 100vw"
+      widths={[240, 320, 480, 720, 1080]}
+      sizes={variant === 'feed' ? '8rem' : '(min-width: 48rem) 16rem, 100vw'}
       data-fade
     />
   )}
@@ -106,6 +106,23 @@ const longDate = formatDate(date);
       float: inline-end;
       width: 40%;
       margin: var(--space-1) 0 var(--space-2) var(--space-6);
+    }
+  }
+
+  /* In the feed a scribble's picture is only ever a small square beside the words, so a scribble can never be mistaken
+     for an essay's wide cover. */
+  .thumb {
+    float: inline-end;
+    width: var(--space-24);
+    aspect-ratio: 1;
+    margin: var(--space-1) 0 var(--space-2) var(--space-4);
+    border-radius: var(--radius-md);
+  }
+
+  @media (min-width: 40rem) {
+    .thumb {
+      width: var(--space-32);
+      margin-inline-start: var(--space-5);
     }
   }
 

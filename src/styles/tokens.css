@@ -82,6 +82,13 @@
   --ratio-photo: 3 / 2;
   --ratio-compact: 4 / 3; /* essay cover, phones */
 
+  /* ---- The thread: marks and lines that tell essays (landmarks) from scribbles (notes) ---- */
+  --mark-essay-large: 2.75rem;
+  --mark-scribble-large: 1.75rem;
+  --mark-essay-small: 1.75rem;
+  --mark-scribble-small: 1.5rem;
+  --thread-heavy: 4px; /* the line beside an essay; a scribble's is --border-thick */
+
   /* ---- Motion ---- */
   --ease: cubic-bezier(0.2, 0, 0, 1);
   --duration-fast: 150ms;

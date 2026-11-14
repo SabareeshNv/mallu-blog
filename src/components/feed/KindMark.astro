@@ -1,0 +1,63 @@
+---
+/**
+ * The mark that tells an essay from a scribble at a glance: a solid orange disc with a book for an essay (a landmark),
+ * a small teal outlined disc with a pen for a scribble (a note). Purely visual; the kind is also given in text.
+ */
+import EssayIcon from '@/components/icons/EssayIcon.astro';
+import ScribbleIcon from '@/components/icons/ScribbleIcon.astro';
+
+interface Props {
+  kind: 'essay' | 'scribble';
+  /** "large" on the timeline, "small" in lists. */
+  size?: 'large' | 'small';
+}
+
+const { kind, size = 'large' } = Astro.props;
+const iconSize = { essay: { large: 22, small: 16 }, scribble: { large: 14, small: 14 } }[kind][size];
+---
+
+<span class:list={['mark', kind, size]} aria-hidden="true">
+  {kind === 'essay' ? <EssayIcon size={iconSize} /> : <ScribbleIcon size={iconSize} />}
+</span>
+
+<style>
+  .mark {
+    display: grid;
+    place-items: center;
+    flex: none;
+    width: var(--mark-size);
+    height: var(--mark-size);
+    border: var(--border-thick) solid var(--mark-color);
+    border-radius: var(--radius-full);
+    background: var(--mark-fill);
+    color: var(--mark-ink);
+  }
+
+  .essay {
+    --mark-color: var(--essay);
+    --mark-fill: var(--essay);
+    --mark-ink: var(--bg);
+  }
+
+  .scribble {
+    --mark-color: var(--accent);
+    --mark-fill: var(--accent-soft);
+    --mark-ink: var(--accent);
+  }
+
+  .essay.large {
+    --mark-size: var(--mark-essay-large);
+  }
+
+  .scribble.large {
+    --mark-size: var(--mark-scribble-large);
+  }
+
+  .essay.small {
+    --mark-size: var(--mark-essay-small);
+  }
+
+  .scribble.small {
+    --mark-size: var(--mark-scribble-small);
+  }
+</style>

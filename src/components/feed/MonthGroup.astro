@@ -1,8 +1,7 @@
 ---
 import EssayEntry from '@/components/feed/EssayEntry.astro';
 import ScribbleEntry from '@/components/feed/ScribbleEntry.astro';
-import EssayIcon from '@/components/icons/EssayIcon.astro';
-import ScribbleIcon from '@/components/icons/ScribbleIcon.astro';
+import KindMark from '@/components/feed/KindMark.astro';
 import { isEssay, type Group } from '@/lib/content';
 import { formatMonthName } from '@/lib/format';
 
@@ -25,8 +24,8 @@ const monthName = formatMonthName(group.posts[0].data.date);
       const essay = isEssay(post);
       return (
         <li class:list={['item', essay ? 'is-essay' : 'is-scribble', { 'has-cover': post.data.cover }]}>
-          <span class="node" aria-hidden="true">
-            {essay ? <EssayIcon size={16} /> : <ScribbleIcon size={16} />}
+          <span class="node">
+            <KindMark kind={essay ? 'essay' : 'scribble'} />
           </span>
           {essay ? <EssayEntry post={post} /> : <ScribbleEntry post={post} />}
         </li>
@@ -62,73 +61,70 @@ const monthName = formatMonthName(group.posts[0].data.date);
     letter-spacing: var(--tracking-label);
   }
 
-  /* A quiet vertical rail links the month's entries. Node: 32px; offset: 48px (40px on phones). */
+  /* The thread: one line runs down the month, drawn item by item so that it can change with the kind of entry. A
+     scribble is a note on a thin teal line with a small outlined mark; an essay is a landmark on a thick orange line
+     with a large solid mark, and gets more space after it. Marks are centred on the line (--axis). */
   .timeline {
-    --node: var(--space-8);
+    --axis: var(--space-2);
     --offset: var(--space-10);
-    position: relative;
-    display: grid;
-    gap: var(--space-12);
     margin: 0;
     padding: 0 0 0 var(--offset);
     list-style: none;
   }
 
-  .timeline::before {
+  .item {
+    position: relative;
+    padding-bottom: var(--space-8);
+  }
+
+  .item:last-child {
+    padding-bottom: 0;
+  }
+
+  .item::before {
     content: '';
     position: absolute;
-    top: var(--space-4);
-    bottom: var(--space-4);
-    left: calc(var(--node) / 2 - var(--border-width));
+    top: 0;
+    bottom: 0;
+    left: calc(var(--axis) - var(--offset) - var(--border-thick) / 2);
     width: var(--border-thick);
     background: var(--rail);
   }
 
-  .item {
-    position: relative;
+  .is-essay {
+    padding-bottom: var(--space-16);
   }
 
-  /* Sits level with the first line of each entry. */
+  .is-essay:last-child {
+    padding-bottom: 0;
+  }
+
+  .is-essay::before {
+    left: calc(var(--axis) - var(--offset) - var(--thread-heavy) / 2);
+    width: var(--thread-heavy);
+    background: var(--rail-essay);
+  }
+
   .node {
     position: absolute;
     top: 0;
-    left: calc(-1 * var(--offset));
-    display: grid;
-    place-items: center;
-    width: var(--node);
-    height: var(--node);
-    border: var(--border-thick) solid currentColor;
-    border-radius: var(--radius-full);
-    background: var(--bg);
+    left: calc(var(--axis) - var(--offset));
+    translate: -50% 0;
   }
 
-  .node :global(svg) {
-    width: var(--space-4);
-    height: var(--space-4);
-  }
-
-  .is-essay .node {
-    color: var(--essay);
-    background: var(--essay-soft);
-  }
-
-  /* An essay without a photograph starts with a headline taller than a line of text, so its node drops to meet it. */
+  /* An essay without a photograph starts with a headline taller than a line of text, so its mark drops to meet it. */
   .is-essay:not(.has-cover) .node {
     top: var(--space-2);
   }
 
-  .is-scribble .node {
-    color: var(--accent);
-    background: var(--accent-soft);
-  }
-
   /* The scribble reached through a permalink is marked on the timeline too. */
   .item:has(:target) .node {
-    box-shadow: 0 0 0 var(--space-1) var(--highlight);
+    filter: drop-shadow(0 0 var(--space-1) var(--highlight));
   }
 
   @media (min-width: 40rem) {
     .timeline {
+      --axis: var(--space-4);
       --offset: var(--space-12);
     }
   }

@@ -27,6 +27,7 @@
   --essay-soft: light-dark(#fcebe2, #3a2219);
   --sun: #f6c453; /* highlights on dark surfaces only */
   --rail: light-dark(#cfe3df, #22403f);
+  --rail-essay: color-mix(in srgb, var(--essay) 55%, transparent); /* the thread beside an essay */
   --highlight: light-dark(#fff0bf, #3a3418);
   --focus: light-dark(#1d4ed8, #93c5fd);
   --focus-on-ink: #93c5fd; /* the footer is dark in both themes */

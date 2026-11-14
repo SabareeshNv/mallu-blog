@@ -1,8 +1,10 @@
 ---
 /**
- * A plain list of posts, one per row: date, kind badge, and the title (essays) or the start of the text (scribbles).
- * Used by the archive, the topic pages and the "keep reading" lists.
+ * A plain list of posts, one per row: the kind mark (book for an essay, pen for a scribble), the date, and the title
+ * (essays) or the start of the text (scribbles). Used by the archive and the "keep reading" lists. With `thread`, a line
+ * runs down the marks, thick and orange beside an essay, thin and teal beside a scribble, as on the home timeline.
  */
+import KindMark from '@/components/feed/KindMark.astro';
 import FormattedDate from '@/components/ui/FormattedDate.astro';
 import { excerpt, isEssay, postUrl, type Post } from '@/lib/content';
 import { SITE } from '@/config/site';
@@ -11,20 +13,24 @@ interface Props {
   posts: Post[];
   /** "short" (12 Mar) when a year heading is shown above; "medium" (12 Mar 2026) when it is not. */
   dateFormat?: 'short' | 'medium';
+  thread?: boolean;
 }
 
-const { posts, dateFormat = 'short' } = Astro.props;
+const { posts, dateFormat = 'short', thread = false } = Astro.props;
 ---
 
 <ol class="rows" role="list">
   {posts.map((post) => {
     const essay = isEssay(post);
     return (
-      <li class:list={['row', dateFormat]}>
+      <li class:list={['row', dateFormat, essay ? 'is-essay' : 'is-scribble', { thread }]}>
+        <span class="mark">
+          <KindMark kind={essay ? 'essay' : 'scribble'} size="small" />
+        </span>
         <FormattedDate class="date" date={post.data.date} format={dateFormat} />
-        <span class:list={['kind', essay ? 'is-essay' : 'is-scribble']}>{essay ? 'Essay' : 'Scribble'}</span>
-        <a class:list={['link', { 'is-excerpt': !essay }]} href={postUrl(post)} lang={SITE.postLang}>
-          {essay ? post.data.title : excerpt(post, 70)}
+        <a class:list={['link', { 'is-excerpt': !essay }]} href={postUrl(post)}>
+          <span class="sr-only">{essay ? 'Essay: ' : 'Scribble: '}</span>
+          <span lang={SITE.postLang}>{essay ? post.data.title : excerpt(post, 70)}</span>
         </a>
       </li>
     );
@@ -39,46 +45,34 @@ const { posts, dateFormat = 'short' } = Astro.props;
     list-style: none;
   }
 
+  /* Phones: the mark on the left, the date above the title. Wider: mark, date and title on one row. */
   .row {
+    position: relative;
     display: grid;
-    grid-template-columns: auto 1fr;
+    grid-template-columns: var(--space-8) 1fr;
     align-items: baseline;
-    gap: var(--space-2) var(--space-3);
+    gap: var(--space-1) var(--space-3);
     padding-block: var(--space-4);
     border-bottom: var(--border-width) solid var(--border);
   }
 
+  .mark {
+    grid-row: 1 / span 2;
+    align-self: start;
+    justify-self: center;
+    z-index: 1;
+  }
+
   .date {
+    grid-column: 2;
     color: var(--muted);
     font-size: var(--fs-meta);
     line-height: var(--lh-meta);
     font-variant-numeric: tabular-nums;
   }
 
-  /* Badge: same shape and type as the year badge on the timeline. */
-  .kind {
-    justify-self: start;
-    padding: var(--space-1) var(--space-2);
-    border-radius: var(--radius-sm);
-    font-size: var(--fs-label);
-    font-weight: var(--fw-bold);
-    line-height: var(--lh-label);
-    letter-spacing: var(--tracking-label);
-    text-transform: uppercase;
-  }
-
-  .is-essay {
-    background: var(--essay-soft);
-    color: var(--essay);
-  }
-
-  .is-scribble {
-    background: var(--accent-soft);
-    color: var(--accent);
-  }
-
   .link {
-    grid-column: 1 / -1;
+    grid-column: 2;
     color: var(--text);
     font-weight: var(--fw-bold);
     text-decoration: none;
@@ -99,16 +93,42 @@ const { posts, dateFormat = 'short' } = Astro.props;
     text-decoration: underline;
   }
 
+  /* The thread: no dividers, a line behind the marks. */
+  .thread {
+    border-bottom: 0;
+  }
+
+  .thread::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: calc(var(--space-8) / 2 - var(--border-thick) / 2);
+    width: var(--border-thick);
+    background: var(--rail);
+  }
+
+  .thread.is-essay::before {
+    left: calc(var(--space-8) / 2 - var(--thread-heavy) / 2);
+    width: var(--thread-heavy);
+    background: var(--rail-essay);
+  }
+
   @media (min-width: 40rem) {
     .row {
-      grid-template-columns: var(--space-16) var(--space-24) 1fr;
+      grid-template-columns: var(--space-8) var(--space-16) 1fr;
       gap: var(--space-4);
     }
 
     .row.medium {
-      grid-template-columns: var(--space-32) var(--space-24) 1fr;
+      grid-template-columns: var(--space-8) var(--space-32) 1fr;
     }
 
+    .mark {
+      grid-row: auto;
+    }
+
+    .date,
     .link {
       grid-column: auto;
     }

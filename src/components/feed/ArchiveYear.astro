@@ -16,7 +16,7 @@ const headingId = `year-${group.key}`;
     {group.label}
     <span class="count">{countOf(group.posts.length, 'entry', 'entries')}</span>
   </h2>
-  <PostList posts={group.posts} />
+  <PostList posts={group.posts} thread />
 </section>
 
 <style>
