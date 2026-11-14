@@ -2,62 +2,41 @@
 import SunIcon from '@/components/icons/SunIcon.astro';
 import MoonIcon from '@/components/icons/MoonIcon.astro';
 /**
- * Light / dark theme switcher (icons only; the labels are read by screen readers).
- * Two real buttons: each is reachable with Tab and works with Enter and Space. The current theme is
- * exposed to screen readers through aria-pressed.
+ * Light / dark theme switch: one button that changes to the opposite of the theme currently shown.
+ * Until the reader presses it, the page follows the device's setting (see scripts/theme-init.js and the script below).
+ * Its icon is the theme a press will switch to (a moon in the light theme, a sun in the dark theme); aria-pressed is
+ * true while the dark theme is showing. A native button, so Enter and Space work as well as a click or tap.
  */
 ---
 
-<div class="switcher" role="group" aria-label="Colour theme" data-theme-switcher>
-  <button
-    type="button"
-    class="option"
-    data-theme-value="light"
-    aria-pressed="false"
-    aria-label="Light theme"
-    title="Light theme"
-  >
-    <SunIcon />
-  </button>
-  <button
-    type="button"
-    class="option"
-    data-theme-value="dark"
-    aria-pressed="false"
-    aria-label="Dark theme"
-    title="Dark theme"
-  >
+<button
+  type="button"
+  class="toggle"
+  aria-pressed="false"
+  aria-label="Dark theme"
+  title="Switch theme"
+  data-theme-toggle
+>
+  <span class="icon icon-moon">
     <MoonIcon />
-  </button>
-</div>
+  </span>
+  <span class="icon icon-sun">
+    <SunIcon />
+  </span>
+</button>
 
 <style>
-  /* Track height equals --control-h: 4px padding + 32px options + 4px padding. */
-  .switcher {
-    display: inline-flex;
-    gap: var(--space-1);
-    margin: 0;
-    padding: calc(var(--space-1) - var(--border-width));
-    border: var(--border-width) solid var(--border);
-    border-radius: var(--radius-full);
-  }
-
-  /* The switcher needs JavaScript; without it the OS preference is used. */
-  :global(html:not([data-js])) .switcher {
-    display: none;
-  }
-
-  .option {
+  .toggle {
     display: inline-grid;
     place-items: center;
-    width: var(--icon-button);
-    height: var(--icon-button);
+    width: var(--control-h);
+    height: var(--control-h);
     margin: 0;
     padding: 0;
-    border: 0;
+    border: var(--border-width) solid var(--border);
     border-radius: var(--radius-full);
     background: transparent;
-    color: var(--muted);
+    color: var(--text);
     font: inherit;
     cursor: pointer;
     transition:
@@ -65,18 +44,28 @@ import MoonIcon from '@/components/icons/MoonIcon.astro';
       color var(--duration-fast) var(--ease);
   }
 
-  .option:hover {
-    color: var(--text);
-  }
-
-  .option[aria-pressed='true'] {
+  .toggle:hover {
     background: var(--accent-soft);
     color: var(--accent);
   }
 
-  .option:focus-visible {
-    outline: var(--focus-width) solid var(--focus);
-    outline-offset: var(--focus-offset);
+  /* The switch needs JavaScript; without it the device's setting is used. */
+  :global(html:not([data-js])) .toggle {
+    display: none;
+  }
+
+  .icon {
+    display: grid;
+    place-items: center;
+  }
+
+  .icon-sun,
+  :global(html[data-theme='dark']) .icon-moon {
+    display: none;
+  }
+
+  :global(html[data-theme='dark']) .icon-sun {
+    display: grid;
   }
 </style>
 
@@ -96,27 +85,24 @@ import MoonIcon from '@/components/icons/MoonIcon.astro';
 
   function apply(theme: Theme) {
     root.dataset.theme = theme;
-    document.querySelectorAll<HTMLButtonElement>('[data-theme-switcher] [data-theme-value]').forEach((button) => {
-      button.setAttribute('aria-pressed', String(button.dataset.themeValue === theme));
+    document.querySelectorAll<HTMLButtonElement>('[data-theme-toggle]').forEach((button) => {
+      button.setAttribute('aria-pressed', String(theme === 'dark'));
     });
   }
 
-  apply((root.dataset.theme as Theme) ?? 'light');
+  apply(root.dataset.theme === 'dark' ? 'dark' : 'light');
 
-  // A native button fires "click" for Enter and Space as well as for the mouse and touch.
-  document.querySelectorAll<HTMLElement>('[data-theme-switcher]').forEach((switcher) => {
-    switcher.addEventListener('click', (event) => {
-      const button = (event.target as Element).closest<HTMLButtonElement>('[data-theme-value]');
-      if (!button) return;
-      const theme = button.dataset.themeValue as Theme;
-      apply(theme);
+  document.querySelectorAll<HTMLButtonElement>('[data-theme-toggle]').forEach((button) => {
+    button.addEventListener('click', () => {
+      const next: Theme = root.dataset.theme === 'dark' ? 'light' : 'dark';
+      apply(next);
       try {
-        localStorage.setItem('theme', theme);
+        localStorage.setItem('theme', next);
       } catch {}
     });
   });
 
-  // Follow the OS while the reader has not made an explicit choice.
+  // Follow the device's setting while the reader has not pressed the button.
   systemDark.addEventListener('change', (event) => {
     if (!stored()) apply(event.matches ? 'dark' : 'light');
   });
