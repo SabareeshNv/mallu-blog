@@ -32,7 +32,7 @@ Node ≥ 22.23.4 (`.nvmrc` = 22). TypeScript strict. `@/` aliases `src/`.
 src/config/      site.ts, routes.ts, navigation.ts   ← single source for names, URLs, nav
 src/content/posts/   Markdown posts (+ _template-scribble.md)
 src/content.config.ts   collection + Zod schema
-src/components/  feed/ home/ icons/ layout/ search/ seo/ ui/
+src/components/  feed/ (KindMark: the one component for essay/scribble marks) home/ icons/ layout/ search/ seo/ ui/
 src/layouts/     BaseLayout, PageLayout, EssayLayout, ScribbleLayout, MarkdownLayout
 src/lib/         content/ (posts, slug, topics, group, kind, text, types), seo/ (schema, types), format, graphemes
 src/pages/       routes (see §4)
@@ -60,7 +60,7 @@ Behaviour:
 - Home feed is purely chronological, newest first. No featured essay. Max 30 per page (`SITE.feedPageSize`). Grouped by month.
 - Essay page: full-width cover with title/date inside the image; text column 75ch; "Keep reading" (shared topics, topped up with recent posts). No Newer/Older and no "More entries".
 - Scribble page: "More scribbles". Scribble permalink icon → `/scribble/<slug>`; "Read the essay →" links to the essay.
-- Archive grouped by year.
+- Archive grouped by year, each row led by the kind mark, with a thread line down the year. The Essays page is the same month-grouped thread as Scribbles and Home; there is no grid.
 
 ## 5. Design system
 
@@ -78,6 +78,13 @@ Behaviour:
 - Put `min-width` blocks after the base rule they override.
 - Reset in `@layer base`. Prefer logical properties, grid/flex, no magic numbers.
 - Semantic HTML first; ARIA only where HTML can't express it.
+
+**The thread** (how essays and scribbles are told apart at a glance; used on Home, Essays, Scribbles and Archive):
+- An essay is a landmark: a large solid orange mark (book) on a thick orange line (`--thread-heavy`, `--rail-essay`), with extra space after it. A scribble is a note: a small outlined teal mark (pen) on a thin teal line (`--border-thick`, `--rail`), closer together.
+- Marks are the single `KindMark` component. Sizes come from `--mark-essay-large`, `--mark-scribble-large`, `--mark-essay-small` and `--mark-scribble-small`, centred on the line with `--axis`.
+- The line is drawn per item (`.item::before`), not as one line per month. In lists, `PostList thread` does the same per row.
+- In the feed a scribble's picture is only a small square thumbnail (`.thumb`), never a banner. On its own page it keeps the larger picture.
+- The kind is never conveyed by icon or colour alone: lists carry hidden "Essay:" and "Scribble:" text.
 
 **Tonal layering** (the user's choice of depth direction for the page structure):
 - Bands use `--surface` and run edge to edge with `box-shadow: 0 0 0 100vmax var(--surface)` plus `clip-path: inset(0 -100vmax)`, so no layout wrapper is needed.
@@ -153,11 +160,12 @@ Removed on purpose: scribble hash script, footer wrap check, parallax. Before ad
 - A negative margin plus matching padding lets a band reach the footer, but it relies on margin collapsing. Check it in a full-page screenshot.
 - Measure text contrast over illustrations at the brightest pixels, not the average. Gold small text over a sky failed even with a veil.
 - Illustrations are drawn with a seeded random generator. Never use `Math.random()` there, or every run changes the pictures.
+- CSS injected into a Playwright mock loses to Astro's scoped selectors; use `!important` in mocks and confirm in the real build.
 - When the user rejects a pattern, record the scope they actually mean (for example, "card UI for posts", not "all cards") and don't generalise it.
 
 ## 10. Current plans
 
-Status: site complete and deployed. Done: code clean-up (`f5130c8`), search limited to posts (`8145141`), illustrated covers, new hero and tonal layering (`8496219`).
+Status: site complete and deployed. Done: code clean-up (`f5130c8`), search limited to posts (`8145141`), illustrated covers, new hero and tonal layering (`8496219`), the essay/scribble thread (`e8876ae`).
 
 Known small things: wordmark tracking `-0.02em`; the header goes wide at exactly 768px; prose link underline offset `0.25em`; the hero label's contrast at tablet width measured about 2.9:1 against the brightest 5% of pixels (it reads clearly on screen).
 
