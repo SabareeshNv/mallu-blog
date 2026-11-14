@@ -109,7 +109,7 @@ Behaviour:
 - Topics, About and RSS in header/footer nav (RSS lives in the home rail "follow" section); section above the footer; "Written in Malayalam" text; post counts in the hero; text-decoration on titles that sit over images.
 
 **Layout facts:**
-- Header: wordmark links home only (not the whole bar); Home, Essays, Scribbles, Archive; shows a menu below 48rem and the links from 48rem up (768px counts as wide); theme switcher at the right end (icons only).
+- Header: wordmark links home only (not the whole bar); Home, Essays, Scribbles, Archive; shows a menu below 48rem and the links from 48rem up (768px counts as wide); theme switch at the right end (a single button, icon only).
 - Home: full-width hero illustration (first page only), then feed + right-hand tinted column (search, About blurb, Topics, RSS); rail is not sticky. Hero text and posts share the same left edge. The hero's veil is darker on the text side; its label is white with a gold rule because gold text failed contrast over the bright sky.
 - On small screens the search sits above the posts, not in the header.
 - Footer: a single bar. Links left, copyright right; below 30rem, stacked, links evenly spaced, copyright centred. CSS only.
@@ -118,7 +118,7 @@ Behaviour:
 
 Only what is needed, all inline and small (~5–6 KB total):
 1. `theme-init` (head, before paint): sets `data-theme`, `data-js`.
-2. ThemeSwitcher: two real buttons with `aria-pressed` (Enter/Space must work).
+2. ThemeSwitcher: one button that flips to the opposite of the theme being shown (the icon shows the target theme; `aria-pressed` is true while dark). It follows the device's setting until the first press, then stores the choice under `localStorage` key `theme`. Enter and Space must work.
 3. SiteHeader menu (the breakpoint in its `matchMedia` must match the header's 48rem).
 4. SearchDialog (Ctrl/⌘+K or `/`; Essay/Scribble filters; query normalisation of legacy chillu spelling and trailing virama).
 5. `image-fade` (images with `data-fade`).
@@ -128,7 +128,7 @@ Removed on purpose: scribble hash script, footer wrap check, parallax. Before ad
 
 ## 7. Accessibility
 
-- Full keyboard operation; DOM order equals visual order (hence the theme switcher is duplicated for phone/desktop headers).
+- Full keyboard operation; DOM order equals visual order (hence the theme switch is duplicated for phone/desktop headers).
 - Visible focus styles; skip link; one `<h1>` per page; meaningful `alt` (`coverAlt` required).
 - `prefers-reduced-motion` respected. Motion only in response to user intent.
 - Colour contrast checked in both themes.
