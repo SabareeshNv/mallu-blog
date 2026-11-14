@@ -83,6 +83,33 @@ const { size = 'regular', lang = SITE.postLang } = Astro.props;
     color: var(--muted);
   }
 
+  /* Emphasis is marked like a highlighter pen: a soft band across the lower part of the words. */
+  .prose :global(strong) {
+    padding-inline: var(--space-1);
+    margin-inline: calc(-1 * var(--space-1));
+    background: linear-gradient(to top, var(--highlight) 0.55em, transparent 0.55em);
+    box-decoration-break: clone;
+    -webkit-box-decoration-break: clone;
+  }
+
+  /* On hover or keyboard focus the pen sweeps across a link. */
+  .prose :global(a) {
+    background: linear-gradient(var(--highlight), var(--highlight)) no-repeat left bottom / 0 0.6em;
+    box-decoration-break: clone;
+    -webkit-box-decoration-break: clone;
+  }
+
+  .prose :global(a:hover),
+  .prose :global(a:focus-visible) {
+    background-size: 100% 0.6em;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .prose :global(a) {
+      transition: background-size var(--duration) var(--ease);
+    }
+  }
+
   .prose :global(img) {
     margin: var(--space-8) 0;
   }

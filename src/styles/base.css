@@ -28,6 +28,12 @@
     }
   }
 
+  /* Tonal bands reach past the content's edges (see PageHeader). What lies outside the window is cut off here, so it can
+     never be scrolled to. `clip`, unlike `hidden`, does not turn <main> into a scroll container. */
+  main {
+    overflow-x: clip;
+  }
+
   body {
     margin: 0;
     min-height: 100dvh;

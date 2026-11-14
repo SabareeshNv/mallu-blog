@@ -1,6 +1,7 @@
 ---
 import { Image } from 'astro:assets';
 import heroImage from '@/assets/images/hero-lake-dusk.jpg';
+import HeroBoat from '@/components/home/HeroBoat.astro';
 import { SITE } from '@/config/site';
 ---
 
@@ -15,6 +16,7 @@ import { SITE } from '@/config/site';
     fetchpriority="high"
     data-fade
   />
+  <HeroBoat />
   <div class="content">
     <p class="eyebrow">A notebook in Malayalam</p>
     <h1 id="hero-title">{SITE.title}</h1>
@@ -47,7 +49,7 @@ import { SITE } from '@/config/site';
     width: 100%;
     height: 100%;
     object-fit: cover;
-    object-position: center 60%;
+    object-position: center;
   }
 
   /* A veil keeps the words readable: darker towards the foot, and (on wider screens) darker on the text's side, so
@@ -83,6 +85,18 @@ import { SITE } from '@/config/site';
     }
   }
 
+  /* The foot of the hero is a gentle wave, the page's own colour lapping up over the water. */
+  .hero::after {
+    content: '';
+    position: absolute;
+    inset-inline: 0;
+    bottom: -1px;
+    height: var(--wave-height);
+    background: var(--bg);
+    mask: var(--wave-foot) repeat-x 0 0 / var(--wave-length) var(--wave-height);
+    scale: 1 -1;
+  }
+
   /* Same container as the home page's two columns below (HomeShell), so the text starts where the posts start. */
   .content {
     width: 100%;
@@ -90,6 +104,14 @@ import { SITE } from '@/config/site';
     margin-inline: auto;
     padding: var(--space-16) var(--gutter) var(--space-12);
     text-shadow: var(--text-shadow-image);
+    pointer-events: none; /* lets the pointer reach the boatman behind the words */
+  }
+
+  .eyebrow,
+  h1,
+  .tagline {
+    width: fit-content;
+    pointer-events: auto;
   }
 
   /* White label with a short gold rule: gold text itself would not stay readable over the brightest part of the sky. */

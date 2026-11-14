@@ -60,6 +60,7 @@ const topics = await getTopics();
      column that fills the page's height and runs off the right edge. (The footer's top margin, --space-24, is
      cancelled by the negative bottom margin and paid back as padding.) */
   .rail {
+    position: relative;
     display: grid;
     gap: var(--space-8);
     margin: var(--space-16) 0 calc(-1 * var(--space-24));
@@ -71,12 +72,34 @@ const topics = await getTopics();
     line-height: var(--lh-small);
   }
 
+  /* The edge facing the writing is a soft wave: along the top of the strip, down the left side of the column. */
+  .rail::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100vmax;
+    width: calc(100% + 200vmax);
+    height: var(--wave-height);
+    background: var(--bg);
+    mask: var(--wave-foot) repeat-x 0 0 / var(--wave-length) var(--wave-height);
+  }
+
   @media (min-width: 64rem) {
     .rail {
       margin-top: calc(-1 * var(--space-12));
       padding-inline-start: var(--space-8);
       align-content: start;
       clip-path: inset(0 -100vmax 0 0);
+    }
+
+    .rail::before {
+      top: 0;
+      bottom: 0;
+      left: 0;
+      width: var(--wave-height);
+      height: auto;
+      mask: var(--wave-side) repeat-y 0 0 / var(--wave-height) var(--wave-length);
+      scale: -1 1;
     }
   }
 

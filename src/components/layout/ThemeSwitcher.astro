@@ -54,18 +54,45 @@ import MoonIcon from '@/components/icons/MoonIcon.astro';
     display: none;
   }
 
+  /* Both icons sit in the same cell. The one for the theme a press will switch to is showing; on a press the two
+     turn over: the old one spins away and shrinks, the new one spins in. */
   .icon {
+    grid-area: 1 / 1;
     display: grid;
     place-items: center;
   }
 
   .icon-sun,
   :global(html[data-theme='dark']) .icon-moon {
-    display: none;
+    opacity: 0;
+    rotate: -90deg;
+    scale: 0.5;
   }
 
   :global(html[data-theme='dark']) .icon-sun {
-    display: grid;
+    opacity: 1;
+    rotate: 0deg;
+    scale: 1;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .icon {
+      transition:
+        opacity var(--duration) var(--ease),
+        rotate var(--duration) var(--ease),
+        scale var(--duration) var(--ease);
+    }
+
+    .toggle {
+      transition:
+        background-color var(--duration-fast) var(--ease),
+        color var(--duration-fast) var(--ease),
+        scale var(--duration-fast) var(--ease);
+    }
+
+    .toggle:active {
+      scale: 0.92;
+    }
   }
 </style>
 

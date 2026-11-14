@@ -202,25 +202,8 @@ pictures['hero-lake-dusk'] = () => {
     HZ + 16,
   )}</g>`;
   b += `<rect y="${HZ + 16}" width="${W}" height="${H - HZ - 16}" fill="url(#water)" opacity="0.0"/>`;
-  // the lone voice: a boatman standing in a canoe with a lantern
-  const bx = 1500,
-    by = 792;
-  b += `<ellipse cx="${bx}" cy="${by + 20}" rx="150" ry="14" fill="#0a1830" opacity="0.5" filter="url(#b6)"/>`;
-  b += `<circle cx="${bx + 112}" cy="${by - 46}" r="150" fill="url(#lamp)" opacity="0.7"/>`;
-  b += `<ellipse cx="${bx + 112}" cy="${by + 60}" rx="70" ry="9" fill="#ffd070" opacity="0.38" filter="url(#b6)"/>`;
-  b += `<path d="M${bx - 150} ${by - 12} Q${bx} ${by + 38} ${bx + 160} ${by - 22} Q${bx + 6} ${by + 8} ${bx - 150} ${by - 12}Z" fill="#1a1626"/>`;
-  b += `<path d="M${bx - 150} ${by - 12} Q${bx - 190} ${by - 34} ${bx - 176} ${by - 40} Q${bx - 150} ${by - 22} ${bx - 120} ${by - 14}Z M${bx + 160} ${by - 22} Q${bx + 196} ${by - 48} ${bx + 182} ${by - 54} Q${bx + 156} ${by - 34} ${bx + 128} ${by - 22}Z" fill="#1a1626"/>`;
-  // the figure
-  b += `<path d="M${bx - 16} ${by - 14} L${bx - 12} ${by - 92} Q${bx} ${by - 104} ${bx + 12} ${by - 92} L${bx + 16} ${by - 14}Z" fill="#14101f"/>`;
-  b += `<circle cx="${bx}" cy="${by - 112}" r="14" fill="#14101f"/>`;
-  b += `<path d="M${bx - 12} ${by - 84} L${bx - 70} ${by - 10}" stroke="#14101f" stroke-width="6" stroke-linecap="round"/>`;
-  b += `<path d="M${bx - 150} ${by - 244} L${bx - 62} ${by + 30}" stroke="#241c2e" stroke-width="5" stroke-linecap="round"/>`;
-  // the lantern hangs from a short bow pole
-  b += `<path d="M${bx + 16} ${by - 80} L${bx + 112} ${by - 62}" stroke="#14101f" stroke-width="4" stroke-linecap="round"/>`;
-  b += `<path d="M${bx + 112} ${by - 62} L${bx + 112} ${by - 52}" stroke="#14101f" stroke-width="2"/><rect x="${bx + 104}" y="${by - 52}" width="16" height="22" rx="3" fill="#ffe08a"/><rect x="${bx + 102}" y="${by - 56}" width="20" height="5" fill="#14101f"/><rect x="${bx + 102}" y="${by - 31}" width="20" height="5" fill="#14101f"/>`;
-  // ripples round the boat
-  for (let i = 0; i < 4; i++)
-    b += `<ellipse cx="${bx + 6}" cy="${by + 18}" rx="${180 + i * 54}" ry="${12 + i * 5}" fill="none" stroke="#e9f2ff" stroke-width="1.6" opacity="${f(0.3 - i * 0.07)}"/>`;
+  // The boatman and his lantern are not in this picture: they are live SVG (components/home/HeroBoat.astro), laid
+  // over it, so that they can answer a hover.
   // fireflies
   for (let i = 0; i < 46; i++) {
     const x = r(0, W),

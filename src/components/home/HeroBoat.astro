@@ -1,0 +1,153 @@
+---
+/**
+ * The boatman and his lantern, drawn over the hero illustration (the picture itself has no boat). It sits in the same
+ * 2400 x 1000 frame as the picture and is cropped the same way (`slice`, centred), so the two always line up.
+ * At rest it is still. When the reader hovers or presses it, the canoe rocks, ripples spread and the lantern glows.
+ * Purely decorative: hidden from assistive technology, and the movement is off under prefers-reduced-motion.
+ */
+---
+
+<svg class="boat" viewBox="0 0 2400 1000" preserveAspectRatio="xMidYMid slice" aria-hidden="true" focusable="false">
+  <defs>
+    <radialGradient id="boat-lamp" cx=".5" cy=".5" r=".5">
+      <stop offset="0" stop-color="#fff2b8" stop-opacity="1"></stop>
+      <stop offset=".25" stop-color="#ffd070" stop-opacity=".6"></stop>
+      <stop offset="1" stop-color="#ff9a40" stop-opacity="0"></stop>
+    </radialGradient>
+    <filter id="boat-blur" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="6"></feGaussianBlur>
+    </filter>
+  </defs>
+  <g class="scene">
+    <rect class="hit" x="1280" y="540" width="480" height="320"></rect>
+    <ellipse cx="1500" cy="812" rx="150" ry="14" fill="#0a1830" opacity="0.5" filter="url(#boat-blur)"></ellipse>
+    <ellipse class="reflection" cx="1612" cy="852" rx="70" ry="9" fill="#ffd070" filter="url(#boat-blur)"></ellipse>
+    <g class="ripples" fill="none" stroke="#e9f2ff" stroke-width="1.6">
+      <ellipse class="ripple" cx="1506" cy="810" rx="180" ry="12" opacity="0.3"></ellipse>
+      <ellipse class="ripple" cx="1506" cy="810" rx="234" ry="17" opacity="0.23"></ellipse>
+      <ellipse class="ripple" cx="1506" cy="810" rx="288" ry="22" opacity="0.16"></ellipse>
+      <ellipse class="ripple" cx="1506" cy="810" rx="342" ry="27" opacity="0.09"></ellipse>
+    </g>
+    <g class="vessel">
+      <circle class="lamp" cx="1612" cy="746" r="150" fill="url(#boat-lamp)"></circle>
+      <path d="M1350 780 Q1500 830 1660 770 Q1506 800 1350 780Z" fill="#1a1626"></path>
+      <path
+        d="M1350 780 Q1310 758 1324 752 Q1350 770 1380 778Z M1660 770 Q1696 744 1682 738 Q1656 758 1628 770Z"
+        fill="#1a1626"
+      ></path>
+      <path d="M1484 778 L1488 700 Q1500 688 1512 700 L1516 778Z" fill="#14101f"></path>
+      <circle cx="1500" cy="680" r="14" fill="#14101f"></circle>
+      <path d="M1488 708 L1430 782" stroke="#14101f" stroke-width="6" stroke-linecap="round"></path>
+      <path d="M1350 548 L1438 822" stroke="#241c2e" stroke-width="5" stroke-linecap="round"></path>
+      <path d="M1516 712 L1612 730" stroke="#14101f" stroke-width="4" stroke-linecap="round"></path>
+      <path d="M1612 730 L1612 740" stroke="#14101f" stroke-width="2"></path>
+      <rect class="flame" x="1604" y="740" width="16" height="22" rx="3" fill="#ffe08a"></rect>
+      <rect x="1602" y="736" width="20" height="5" fill="#14101f"></rect>
+      <rect x="1602" y="761" width="20" height="5" fill="#14101f"></rect>
+    </g>
+  </g>
+</svg>
+
+<style>
+  .boat {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+  }
+
+  /* An invisible patch around the canoe is what the pointer finds. */
+  .hit {
+    fill: transparent;
+    pointer-events: all;
+  }
+
+  .reflection {
+    opacity: 0.38;
+  }
+
+  .lamp {
+    opacity: 0.7;
+    transform-box: fill-box;
+    transform-origin: center;
+    transition:
+      opacity var(--duration) var(--ease),
+      scale var(--duration) var(--ease);
+  }
+
+  .scene:hover .lamp,
+  .scene:active .lamp {
+    opacity: 1;
+    scale: 1.2;
+  }
+
+  .scene:hover .reflection,
+  .scene:active .reflection {
+    opacity: 0.6;
+  }
+
+  .vessel,
+  .ripple {
+    transform-box: fill-box;
+    transform-origin: center bottom;
+  }
+
+  .ripple {
+    transform-origin: center;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .scene:hover .vessel,
+    .scene:active .vessel {
+      animation: rock 2.8s ease-in-out infinite;
+    }
+
+    .scene:hover .ripple,
+    .scene:active .ripple {
+      animation: ripple 2.8s ease-out infinite;
+    }
+
+    .scene:hover .ripple:nth-child(2),
+    .scene:active .ripple:nth-child(2) {
+      animation-delay: 0.35s;
+    }
+
+    .scene:hover .ripple:nth-child(3),
+    .scene:active .ripple:nth-child(3) {
+      animation-delay: 0.7s;
+    }
+
+    .scene:hover .ripple:nth-child(4),
+    .scene:active .ripple:nth-child(4) {
+      animation-delay: 1.05s;
+    }
+
+    @keyframes rock {
+      0%,
+      100% {
+        translate: 0 0;
+        rotate: 0deg;
+      }
+      50% {
+        translate: 0 5px;
+        rotate: 1.4deg;
+      }
+    }
+
+    @keyframes ripple {
+      0% {
+        scale: 0.9;
+        opacity: 0;
+      }
+      35% {
+        opacity: 0.4;
+      }
+      100% {
+        scale: 1.12;
+        opacity: 0;
+      }
+    }
+  }
+</style>

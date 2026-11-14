@@ -23,11 +23,25 @@ const { title, intro, lang } = Astro.props;
      header pulls itself up over the container's top padding (--space-12) and pays it back as its own. The shadow
      paints the band sideways, and the clip keeps it from spilling above or below. */
   .page-header {
+    position: relative;
     margin: calc(-1 * var(--space-12)) 0 var(--space-12);
     padding: var(--space-12) 0 var(--space-8);
     background: var(--surface);
     box-shadow: 0 0 0 100vmax var(--surface);
     clip-path: inset(0 -100vmax);
+  }
+
+  /* The band's foot is a soft wave, like a water line: the page colour laps up over the band's lower edge. */
+  .page-header::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: -100vmax;
+    width: calc(100% + 200vmax);
+    height: var(--wave-height);
+    background: var(--bg);
+    mask: var(--wave-foot) repeat-x 0 0 / var(--wave-length) var(--wave-height);
+    scale: 1 -1;
   }
 
   h1 {
