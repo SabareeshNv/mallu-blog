@@ -85,18 +85,6 @@ import { SITE } from '@/config/site';
     }
   }
 
-  /* The foot of the hero is a gentle wave, the page's own colour lapping up over the water. */
-  .hero::after {
-    content: '';
-    position: absolute;
-    inset-inline: 0;
-    bottom: -1px;
-    height: var(--wave-height);
-    background: var(--bg);
-    mask: var(--wave-foot) repeat-x 0 0 / var(--wave-length) var(--wave-height);
-    scale: 1 -1;
-  }
-
   /* Same container as the home page's two columns below (HomeShell), so the text starts where the posts start. */
   .content {
     width: 100%;

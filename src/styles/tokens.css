@@ -89,13 +89,6 @@
   --mark-scribble-small: 1.5rem;
   --thread-heavy: 4px; /* the line beside an essay; a scribble's is --border-thick */
 
-  /* ---- Water: the soft wave along the edge of a tonal band, and at the foot of the hero ---- */
-  --wave-height: 1rem;
-  --wave-length: 12rem;
-  /* Masks: solid above a wavy lower edge (a band's foot); and solid to the right of a wavy left edge (a column's side). */
-  --wave-foot: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 96 16' preserveAspectRatio='none'%3E%3Cpath d='M0 0H96V6C84 6 84 14 72 14S60 6 48 6S36 14 24 14S12 6 0 6Z'/%3E%3C/svg%3E");
-  --wave-side: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 96' preserveAspectRatio='none'%3E%3Cpath d='M16 0H10C10 12 2 12 2 24S10 36 10 48S2 60 2 72S10 84 10 96H16Z'/%3E%3C/svg%3E");
-
   /* ---- Motion ---- */
   --ease: cubic-bezier(0.2, 0, 0, 1);
   --duration-fast: 150ms;
