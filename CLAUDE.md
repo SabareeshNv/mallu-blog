@@ -93,6 +93,10 @@ Behaviour:
 - The rail and `PostSection` end in a negative bottom margin of `--space-24` that cancels the footer's top margin, so the band meets the footer. Don't change the footer's margin without checking these.
 - The search button in the rail uses `--bg` so it stands out on the band.
 
+**Play** (small, tied to user intent, never decorative loops):
+- The hero's boatman (`HeroBoat.astro`) is live SVG, not part of the JPEG. It is still at rest and responds only to hover or press. Keep its coordinates in step with `scripts/art/generate.mjs` (the picture has no boat). Any new motion must be tied to user intent and off under `prefers-reduced-motion`.
+- Prose emphasis (`strong`) and links use the `--highlight` pen effect. The `ThemeSwitcher` icons turn over on a press.
+
 **Illustrations:**
 - The covers and hero are original SVG drawn in `scripts/art/generate.mjs` and written as 2000px-wide JPEGs (`sharp`) over the same filenames in `src/assets/images/`. Nothing in the components or content schema changed.
 - Each cover keeps its subject in the upper two-thirds, because the title sits across the foot. The hero keeps its subject (the boatman) right of centre, clear of the text, and inside the centre half of the picture so phone crops still show it.
@@ -102,6 +106,7 @@ Behaviour:
 **Rejected by the user. Do not reintroduce without being asked:**
 - **Card-based UI for posts**, above all on the home page and in the thread. Posts should read as an open timeline, not a stack of boxed cards. Shadows, borders and cards are *not* banned in themselves; they are fine in moderation elsewhere (controls, panels, small components), as long as they don't become the project's prominent pattern.
 - Parallax and scroll reveals.
+- Water-wave edges on the hero and tonal bands (tried; the user didn't like them).
 - Mood labels and icons in place of topics (tried as a mockup; the user did not want them).
 - The specific depth treatment tried earlier (reverted to commit `3526559`). The user is NOT against depth in general; a different, tasteful approach may be proposed (show it first), but never reinstate that one.
 - Kasavu / maroon-and-gold palette (teal was restored).
@@ -161,11 +166,13 @@ Removed on purpose: scribble hash script, footer wrap check, parallax. Before ad
 - Measure text contrast over illustrations at the brightest pixels, not the average. Gold small text over a sky failed even with a veil.
 - Illustrations are drawn with a seeded random generator. Never use `Math.random()` there, or every run changes the pictures.
 - CSS injected into a Playwright mock loses to Astro's scoped selectors; use `!important` in mocks and confirm in the real build.
+- `overflow: clip` on the root is propagated to the viewport as `hidden`, which still allows programmatic scrolling. Clip on a normal element instead, and test with `scrollTo` plus `scrollWidth`.
+- An SVG used as a CSS mask keeps its aspect ratio unless it says `preserveAspectRatio="none"`.
 - When the user rejects a pattern, record the scope they actually mean (for example, "card UI for posts", not "all cards") and don't generalise it.
 
 ## 10. Current plans
 
-Status: site complete and deployed. Done: code clean-up (`f5130c8`), search limited to posts (`8145141`), illustrated covers, new hero and tonal layering (`8496219`), the essay/scribble thread (`e8876ae`).
+Status: site complete and deployed. Done: code clean-up (`f5130c8`), search limited to posts (`8145141`), illustrated covers, new hero and tonal layering (`8496219`), the essay/scribble thread (`e8876ae`), the single theme toggle (`f1dbbdf`), and the boatman, toggle turn and highlighter (`44f2efd`).
 
 Known small things: wordmark tracking `-0.02em`; the header goes wide at exactly 768px; prose link underline offset `0.25em`; the hero label's contrast at tablet width measured about 2.9:1 against the brightest 5% of pixels (it reads clearly on screen).
 
