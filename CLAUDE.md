@@ -92,6 +92,7 @@ Behaviour:
 - `PageHeader` pulls itself up over the container's top padding (`--space-12`). It assumes `Container` keeps its default top padding.
 - The rail and `PostSection` end in a negative bottom margin of `--space-24` that cancels the footer's top margin, so the band meets the footer. Don't change the footer's margin without checking these.
 - The search button in the rail uses `--bg` so it stands out on the band.
+- The rail has a soft inner shadow on the edge facing the writing (`--shadow-inset`). Depth is added in small, subtle steps: the user liked "less flat" but rejected floating-photograph depth, so picture shadows and overlaps need approval first.
 
 **Play** (small, tied to user intent, never decorative loops):
 - The hero's boatman (`HeroBoat.astro`) is live SVG, not part of the JPEG. It is still at rest and responds only to hover or press. Keep its coordinates in step with `scripts/art/generate.mjs` (the picture has no boat). Any new motion must be tied to user intent and off under `prefers-reduced-motion`.
@@ -172,7 +173,7 @@ Removed on purpose: scribble hash script, footer wrap check, parallax. Before ad
 
 ## 10. Current plans
 
-Status: site complete and deployed. Done: code clean-up (`f5130c8`), search limited to posts (`8145141`), illustrated covers, new hero and tonal layering (`8496219`), the essay/scribble thread (`e8876ae`), the single theme toggle (`f1dbbdf`), and the boatman, toggle turn and highlighter (`44f2efd`).
+Status: site complete and deployed. Done: code clean-up (`f5130c8`), search limited to posts (`8145141`), illustrated covers, new hero and tonal layering (`8496219`), the essay/scribble thread (`e8876ae`), the single theme toggle (`f1dbbdf`), and the boatman, toggle turn and highlighter (`44f2efd`), and the rail's inner edge (`7314e42`).
 
 Known small things: wordmark tracking `-0.02em`; the header goes wide at exactly 768px; prose link underline offset `0.25em`; the hero label's contrast at tablet width measured about 2.9:1 against the brightest 5% of pixels (it reads clearly on screen).
 
