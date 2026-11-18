@@ -65,7 +65,11 @@ const topics = await getTopics();
     margin: var(--space-16) 0 calc(-1 * var(--space-24));
     padding: var(--space-12) 0 calc(var(--space-12) + var(--space-24));
     background: var(--surface);
-    box-shadow: 0 0 0 100vmax var(--surface);
+    /* The first shadow paints the band sideways; the second is a soft inner edge along the side that faces the
+       writing (the top of the strip, or the left of the column), so the panel reads as recessed. */
+    box-shadow:
+      0 0 0 100vmax var(--surface),
+      inset 0 var(--space-4) var(--space-4) calc(-1 * var(--space-3)) var(--shadow-inset);
     clip-path: inset(0 -100vmax);
     font-size: var(--fs-small);
     line-height: var(--lh-small);
@@ -77,6 +81,9 @@ const topics = await getTopics();
       padding-inline-start: var(--space-8);
       align-content: start;
       clip-path: inset(0 -100vmax 0 0);
+      box-shadow:
+        0 0 0 100vmax var(--surface),
+        inset var(--space-4) 0 var(--space-4) calc(-1 * var(--space-3)) var(--shadow-inset);
     }
   }
 

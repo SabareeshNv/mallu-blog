@@ -47,6 +47,7 @@
   --logo-wave: #b47c45;
 
   /* Elevation */
+  --shadow-inset: light-dark(rgb(10 50 70 / 0.16), rgb(0 0 0 / 0.5)); /* the soft inner edge of a recessed panel */
   --shadow-md:
     0 2px 4px light-dark(rgb(21 33 44 / 0.05), rgb(0 0 0 / 0.3)),
     0 12px 24px -8px light-dark(rgb(10 60 66 / 0.2), rgb(0 0 0 / 0.6));
